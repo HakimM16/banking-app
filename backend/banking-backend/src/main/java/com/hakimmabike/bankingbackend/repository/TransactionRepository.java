@@ -6,6 +6,7 @@ import com.hakimmabike.bankingbackend.entity.TransactionCategory;
 import com.hakimmabike.bankingbackend.enums.TransactionStatus;
 import com.hakimmabike.bankingbackend.enums.TransactionType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -30,5 +31,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> findByTransactionDateBetween(LocalDateTime start, LocalDateTime end);
 
     // finds transactions by category
-    List<Transaction> findByCategory(TransactionCategory category);
+    List<Transaction> findByTransactionCategory(TransactionCategory category);
 }
