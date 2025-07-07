@@ -2,9 +2,12 @@ package com.hakimmabike.bankingbackend;
 
 import com.hakimmabike.bankingbackend.entity.*;
 import com.hakimmabike.bankingbackend.enums.*;
+import com.hakimmabike.bankingbackend.service.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @SpringBootApplication
@@ -12,10 +15,11 @@ public class BankingBackendApplication {
 
 	public static void main(String[] args) {
 
-		SpringApplication.run(BankingBackendApplication.class, args);
+		var context = SpringApplication.run(BankingBackendApplication.class, args);
 		//testUserAndAccountCreation();
 		//testTransactionsAndTransfers();
-		//testAccountTransactions();
+//		testAccountTransactions();
+		testSaveUser(context);
 
 	}
 
@@ -33,7 +37,7 @@ public class BankingBackendApplication {
 		var account = Account.builder()
 				.accountNumber("123456789")
 				.accountType(AccountType.valueOf("SAVINGS"))
-				.balance(1000.0)
+				.balance(BigDecimal.valueOf(1000.0))
 				.status(AccountStatus.OPEN)
 				.build();
 		user.addAccount(account);
@@ -42,7 +46,7 @@ public class BankingBackendApplication {
 		var account2 = Account.builder()
 				.accountNumber("987654321")
 				.accountType(AccountType.valueOf("DEBIT"))
-				.balance(500.0)
+				.balance(BigDecimal.valueOf(500.0))
 				.status(AccountStatus.OPEN)
 				.build();
 
@@ -81,14 +85,14 @@ public class BankingBackendApplication {
 		Account savingsAccount = Account.builder()
 				.accountNumber("123456789")
 				.accountType(AccountType.SAVINGS)
-				.balance(1000.0)
+				.balance(BigDecimal.valueOf(1000.0))
 				.status(AccountStatus.OPEN)
 				.build();
 
 		Account debitAccount = Account.builder()
 				.accountNumber("987654321")
 				.accountType(AccountType.DEBIT)
-				.balance(500.0)
+				.balance(BigDecimal.valueOf(500.0))
 				.status(AccountStatus.OPEN)
 				.build();
 
@@ -135,14 +139,14 @@ public class BankingBackendApplication {
 		Account sourceAccount = Account.builder()
 				.accountNumber("123456789")
 				.accountType(AccountType.SAVINGS)
-				.balance(1000.0)
+				.balance(BigDecimal.valueOf(1000.0))
 				.status(AccountStatus.OPEN)
 				.build();
 
 		Account destinationAccount = Account.builder()
 				.accountNumber("987654321")
 				.accountType(AccountType.DEBIT)
-				.balance(500.0)
+				.balance(BigDecimal.valueOf(500.0))
 				.status(AccountStatus.OPEN)
 				.build();
 
@@ -164,7 +168,7 @@ public class BankingBackendApplication {
 		Transfer transfer = Transfer.builder()
 				.senderAccount(sourceAccount)
 				.receiverAccount(destinationAccount)
-				.amount(200.0)
+				.amount(BigDecimal.valueOf(200.0))
 				.status(TransactionStatus.PENDING)
 				.description("Transfer from savings to debit")
 				.build();
@@ -172,8 +176,8 @@ public class BankingBackendApplication {
 		// Create transactions for the transfer
 		Transaction debitTransaction = Transaction.builder()
 				.account(sourceAccount)
-				.amount(-200.0)
-				.balanceAfterTransaction(sourceAccount.getBalance() -200.0)
+				.amount(BigDecimal.valueOf(-200.0))
+				.balanceAfterTransaction(sourceAccount.getBalance().subtract(BigDecimal.valueOf(500.0)).doubleValue())
 				.transactionCategory(transferCategory)
 				.description("Transfer to " + destinationAccount.getAccountNumber())
 				.status(TransactionStatus.COMPLETED)
@@ -182,8 +186,8 @@ public class BankingBackendApplication {
 
 		Transaction creditTransaction = Transaction.builder()
 				.account(destinationAccount)
-				.amount(200.0)
-				.balanceAfterTransaction(destinationAccount.getBalance() + 200.0)
+				.amount(BigDecimal.valueOf(200.0))
+				.balanceAfterTransaction(destinationAccount.getBalance().add(BigDecimal.valueOf(200.0)).doubleValue())
 				.transactionCategory(transferCategory)
 				.description("Transfer from " + sourceAccount.getAccountNumber())
 				.status(TransactionStatus.COMPLETED)
@@ -206,7 +210,7 @@ public class BankingBackendApplication {
 		Account account = Account.builder()
 				.accountNumber("123456789")
 				.accountType(AccountType.SAVINGS)
-				.balance(1000.0)
+				.balance(BigDecimal.valueOf(1000.0))
 				.status(AccountStatus.OPEN)
 				.build();
 
@@ -230,8 +234,8 @@ public class BankingBackendApplication {
 				.account(account)
 				.transactionNumber("DEP-001")
 				.transactionType(TransactionType.DEPOSIT)
-				.amount(2500.0)
-				.balanceAfterTransaction(account.getBalance() + 2500.0)
+				.amount(BigDecimal.valueOf(2500.0))
+				.balanceAfterTransaction(account.getBalance().add(BigDecimal.valueOf(2500.0)).doubleValue())
 				.description("Monthly salary deposit")
 				.status(TransactionStatus.COMPLETED)
 				.transactionDate(LocalDateTime.now())
@@ -242,8 +246,8 @@ public class BankingBackendApplication {
 				.account(account)
 				.transactionNumber("BILL-001")
 				.transactionType(TransactionType.WITHDRAWAL)
-				.amount(-150.0)
-				.balanceAfterTransaction(account.getBalance() - 150.0)
+				.amount(BigDecimal.valueOf(-150.0))
+				.balanceAfterTransaction(account.getBalance().subtract(BigDecimal.valueOf(150.0)).doubleValue())
 				.description("Electricity bill payment")
 				.status(TransactionStatus.COMPLETED)
 				.transactionDate(LocalDateTime.now())
@@ -266,4 +270,18 @@ public class BankingBackendApplication {
 				", Type: " + billPayment.getTransactionType());
 	}
 
+	public static void testSaveUser(ConfigurableApplicationContext context) {
+		// Create a user
+		User user = User.builder()
+				.email("Patrick@gmail.com")
+				.password("password")
+				.firstName("Patrick")
+				.lastName("Star")
+				.phoneNumber("07965047732")
+				.status(UserStatus.valueOf("ACTIVE"))
+				.build();
+
+		var service = context.getBean(UserService.class);
+		service.registerUser(user);
+	}
 }

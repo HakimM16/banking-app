@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class Transfer {
     private Long id;
 
     @Column(nullable = false, name = "amount")
-    private Double amount;
+    private BigDecimal amount;
 
     @Column(nullable = false, name = "description")
     private String description;

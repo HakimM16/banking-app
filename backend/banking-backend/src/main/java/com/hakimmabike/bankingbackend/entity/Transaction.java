@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,7 +30,7 @@ public class Transaction {
     private TransactionType transactionType;
 
     @Column(nullable = false, name = "amount")
-    private Double amount;
+    private BigDecimal amount;
 
     @Column(nullable = false, name = "balance_after")
     private Double balanceAfterTransaction;
