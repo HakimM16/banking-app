@@ -1,0 +1,29 @@
+package com.hakimmabike.bankingbackend.repository;
+
+import com.hakimmabike.bankingbackend.entity.Account;
+import com.hakimmabike.bankingbackend.entity.User;
+import com.hakimmabike.bankingbackend.enums.AccountStatus;
+import com.hakimmabike.bankingbackend.enums.AccountType;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface AccountRepository extends JpaRepository<Account, Long> {
+    // Find an account by its account number
+    Optional<Account> findByAccountNumber(String accountNumber);
+
+    // Find accounts by user
+    List<Account> findByUser(User user);
+
+    // Find accounts by user and account type
+    List<Account> findByUserAndAccountType(User user, AccountType accountType);
+
+    // Find accounts by status
+    List<Account> findByStatus(AccountStatus status);
+
+    // Checks if an account exists by its account number
+    boolean existsByAccountNumber(String accountNumber);
+}
