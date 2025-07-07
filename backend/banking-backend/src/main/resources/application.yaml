@@ -3,8 +3,8 @@ spring:
     name: banking-backend
   datasource:
     url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    username: ${DB_USER:bankingapp}
+    password: ${DB_PASSWORD:password}
   jpa:
     hibernate:
       dialect: org.hibernate.dialect.PostgreSQLDialect
