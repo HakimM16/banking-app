@@ -10,3 +10,8 @@ spring:
       dialect: org.hibernate.dialect.PostgreSQLDialect
     ddl:
       auto: update
+  flyway:
+    enabled: true
+    # locations: classpath:db/migration # If necessary.
+    baseline-on-migrate: true
+    baseline-version: 1
