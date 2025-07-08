@@ -16,7 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/Users")
+@RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;

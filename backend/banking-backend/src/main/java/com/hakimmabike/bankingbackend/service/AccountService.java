@@ -56,22 +56,50 @@ public class AccountService {
         return accountMapper.toDto(account);
     }
 
-    public void closeAccount(Long accountId) {
-        Account account = accountRepository.findById(accountId).orElseThrow(() -> new EntityNotFoundException("Account not found"));
+    // close an account
+    public void closeAccount(Long accountId, DeleteAccountRequest request) {
+        // Check if the account exists
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
-        // check if the account is already closed
+        // Check if account matches with request details
+        if (!account.getAccountNumber().equals(request.getAccountNumber()) && !account.getAccountType().equals(request.getAccountType())) {
+            throw new InvalidObjectException("Account details do not match. Please check the account number and type.");
+        }
+
+        // Check if the account is already closed
         if (account.getStatus() == AccountStatus.CLOSED) {
             throw new AccountStatusException("Account is already closed");
         }
 
-        // check if the account has a balance
+        // Check if the account has a balance
         if (account.getBalance().compareTo(BigDecimal.ZERO) != 0) {
-            throw new ExistingBalanceException("Cannot close account with a non-zero balance. Please withdraw or transfer funds first.");
+            throw new ExistingBalanceException("Cannot delete account with a non-zero balance. Please withdraw or transfer funds first.");
         }
 
         // Set the account status to CLOSED
         account.setStatus(AccountStatus.CLOSED);
-        accountRepository.save(account);
+
+        // delete associated transactions if needed
+        transactionRepository.deleteAllByAccount(account);
+
+        // Delete all sent and received transfers associated with this account
+        transferRepository.deleteAllBySenderAccount(account);
+        transferRepository.deleteAllByReceiverAccount(account);
+
+        // delete associated transaction categories if needed
+        categoryRepository.deleteAllByAccount(account);
+
+        // If you want to remove the account from the user's account list, you can do that as well
+        User user = account.getUser();
+        user.getAccounts().remove(account);
+        userRepository.save(user); // Save the user to update the relationship
+
+        // delete the account
+        accountRepository.delete(account);
+
+        System.out.println("Account with account number " + account.getAccountNumber() + " has been successfully deleted.");
+
     }
 
     public AccountDto getAccountById(Long accountId) {
@@ -107,53 +135,6 @@ public class AccountService {
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
         return account.getBalance();
-    }
-
-    // Add in deleteAccount method
-    public void deleteAccount(Long accountId, DeleteAccountRequest request) {
-        // Check if the account exists
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
-
-        // Check if account matches with request details
-        if (!account.getAccountNumber().equals(request.getAccountNumber()) && !account.getAccountType().equals(request.getAccountType())) {
-            throw new InvalidObjectException("Account details do not match. Please check the account number and type.");
-        }
-
-        // Check if the account is already closed
-        if (account.getStatus() == AccountStatus.CLOSED) {
-            throw new AccountStatusException("Account is already closed");
-        }
-
-        // Check if the account has a balance
-        if (account.getBalance().compareTo(BigDecimal.ZERO) != 0) {
-            throw new ExistingBalanceException("Cannot delete account with a non-zero balance. Please withdraw or transfer funds first.");
-        }
-
-        // Set the account status to CLOSED
-        account.setStatus(AccountStatus.CLOSED);
-
-        // delete associated transactions if needed
-        transactionRepository.deleteAllByAccount(account);
-
-        // Delete all sent and received transfers associated with this account
-         transferRepository.deleteAllBySenderAccount(account);
-         transferRepository.deleteAllByReceiverAccount(account);
-
-        // delete associated transaction categories if needed
-        categoryRepository.deleteAllByAccount(account);
-
-        // If you want to remove the account from the user's account list, you can do that as well
-        User user = account.getUser();
-        user.getAccounts().remove(account);
-        userRepository.save(user); // Save the user to update the relationship
-
-        // delete the account
-        accountRepository.delete(account);
-
-        System.out.println("Account with account number " + account.getAccountNumber() + " has been successfully deleted.");
-
-
     }
 
 }
