@@ -1,11 +1,15 @@
 package com.hakimmabike.bankingbackend.service;
 
+import com.hakimmabike.bankingbackend.dto.TransactionDto;
+import com.hakimmabike.bankingbackend.dto.TransferDto;
 import com.hakimmabike.bankingbackend.entity.Account;
 import com.hakimmabike.bankingbackend.entity.Transaction;
 import com.hakimmabike.bankingbackend.entity.Transfer;
 import com.hakimmabike.bankingbackend.enums.TransactionStatus;
 import com.hakimmabike.bankingbackend.enums.TransactionType;
 import com.hakimmabike.bankingbackend.exception.InsufficientFundsException;
+import com.hakimmabike.bankingbackend.mappers.TransactionMapper;
+import com.hakimmabike.bankingbackend.mappers.TransferMapper;
 import com.hakimmabike.bankingbackend.repository.AccountRepository;
 import com.hakimmabike.bankingbackend.repository.TransactionCategoryRepository;
 import com.hakimmabike.bankingbackend.repository.TransactionRepository;
@@ -25,13 +29,15 @@ public class TransactionService {
     private final AccountRepository accountRepository;
     private final TransactionCategoryRepository categoryRepository;
     private final TransferRepository transferRepository;
+    private final TransactionMapper transactionMapper;
+    private final TransferMapper transferMapper;
 
     private String generateTransactionNumber() {
         return "TXN" + System.currentTimeMillis();
     }
 
     @Transactional
-    public Transaction deposit(Long accountId, BigDecimal amount, String description, Long categoryId) {
+    public TransactionDto deposit(Long accountId, BigDecimal amount, String description, Long categoryId) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found"));
 
@@ -64,10 +70,13 @@ public class TransactionService {
 
         // Save the transaction and account
         accountRepository.save(account);
-        return transactionRepository.save(transaction);
+        transactionRepository.save(transaction);
+
+        // Convert to DTO
+        return transactionMapper.toDto(transaction);
     }
 
-    public Transaction withdraw(Long accountId, BigDecimal amount, String description, Long categoryId) {
+    public TransactionDto withdraw(Long accountId, BigDecimal amount, String description, Long categoryId) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
@@ -97,11 +106,14 @@ public class TransactionService {
 
         // Save the transaction and account
         accountRepository.save(account);
-        return transactionRepository.save(transaction);
+        transactionRepository.save(transaction);
+
+        // Convert to DTO
+        return transactionMapper.toDto(transaction);
     }
 
     @Transactional
-    public Transfer transfer(Long fromAccountId, Long toAccountId, BigDecimal amount, String description) {
+    public TransferDto transfer(Long fromAccountId, Long toAccountId, BigDecimal amount, String description) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Transfer amount must be positive");
         }
@@ -143,7 +155,8 @@ public class TransactionService {
         // Create transactions
         createTransferTransactions(savedTransfer, fromNewBalance, toNewBalance);
 
-        return savedTransfer;
+        // Convert to DTO
+        return transferMapper.toDto(savedTransfer, fromAccount.getAccountNumber(), toAccount.getAccountNumber());
     }
 
     private void createTransferTransactions(Transfer transfer, BigDecimal fromBalance, BigDecimal toBalance) {

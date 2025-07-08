@@ -19,7 +19,7 @@ public class BankingBackendApplication {
 		//testUserAndAccountCreation();
 		//testTransactionsAndTransfers();
 //		testAccountTransactions();
-		testSaveUser(context);
+//		testSaveUser(context);
 
 	}
 

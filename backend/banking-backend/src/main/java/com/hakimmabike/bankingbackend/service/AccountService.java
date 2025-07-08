@@ -1,8 +1,10 @@
 package com.hakimmabike.bankingbackend.service;
 
+import com.hakimmabike.bankingbackend.dto.AccountDto;
 import com.hakimmabike.bankingbackend.entity.Account;
 import com.hakimmabike.bankingbackend.entity.User;
 import com.hakimmabike.bankingbackend.enums.AccountStatus;
+import com.hakimmabike.bankingbackend.mappers.AccountMapper;
 import com.hakimmabike.bankingbackend.repository.AccountRepository;
 import com.hakimmabike.bankingbackend.repository.TransactionCategoryRepository;
 import com.hakimmabike.bankingbackend.repository.TransactionRepository;
@@ -21,12 +23,13 @@ public class AccountService {
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
     private final TransactionCategoryRepository categoryRepository;
+    private final AccountMapper accountMapper;
 
     public String generateAccountNumber() {
         return String.valueOf((int) (Math.random() * 90000000) + 10000000);
     }
 
-    public Account createAccount(Long userId, Account account) {
+    public AccountDto createAccount(Long userId, Account account) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
@@ -40,7 +43,10 @@ public class AccountService {
         account.setStatus(AccountStatus.OPEN);
         account.setBalance(BigDecimal.ZERO);
 
-        return accountRepository.save(account);
+        accountRepository.save(account);
+
+        // Map the saved account entity to a DTO
+        return accountMapper.toDto(account);
     }
 
     public void closeAccount(Long accountId) {
@@ -61,12 +67,13 @@ public class AccountService {
         accountRepository.save(account);
     }
 
-    public Account getAccountById(Long accountId) {
-        return accountRepository.findById(accountId)
+    public AccountDto getAccountById(Long accountId) {
+        var account =  accountRepository.findById(accountId)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+        return accountMapper.toDto(account);
     }
 
-    public Account updateAccount(Long accountId, Account updatedAccount) {
+    public AccountDto updateAccount(Long accountId, Account updatedAccount) {
         Account existingAccount = accountRepository.findById(accountId)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
@@ -75,17 +82,26 @@ public class AccountService {
         existingAccount.setBalance(updatedAccount.getBalance());
         existingAccount.setStatus(updatedAccount.getStatus());
 
-        return accountRepository.save(existingAccount);
+        accountRepository.save(existingAccount);
+
+        // Map the updated account entity to a DTO
+        return accountMapper.toDto(existingAccount);
     }
 
-    public List<Account> getUserAccounts(Long userId) {
+    public List<AccountDto> getUserAccounts(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        return accountRepository.findByUser(user);
+        return accountRepository.findByUser(user)
+                .stream()
+                .map(accountMapper::toDto)
+                .toList();
     }
 
     public BigDecimal getAccountBalance(Long accountId) {
-        return getAccountById(accountId).getBalance();
+        var account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+
+        return account.getBalance();
     }
 
     // Add in deleteAccount method

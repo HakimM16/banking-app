@@ -1,5 +1,9 @@
 package com.hakimmabike.bankingbackend.service;
 
+import com.hakimmabike.bankingbackend.dto.UserAddressDto;
+import com.hakimmabike.bankingbackend.mappers.UserAddressMapper;
+import com.hakimmabike.bankingbackend.dto.UserDto;
+import com.hakimmabike.bankingbackend.mappers.UserEntityMapper;
 import com.hakimmabike.bankingbackend.entity.User;
 import com.hakimmabike.bankingbackend.entity.UserAddress;
 import com.hakimmabike.bankingbackend.enums.UserStatus;
@@ -17,8 +21,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserAddressRepository userAddressRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserEntityMapper userEntityMapper;
+    private final UserAddressMapper userAddressMapper;
 
-    public User registerUser(User user) {
+    public UserDto registerUser(User user) {
         // Check if the user already exists
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("User with this email already exists");
@@ -27,10 +33,13 @@ public class UserService {
         user.setStatus(UserStatus.ACTIVE);// Set the user status to ACTIVE
         System.out.println("User saved: " + user);
         // Save the user to the repository
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        // Convert the User entity to UserDto and return it
+        return userEntityMapper.toDto(user);
     }
 
-    public User updateUser(Long userId, User updatedUser) {
+    public UserDto updateUser(Long userId, User updatedUser) {
         // Find the existing user
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -49,7 +58,10 @@ public class UserService {
         existingUser.setStatus(updatedUser.getStatus());
 
         // Save the updated user
-        return userRepository.save(existingUser);
+        userRepository.save(existingUser);
+
+        // Convert the updated User entity to UserDto and return it
+        return userEntityMapper.toDto(existingUser);
     }
 
     public void deleteUser(Long userId) {
@@ -73,22 +85,30 @@ public class UserService {
         userRepository.save(existingUser);
     }
 
-    public User getUserById(Long userId) {
+    public UserDto getUserById(Long userId) {
         // Find the user by ID
-        return userRepository.findById(userId)
+        var user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        // Convert the User entity to UserDto and return it
+        return userEntityMapper.toDto(user);
     }
 
-    public List<UserAddress> getUserAddresses(Long userId) {
+    public List<UserAddressDto> getUserAddresses(Long userId) {
         // Find the user by ID
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        // Return the user's addresses
-        return userAddressRepository.findByUserId(user.getId());
+        // Create the user's addresses
+        var addresses =  userAddressRepository.findByUserId(user.getId());
+
+        // Convert the list of UserAddress entities to UserAddressDto and return it
+        return addresses.stream()
+                .map(userAddressMapper::toDto)
+                .toList();
     }
 
-    public UserAddress addUserAddress(Long userId, UserAddress address) {
+    public UserAddressDto addUserAddress(Long userId, UserAddress address) {
         // Find the user by ID
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -97,7 +117,10 @@ public class UserService {
         address.setUser(user);
 
         // Save the address to the repository
-        return userAddressRepository.save(address);
+        var userAddress =  userAddressRepository.save(address);
+
+        // Convert the UserAddress entity to UserAddressDto and return it
+        return userAddressMapper.toDto(userAddress);
     }
 
 
