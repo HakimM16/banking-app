@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -158,6 +159,30 @@ public class TransactionService {
 
         // Convert to DTO
         return transferMapper.toDto(savedTransfer, fromAccount.getAccountNumber(), toAccount.getAccountNumber());
+    }
+
+    // Get account transactions
+    public List<TransactionDto> getAllTransactions(Long accountId, GetTransactionsRequest request) {
+        //Check if account exists
+        Account account = accountRepository.findByAccountNumber(request.getAccountNumber())
+                .orElseThrow(() -> new EntityNotFoundException("Account not found with number: " + request.getAccountNumber()));
+
+        // Check if account ID matches the request
+        if (!account.getId().equals(accountId)) {
+            throw new EntityNotFoundException("Account ID does not match the account number provided");
+        }
+
+        List<Transaction> transactions = transactionRepository.findByAccount(account);
+
+        // Check if list is empty
+        if (transactions.isEmpty()) {
+            throw new EntityNotFoundException("No transactions found for account number: " + request.getAccountNumber());
+        }
+
+        // Map transactions to DTOs
+        return transactions.stream()
+                .map(transactionMapper::toDto)
+                .toList();
     }
 
     private void createTransferTransactions(Transfer transfer, BigDecimal fromBalance, BigDecimal toBalance) {

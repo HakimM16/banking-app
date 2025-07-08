@@ -35,4 +35,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     // Delete transactions by account
     void deleteAllByAccount(Account account);
+
+    String account(Account account);
 }
