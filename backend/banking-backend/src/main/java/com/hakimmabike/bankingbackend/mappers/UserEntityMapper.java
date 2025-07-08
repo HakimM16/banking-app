@@ -4,7 +4,9 @@ import com.hakimmabike.bankingbackend.dto.RegisterUserRequest;
 import com.hakimmabike.bankingbackend.dto.UpdateUserRequest;
 import com.hakimmabike.bankingbackend.dto.UserDto;
 import com.hakimmabike.bankingbackend.entity.User;
+import com.hakimmabike.bankingbackend.entity.UserAddress;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface UserEntityMapper {
@@ -13,5 +15,5 @@ public interface UserEntityMapper {
     User toEntity(RegisterUserRequest request);
 
     // Additional methods can be added here if needed
-    void update(UpdateUserRequest request, User userEntity);
+    User update(UpdateUserRequest request, @MappingTarget User userEntity);
 }

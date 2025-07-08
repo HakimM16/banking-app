@@ -4,6 +4,7 @@ import com.hakimmabike.bankingbackend.dto.AccountDto;
 import com.hakimmabike.bankingbackend.dto.UpdateAccountRequest;
 import com.hakimmabike.bankingbackend.entity.Account;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
@@ -12,5 +13,5 @@ public interface AccountMapper {
     Account toEntity(AccountDto accountDto);
 
     // Additional methods can be added here for more complex mappings if needed
-    void update(Account account, UpdateAccountRequest request);
+    Account update(@MappingTarget Account account, UpdateAccountRequest request);
 }

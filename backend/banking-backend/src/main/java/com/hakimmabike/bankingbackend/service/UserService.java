@@ -1,11 +1,8 @@
 package com.hakimmabike.bankingbackend.service;
 
-import com.hakimmabike.bankingbackend.dto.RegisterUserRequest;
-import com.hakimmabike.bankingbackend.dto.UpdateUserRequest;
-import com.hakimmabike.bankingbackend.dto.UserAddressDto;
+import com.hakimmabike.bankingbackend.dto.*;
 import com.hakimmabike.bankingbackend.exception.ExistingObjectException;
 import com.hakimmabike.bankingbackend.mappers.UserAddressMapper;
-import com.hakimmabike.bankingbackend.dto.UserDto;
 import com.hakimmabike.bankingbackend.mappers.UserEntityMapper;
 import com.hakimmabike.bankingbackend.entity.User;
 import com.hakimmabike.bankingbackend.entity.UserAddress;
@@ -58,7 +55,7 @@ public class UserService {
         }
 
         // Update the user's details
-        userEntityMapper.update(request,existingUser);
+        var updated = userEntityMapper.update(request,existingUser);
 
         // Save the updated user
         userRepository.save(existingUser);
@@ -97,32 +94,60 @@ public class UserService {
         return userEntityMapper.toDto(user);
     }
 
-    public List<UserAddressDto> getUserAddresses(Long userId) {
+    // Create user address
+    public UserAddressDto createUserAddress(Long userId, CustomiseAddressRequest request) {
         // Find the user by ID
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        // Create the user's addresses
-        var addresses =  userAddressRepository.findByUserId(user.getId());
+        // Check if the user already has an address
+        if (userAddressRepository.findByUserId(user.getId()).isPresent()) {
+            throw new ExistingObjectException("User already has an address");
+        }
 
-        // Convert the list of UserAddress entities to UserAddressDto and return it
-        return addresses.stream()
-                .map(userAddressMapper::toDto)
-                .toList();
+        // Convert the request to UserAddress entity
+        UserAddress newAddress = userAddressMapper.toEntity(request);
+
+        // Set the user for the new address
+        newAddress.setUser(user);
+        // Save the new address to the repository
+        var savedAddress = userAddressRepository.save(newAddress);
+        // Convert the saved UserAddress entity to UserAddressDto and return it
+        return userAddressMapper.toDto(savedAddress);
     }
 
-    public UserAddressDto addUserAddress(Long userId, UserAddress address) {
+    // Get User address by Id
+    public UserAddressDto getUserAddressById(Long userId) {
         // Find the user by ID
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        // Set the user for the address
-        address.setUser(user);
-
-        // Save the address to the repository
-        var userAddress =  userAddressRepository.save(address);
+        // Find the address by ID and user
+        UserAddress address = userAddressRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Address not found for user"));
 
         // Convert the UserAddress entity to UserAddressDto and return it
-        return userAddressMapper.toDto(userAddress);
+        return userAddressMapper.toDto(address);
     }
+
+    // Change User address by Id
+    public UserAddressDto updateUserAddress(Long userId, CustomiseAddressRequest request) {
+        // Find the user by ID
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        // Find the existing address by ID and user
+        UserAddress existingAddress = userAddressRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Address not found for user"));
+
+        // Update the existing address with new details
+        var updated = userAddressMapper.update(request,existingAddress);
+
+        // Save the updated address to the repository
+        var updatedAddress = userAddressRepository.save(existingAddress);
+
+        // Convert the updated UserAddress entity to UserAddressDto and return it
+        return userAddressMapper.toDto(updatedAddress);
+    }
+
 }

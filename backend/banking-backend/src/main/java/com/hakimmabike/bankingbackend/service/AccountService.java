@@ -85,7 +85,7 @@ public class AccountService {
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
         // Update the account details
-        accountMapper.update(existingAccount, request);
+        var updated = accountMapper.update(existingAccount, request);
 
         accountRepository.save(existingAccount);
 
