@@ -1,6 +1,7 @@
 package com.hakimmabike.bankingbackend.mappers;
 
 import com.hakimmabike.bankingbackend.dto.AccountDto;
+import com.hakimmabike.bankingbackend.dto.UpdateAccountRequest;
 import com.hakimmabike.bankingbackend.entity.Account;
 import org.mapstruct.Mapper;
 
@@ -11,4 +12,5 @@ public interface AccountMapper {
     Account toEntity(AccountDto accountDto);
 
     // Additional methods can be added here for more complex mappings if needed
+    void update(Account account, UpdateAccountRequest request);
 }

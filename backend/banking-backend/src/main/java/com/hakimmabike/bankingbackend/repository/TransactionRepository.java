@@ -32,4 +32,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     // finds transactions by category
     List<Transaction> findByTransactionCategory(TransactionCategory category);
+
+    // Delete transactions by account
+    void deleteAllByAccount(Account account);
 }

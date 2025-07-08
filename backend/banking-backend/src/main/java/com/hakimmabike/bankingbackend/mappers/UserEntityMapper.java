@@ -1,5 +1,7 @@
 package com.hakimmabike.bankingbackend.mappers;
 
+import com.hakimmabike.bankingbackend.dto.RegisterUserRequest;
+import com.hakimmabike.bankingbackend.dto.UpdateUserRequest;
 import com.hakimmabike.bankingbackend.dto.UserDto;
 import com.hakimmabike.bankingbackend.entity.User;
 import org.mapstruct.Mapper;
@@ -8,7 +10,8 @@ import org.mapstruct.Mapper;
 public interface UserEntityMapper {
     UserDto toDto(User userEntity);
 
-    User toEntity(UserDto userDto);
+    User toEntity(RegisterUserRequest request);
 
     // Additional methods can be added here if needed
+    void update(UpdateUserRequest request, User userEntity);
 }

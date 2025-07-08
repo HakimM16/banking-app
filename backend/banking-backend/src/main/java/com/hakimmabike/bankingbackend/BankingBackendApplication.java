@@ -282,6 +282,6 @@ public class BankingBackendApplication {
 				.build();
 
 		var service = context.getBean(UserService.class);
-		service.registerUser(user);
+//		service.registerUser(user);
 	}
 }

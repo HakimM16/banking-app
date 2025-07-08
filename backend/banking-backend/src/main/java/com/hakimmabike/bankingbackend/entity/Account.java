@@ -46,19 +46,6 @@ public class Account {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", accountNumber='" + accountNumber + '\'' +
-                ", accountType=" + accountType +
-                ", balance=" + balance +
-                ", status=" + status +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
-
     // Many-to-One relationship with User
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

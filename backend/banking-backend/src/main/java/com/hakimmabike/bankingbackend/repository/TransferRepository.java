@@ -29,4 +29,9 @@ public interface TransferRepository extends JpaRepository<Transfer, Long> {
 
     // finds transfers between two dates
     List<Transfer> findByTransferDateBetween(LocalDateTime start, LocalDateTime end);
+
+    // delete all transfers by account (sender or receiver)
+    void deleteAllBySenderAccount(Account account);
+
+    void deleteAllByReceiverAccount(Account account);
 }

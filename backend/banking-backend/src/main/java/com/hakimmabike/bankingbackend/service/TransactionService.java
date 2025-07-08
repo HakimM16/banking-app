@@ -1,13 +1,14 @@
 package com.hakimmabike.bankingbackend.service;
 
-import com.hakimmabike.bankingbackend.dto.TransactionDto;
-import com.hakimmabike.bankingbackend.dto.TransferDto;
+import com.hakimmabike.bankingbackend.dto.*;
 import com.hakimmabike.bankingbackend.entity.Account;
 import com.hakimmabike.bankingbackend.entity.Transaction;
 import com.hakimmabike.bankingbackend.entity.Transfer;
 import com.hakimmabike.bankingbackend.enums.TransactionStatus;
 import com.hakimmabike.bankingbackend.enums.TransactionType;
 import com.hakimmabike.bankingbackend.exception.InsufficientFundsException;
+import com.hakimmabike.bankingbackend.exception.NoAccountException;
+import com.hakimmabike.bankingbackend.exception.TransferException;
 import com.hakimmabike.bankingbackend.mappers.TransactionMapper;
 import com.hakimmabike.bankingbackend.mappers.TransferMapper;
 import com.hakimmabike.bankingbackend.repository.AccountRepository;
@@ -37,9 +38,9 @@ public class TransactionService {
     }
 
     @Transactional
-    public TransactionDto deposit(Long accountId, BigDecimal amount, String description, Long categoryId) {
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+    public TransactionDto deposit(DepositRequest request) {
+        Account account = accountRepository.findByAccountNumber(request.getAccountNumber())
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
         // Make a deposit transaction
         Transaction transaction = new Transaction();
@@ -47,24 +48,24 @@ public class TransactionService {
         transaction.setTransactionType(TransactionType.DEPOSIT);
 
         // Make sure the amount is positive
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Deposit amount must be positive");
+        if (request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InsufficientFundsException("Deposit amount must be positive");
         } else {
-            transaction.setAmount(amount);
+            transaction.setAmount(request.getAmount());
         }
 
-        transaction.setDescription(description);
+        transaction.setDescription(request.getDescription());
         transaction.setStatus(TransactionStatus.COMPLETED);
         transaction.setTransactionDate(LocalDateTime.now());
         transaction.setTransactionNumber(generateTransactionNumber());
 
-        if (categoryId != null) {
-            transaction.setTransactionCategory(categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new IllegalArgumentException("Transaction category not found")));
+        if (request.getCategoryId() != null) {
+            transaction.setTransactionCategory(categoryRepository.findById(request.getCategoryId())
+                    .orElseThrow(() -> new EntityNotFoundException("Transaction category not found")));
         }
 
         // Update the account balance
-        BigDecimal newBalance = account.getBalance().add(amount);
+        BigDecimal newBalance = account.getBalance().add(request.getAmount());
         account.setBalance(newBalance);
         transaction.setBalanceAfterTransaction(newBalance.doubleValue());
 
@@ -76,11 +77,11 @@ public class TransactionService {
         return transactionMapper.toDto(transaction);
     }
 
-    public TransactionDto withdraw(Long accountId, BigDecimal amount, String description, Long categoryId) {
-        Account account = accountRepository.findById(accountId)
+    public TransactionDto withdraw(WithdrawRequest request) {
+        Account account = accountRepository.findByAccountNumber(request.getAccountNumber())
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
-        if (account.getBalance().compareTo(amount) < 0) {
+        if (account.getBalance().compareTo(request.getAmount()) < 0) {
             throw new InsufficientFundsException("Insufficient funds for withdrawal");
         }
 
@@ -88,19 +89,19 @@ public class TransactionService {
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
         transaction.setTransactionType(TransactionType.WITHDRAWAL);
-        transaction.setAmount(amount);
-        transaction.setDescription(description);
+        transaction.setAmount(request.getAmount());
+        transaction.setDescription(request.getDescription());
         transaction.setStatus(TransactionStatus.COMPLETED);
         transaction.setTransactionDate(LocalDateTime.now());
         transaction.setTransactionNumber(generateTransactionNumber());
 
-        if (categoryId != null) {
-            transaction.setTransactionCategory(categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new IllegalArgumentException("Transaction category not found")));
+        if (request.getCategoryId() != null) {
+            transaction.setTransactionCategory(categoryRepository.findById(request.getCategoryId())
+                    .orElseThrow(() -> new EntityNotFoundException("Transaction category not found")));
         }
 
         // Update the account balance
-        BigDecimal newBalance = account.getBalance().subtract(amount);
+        BigDecimal newBalance = account.getBalance().subtract(request.getAmount());
         account.setBalance(newBalance);
         transaction.setBalanceAfterTransaction(newBalance.doubleValue());
 
@@ -113,34 +114,34 @@ public class TransactionService {
     }
 
     @Transactional
-    public TransferDto transfer(Long fromAccountId, Long toAccountId, BigDecimal amount, String description) {
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Transfer amount must be positive");
+    public TransferDto transfer(TransferRequest request) {
+        if (request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InsufficientFundsException("Transfer amount must be positive");
         }
 
         // check if both accounts are the same
-        if (fromAccountId.equals(toAccountId)) {
-            throw new IllegalArgumentException("Cannot transfer to the same account");
+        if (request.getFromAccount().equals(request.getToAccount())) {
+            throw new TransferException("Cannot transfer to the same account");
         }
 
-        Account fromAccount = accountRepository.findById(fromAccountId)
-                .orElseThrow(() -> new EntityNotFoundException("Source account not found"));
+        Account fromAccount = accountRepository.findByAccountNumber(request.getFromAccount())
+                .orElseThrow(() -> new NoAccountException("Source account not found"));
 
-        Account toAccount = accountRepository.findById(toAccountId)
-                .orElseThrow(() -> new EntityNotFoundException("Destination account not found"));
+        Account toAccount = accountRepository.findByAccountNumber(request.getToAccount())
+                .orElseThrow(() -> new NoAccountException("Destination account not found"));
 
         // Create a transfer record
         Transfer transfer = new Transfer();
         transfer.setSenderAccount(fromAccount);
         transfer.setReceiverAccount(toAccount);
-        transfer.setAmount(amount);
-        transfer.setDescription(description);
+        transfer.setAmount(request.getAmount());
+        transfer.setDescription(request.getDescription());
         transfer.setStatus(TransactionStatus.COMPLETED);
         transfer.setTransferDate(LocalDateTime.now());
 
         // Update balances
-        BigDecimal fromNewBalance = fromAccount.getBalance().subtract(amount);
-        BigDecimal toNewBalance = toAccount.getBalance().add(amount);
+        BigDecimal fromNewBalance = fromAccount.getBalance().subtract(request.getAmount());
+        BigDecimal toNewBalance = toAccount.getBalance().add(request.getAmount());
 
         fromAccount.setBalance(fromNewBalance);
         toAccount.setBalance(toNewBalance);
