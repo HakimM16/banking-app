@@ -42,6 +42,7 @@ public class AuthController {
 
     @PostMapping("/validate")
     public Boolean validate(@RequestHeader("Authorization") String authHeader) {
+        System.out.println("Validating token...");
         // Extract the token from the Authorization header by removing the "Bearer " prefix
         var token = authHeader.replace("Bearer ", "");
 
