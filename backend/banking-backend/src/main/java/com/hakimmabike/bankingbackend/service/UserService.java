@@ -1,10 +1,10 @@
 package com.hakimmabike.bankingbackend.service;
 
 import com.hakimmabike.bankingbackend.dto.*;
+import com.hakimmabike.bankingbackend.entity.User;
 import com.hakimmabike.bankingbackend.exception.ExistingObjectException;
 import com.hakimmabike.bankingbackend.mappers.UserAddressMapper;
 import com.hakimmabike.bankingbackend.mappers.UserEntityMapper;
-import com.hakimmabike.bankingbackend.entity.User;
 import com.hakimmabike.bankingbackend.entity.UserAddress;
 import com.hakimmabike.bankingbackend.enums.UserStatus;
 import com.hakimmabike.bankingbackend.repository.UserAddressRepository;
@@ -13,8 +13,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -55,7 +53,7 @@ public class UserService {
         }
 
         // Update the user's details
-        var updated = userEntityMapper.update(request,existingUser);
+        var updated = userEntityMapper.update(request, existingUser);
 
         // Save the updated user
         userRepository.save(existingUser);

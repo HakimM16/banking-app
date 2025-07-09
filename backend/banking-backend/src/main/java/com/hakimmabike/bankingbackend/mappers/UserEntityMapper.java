@@ -4,7 +4,6 @@ import com.hakimmabike.bankingbackend.dto.RegisterUserRequest;
 import com.hakimmabike.bankingbackend.dto.UpdateUserRequest;
 import com.hakimmabike.bankingbackend.dto.UserDto;
 import com.hakimmabike.bankingbackend.entity.User;
-import com.hakimmabike.bankingbackend.entity.UserAddress;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
