@@ -1,5 +1,6 @@
 package com.hakimmabike.bankingbackend.services;
 
+import com.hakimmabike.bankingbackend.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -14,12 +15,14 @@ public class JwtService {
     // This service will handle JWT creation and validation
     @Value("${spring.jwt.secret}")
     private String secret;
-    public String generateToken(String email) {
+    public String generateToken(User user) {
         final long tokenExpiration = 86400; // Token expiration time in seconds (24 hours)
 
         return Jwts.builder()
-                .subject(email)
+                .subject(user.getId().toString())
                 .issuedAt(new Date())
+                .claim("name", user.getFirstName())
+                .claim("email", user.getEmail())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * tokenExpiration)) // Token valid for 24 hours
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
@@ -47,8 +50,8 @@ public class JwtService {
                 .getPayload(); // Extract the payload (claims)
     }
 
-    public String getEmailFromToken(String token) {
-        return getClaims(token).getSubject();
+    public Long getUserIdFromToken(String token) {
+        return Long.valueOf(getClaims(token).getSubject());
     }
 
 }

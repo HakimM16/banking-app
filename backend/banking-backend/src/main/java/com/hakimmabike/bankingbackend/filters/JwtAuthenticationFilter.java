@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Create an authentication object using the email extracted from the token
         var authentication = new UsernamePasswordAuthenticationToken(
-                jwtService.getEmailFromToken(token), // Extracted email from the token
+                jwtService.getUserIdFromToken(token), // Extracted email from the token
                 null, // No credentials are provided
                 null // No authorities are provided
         );

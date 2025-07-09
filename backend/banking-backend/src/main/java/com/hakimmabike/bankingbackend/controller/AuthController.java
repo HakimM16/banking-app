@@ -38,7 +38,9 @@ public class AuthController {
                 )
         );
         // If authentication is successful, generate a JWT token
-        var token = jwtService.generateToken(loginUserRequest.getEmail());
+        var user = userRepository.findByEmail(loginUserRequest.getEmail()).orElseThrow();
+
+        var token = jwtService.generateToken(user); // Generate JWT token for the authenticated user
 
         // If the user exists and the password matches, return a 200 OK status
         return ResponseEntity.ok(new JwtResponse(token));
@@ -59,9 +61,9 @@ public class AuthController {
         // Get the current authentication from the SecurityContext
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         // Retrieve the email of the authenticated user from the SecurityContext
-        var email = (String) authentication.getPrincipal();
+        var userId = (Long) authentication.getPrincipal();
 
-        var user = userRepository.findByEmail(email).orElse(null);
+        var user = userRepository.findById(userId).orElse(null);
 
         if (user == null) {
             return ResponseEntity.notFound().build(); // Return 404 Not Found if user does not exist
