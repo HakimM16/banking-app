@@ -1,5 +1,6 @@
 package com.hakimmabike.bankingbackend.config;
 
+import com.hakimmabike.bankingbackend.filters.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,12 +17,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -61,11 +64,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login").permitAll()
                         // Allow unauthenticated access to user registration endpoint
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
-                        // Allow unauthenticated access to the health check endpoint
-                        .requestMatchers(HttpMethod.POST, "/api/auth/validate").permitAll()
                         // Require authentication for all other requests
                         .anyRequest().authenticated()
-                );
+                )
+                // Add the JWT authentication filter to the security filter chain
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

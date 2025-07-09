@@ -1,5 +1,6 @@
 package com.hakimmabike.bankingbackend.services;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -27,11 +28,7 @@ public class JwtService {
    public boolean validateToken(String token) {
        try {
            // Parse the JWT token and extract claims
-           var claims = Jwts.parser()
-                   .verifyWith(Keys.hmacShaKeyFor(secret.getBytes())) // Use the secret key to verify the token
-                   .build()
-                   .parseSignedClaims(token) // Parse the signed claims from the token
-                   .getPayload(); // Extract the payload (claims)
+           var claims = getClaims(token);
 
            // Check if the token's expiration date is after the current date
            return claims.getExpiration().after(new Date());
@@ -41,5 +38,17 @@ public class JwtService {
            return false;
        }
    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(secret.getBytes())) // Use the secret key to verify the token
+                .build()
+                .parseSignedClaims(token) // Parse the signed claims from the token
+                .getPayload(); // Extract the payload (claims)
+    }
+
+    public String getEmailFromToken(String token) {
+        return getClaims(token).getSubject();
+    }
 
 }
