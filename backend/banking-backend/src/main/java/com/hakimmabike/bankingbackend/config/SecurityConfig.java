@@ -65,12 +65,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(c -> c
                         // Allow unauthenticated access to the authentication endpoint
                         .requestMatchers("/api/auth/login").permitAll()
+                        // Allow unauthenticated access to register a new user
+                        .requestMatchers(HttpMethod.POST, "api/user").permitAll()
                         // Allow AdminController endpoints to be accessed by users with the ADMIN role
                         .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
-                        // Allow unauthenticated access to the user registration endpoint
-                        .requestMatchers(HttpMethod.POST, "/api/auth").permitAll()
-                        // Allow unauthenticated access to user registration endpoint
-                        .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                        // Allow AccountController endpoints to be accessed by users with the USER role
+                        .requestMatchers("/api/accounts/**").hasRole(Role.USER.name())
+                        // Allow TransactionController endpoints to be accessed by users with the USER role
+                        .requestMatchers("/api/transactions/**").hasRole(Role.USER.name())
+                        // Allow UserController endpoints to be accessed by users with the USER role
+                        .requestMatchers("/api/user/**").hasRole(Role.USER.name())
                         // Require authentication for all other requests
                         .anyRequest().authenticated()
                 )

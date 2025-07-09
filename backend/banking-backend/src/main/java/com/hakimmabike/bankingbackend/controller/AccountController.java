@@ -31,7 +31,7 @@ public class AccountController {
         AccountDto accountDto = accountService.createAccount(userId, request);
 
         // Build the URI for the newly created account resource
-        var uri = uriBuilder.path("/accounts/{id}")
+        var uri = uriBuilder.path("/accounts/{accountId}")
                 .buildAndExpand(accountDto.getId())
                 .toUri();
 
