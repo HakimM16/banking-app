@@ -6,14 +6,13 @@ import com.hakimmabike.bankingbackend.repository.UserRepository;
 import com.hakimmabike.bankingbackend.services.JwtService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -39,5 +38,19 @@ public class AuthController {
 
         // If the user exists and the password matches, return a 200 OK status
         return ResponseEntity.ok(new JwtResponse(token));
+    }
+
+    @PostMapping("/validate")
+    public Boolean validate(@RequestHeader("Authorization") String authHeader) {
+        // Extract the token from the Authorization header by removing the "Bearer " prefix
+        var token = authHeader.replace("Bearer ", "");
+
+        // Validate the token using the JwtService and return the result
+        return jwtService.validateToken(token);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Void> handleBadCredentialsException() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

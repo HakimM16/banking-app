@@ -61,6 +61,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login").permitAll()
                         // Allow unauthenticated access to user registration endpoint
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                        // Allow unauthenticated access to the health check endpoint
+                        .requestMatchers(HttpMethod.POST, "/api/auth/validate").permitAll()
                         // Require authentication for all other requests
                         .anyRequest().authenticated()
                 );

@@ -1,5 +1,6 @@
 package com.hakimmabike.bankingbackend.services;
 
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,5 +23,23 @@ public class JwtService {
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
     }
+
+   public boolean validateToken(String token) {
+       try {
+           // Parse the JWT token and extract claims
+           var claims = Jwts.parser()
+                   .verifyWith(Keys.hmacShaKeyFor(secret.getBytes())) // Use the secret key to verify the token
+                   .build()
+                   .parseSignedClaims(token) // Parse the signed claims from the token
+                   .getPayload(); // Extract the payload (claims)
+
+           // Check if the token's expiration date is after the current date
+           return claims.getExpiration().after(new Date());
+       }
+       catch (JwtException e) {
+           // Return false if the token is invalid or an error occurs during parsing
+           return false;
+       }
+   }
 
 }
