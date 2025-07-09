@@ -1,11 +1,14 @@
 package com.hakimmabike.bankingbackend.controller;
 
+import com.hakimmabike.bankingbackend.config.JwtConfig;
 import com.hakimmabike.bankingbackend.dto.JwtResponse;
 import com.hakimmabike.bankingbackend.dto.LoginUserRequest;
 import com.hakimmabike.bankingbackend.dto.UserDto;
 import com.hakimmabike.bankingbackend.mappers.UserEntityMapper;
 import com.hakimmabike.bankingbackend.repository.UserRepository;
 import com.hakimmabike.bankingbackend.services.JwtService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,11 +28,15 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final JwtConfig jwtConfig;
     private final UserEntityMapper userEntityMapper;
 
     // Login endpoint
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginUserRequest loginUserRequest) {
+    public ResponseEntity<JwtResponse> login(
+            @Valid @RequestBody LoginUserRequest loginUserRequest,
+            HttpServletResponse response
+    ) {
         // Authenticate the user using the provided email and password
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -40,10 +47,18 @@ public class AuthController {
         // If authentication is successful, generate a JWT token
         var user = userRepository.findByEmail(loginUserRequest.getEmail()).orElseThrow();
 
-        var token = jwtService.generateToken(user); // Generate JWT token for the authenticated user
+        var accessToken = jwtService.generateAccessToken(user); // Generate access JWT token for the authenticated user
+        var refreshToken = jwtService.generateRefreshToken(user); // Generate refresh token for the authenticated user
+
+        var cookie = new Cookie("refreshToken", refreshToken);
+        cookie.setHttpOnly(true); // Set the cookie to be HTTP-only
+        cookie.setPath("/auth/refresh"); // Set the path for the cookie
+        cookie.setMaxAge(jwtConfig.getRefreshTokenExpiration()); // Set the cookie to expire in 7 days
+        cookie.setSecure(true);
+        response.addCookie(cookie);
 
         // If the user exists and the password matches, return a 200 OK status
-        return ResponseEntity.ok(new JwtResponse(token));
+        return ResponseEntity.ok(new JwtResponse(accessToken));
     }
 
     @PostMapping("/validate")
