@@ -2,6 +2,8 @@ package com.hakimmabike.bankingbackend.controller;
 
 import com.hakimmabike.bankingbackend.dto.JwtResponse;
 import com.hakimmabike.bankingbackend.dto.LoginUserRequest;
+import com.hakimmabike.bankingbackend.dto.UserDto;
+import com.hakimmabike.bankingbackend.mappers.UserEntityMapper;
 import com.hakimmabike.bankingbackend.repository.UserRepository;
 import com.hakimmabike.bankingbackend.services.JwtService;
 import jakarta.validation.Valid;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +25,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final UserEntityMapper userEntityMapper;
 
     // Login endpoint
     @PostMapping("/login")
@@ -48,6 +52,24 @@ public class AuthController {
 
         // Validate the token using the JwtService and return the result
         return jwtService.validateToken(token);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> me() {
+        // Get the current authentication from the SecurityContext
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Retrieve the email of the authenticated user from the SecurityContext
+        var email = (String) authentication.getPrincipal();
+
+        var user = userRepository.findByEmail(email).orElse(null);
+
+        if (user == null) {
+            return ResponseEntity.notFound().build(); // Return 404 Not Found if user does not exist
+        }
+
+        var userDto = userEntityMapper.toDto(user); // Convert user entity to DTO
+
+        return ResponseEntity.ok(userDto); // Return 200 OK with user details
     }
 
     @ExceptionHandler(BadCredentialsException.class)
