@@ -2,7 +2,7 @@ package com.hakimmabike.bankingbackend.controller;
 
 import com.hakimmabike.bankingbackend.dto.*;
 import com.hakimmabike.bankingbackend.repository.TransactionRepository;
-import com.hakimmabike.bankingbackend.service.TransactionService;
+import com.hakimmabike.bankingbackend.services.TransactionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

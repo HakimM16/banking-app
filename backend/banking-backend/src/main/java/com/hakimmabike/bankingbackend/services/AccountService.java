@@ -1,4 +1,4 @@
-package com.hakimmabike.bankingbackend.service;
+package com.hakimmabike.bankingbackend.services;
 
 import com.hakimmabike.bankingbackend.dto.AccountDto;
 import com.hakimmabike.bankingbackend.dto.CreateAccountRequest;

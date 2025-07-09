@@ -2,7 +2,7 @@ package com.hakimmabike.bankingbackend;
 
 import com.hakimmabike.bankingbackend.entity.*;
 import com.hakimmabike.bankingbackend.enums.*;
-import com.hakimmabike.bankingbackend.service.UserService;
+import com.hakimmabike.bankingbackend.services.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;

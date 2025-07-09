@@ -1,4 +1,4 @@
-package com.hakimmabike.bankingbackend.service;
+package com.hakimmabike.bankingbackend.services;
 
 import com.hakimmabike.bankingbackend.repository.UserRepository;
 import lombok.AllArgsConstructor;

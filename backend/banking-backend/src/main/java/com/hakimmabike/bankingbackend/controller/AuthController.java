@@ -1,7 +1,9 @@
 package com.hakimmabike.bankingbackend.controller;
 
+import com.hakimmabike.bankingbackend.dto.JwtResponse;
 import com.hakimmabike.bankingbackend.dto.LoginUserRequest;
 import com.hakimmabike.bankingbackend.repository.UserRepository;
+import com.hakimmabike.bankingbackend.services.JwtService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +22,11 @@ public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     // Login endpoint
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginUserRequest loginUserRequest) {
+    public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginUserRequest loginUserRequest) {
         // Authenticate the user using the provided email and password
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -31,8 +34,10 @@ public class AuthController {
                         loginUserRequest.getPassword() // User's password
                 )
         );
+        // If authentication is successful, generate a JWT token
+        var token = jwtService.generateToken(loginUserRequest.getEmail());
 
         // If the user exists and the password matches, return a 200 OK status
-        return ResponseEntity.ok("Login successful");
+        return ResponseEntity.ok(new JwtResponse(token));
     }
 }
