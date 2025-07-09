@@ -2,6 +2,7 @@ package com.hakimmabike.bankingbackend.services;
 
 import com.hakimmabike.bankingbackend.dto.*;
 import com.hakimmabike.bankingbackend.entity.User;
+import com.hakimmabike.bankingbackend.enums.Role;
 import com.hakimmabike.bankingbackend.exception.ExistingObjectException;
 import com.hakimmabike.bankingbackend.mappers.UserAddressMapper;
 import com.hakimmabike.bankingbackend.mappers.UserEntityMapper;
@@ -33,6 +34,7 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword())); // Hash the password before saving
         user.setStatus(UserStatus.ACTIVE);// Set the user status to ACTIVE
+        user.setRole(Role.USER);
         System.out.println("User saved: " + user);
         // Save the user to the repository
         userRepository.save(user);

@@ -1,5 +1,6 @@
 package com.hakimmabike.bankingbackend.entity;
 
+import com.hakimmabike.bankingbackend.enums.Role;
 import com.hakimmabike.bankingbackend.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -49,6 +50,10 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     // One-to-One relationship with UserAddress
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

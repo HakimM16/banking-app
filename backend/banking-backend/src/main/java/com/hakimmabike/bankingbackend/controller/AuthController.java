@@ -52,7 +52,7 @@ public class AuthController {
 
         var cookie = new Cookie("refreshToken", refreshToken);
         cookie.setHttpOnly(true); // Set the cookie to be HTTP-only
-        cookie.setPath("/auth/refresh"); // Set the path for the cookie
+        cookie.setPath("/auth"); // Set the path for the cookie
         cookie.setMaxAge(jwtConfig.getRefreshTokenExpiration()); // Set the cookie to expire in 7 days
         cookie.setSecure(true);
         response.addCookie(cookie);
@@ -61,14 +61,20 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(accessToken));
     }
 
-    @PostMapping("/validate")
-    public Boolean validate(@RequestHeader("Authorization") String authHeader) {
-        System.out.println("Validating token...");
-        // Extract the token from the Authorization header by removing the "Bearer " prefix
-        var token = authHeader.replace("Bearer ", "");
+    @PostMapping("/refresh")
+    public ResponseEntity<JwtResponse> refresh(
+            @CookieValue(value = "refreshToken") String refreshToken
+    ) {
+        if (!jwtService.validateToken(refreshToken)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 Unauthorized if the token is invalid
+        }
 
-        // Validate the token using the JwtService and return the result
-        return jwtService.validateToken(token);
+        var userId = jwtService.getUserIdFromToken(refreshToken); // Extract user ID from the refresh token
+        var user = userRepository.findById(userId).orElseThrow(); // Retrieve the user from the database
+        var accessToken = jwtService.generateAccessToken(user); // Generate a new access token for the user
+
+        // Return the new access token in the response
+        return ResponseEntity.ok(new JwtResponse(accessToken));
     }
 
     @GetMapping("/me")

@@ -2,6 +2,7 @@ package com.hakimmabike.bankingbackend.services;
 
 import com.hakimmabike.bankingbackend.config.JwtConfig;
 import com.hakimmabike.bankingbackend.entity.User;
+import com.hakimmabike.bankingbackend.enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -34,6 +35,7 @@ public class JwtService {
                 .issuedAt(new Date())
                 .claim("name", user.getFirstName())
                 .claim("email", user.getEmail())
+                .claim("role", user.getRole())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * tokenExpiration)) // Token valid for 24 hours
                 .signWith(jwtConfig.getSecretKey()) // Sign the token with the secret key
                 .compact();
@@ -63,6 +65,10 @@ public class JwtService {
 
     public Long getUserIdFromToken(String token) {
         return Long.valueOf(getClaims(token).getSubject());
+    }
+
+    public Role getRoleFromToken(String token) {
+        return Role.valueOf(getClaims(token).get("role", String.class));
     }
 
 }
