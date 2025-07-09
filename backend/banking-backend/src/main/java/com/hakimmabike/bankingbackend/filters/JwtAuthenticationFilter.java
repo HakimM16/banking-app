@@ -42,20 +42,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Extract the token by removing the "Bearer " prefix
         var token = authHeader.replace("Bearer ", "");
-        if (!jwtService.validateToken(token)) {
+        var jwt = jwtService.parseToken(token);
+        if (jwt == null || jwt.isExpired()) {
             // If the token is invalid, continue the filter chain without setting authentication
             filterChain.doFilter(request, response);
             return;
         }
 
-        var role = jwtService.getRoleFromToken(token);
-        var user = jwtService.getUserIdFromToken(token);
-
         // Create an authentication object using the email extracted from the token
         var authentication = new UsernamePasswordAuthenticationToken(
-                user, // Extracted email from the token
+                jwt.getUserId(), // Extracted email from the token
                 null, // No authorities are provided
-                List.of(new SimpleGrantedAuthority("ROLE_" + role)) // Assigning a role to the user, can be dynamic based on token claims
+                List.of(new SimpleGrantedAuthority("ROLE_" + jwt.getRole())) // Assigning a role to the user, can be dynamic based on token claims
         );
         // Set additional details for the authentication object
         authentication.setDetails(

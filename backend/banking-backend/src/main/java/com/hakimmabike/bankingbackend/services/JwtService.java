@@ -19,39 +19,39 @@ public class JwtService {
     // This service will handle JWT creation and validation
     private final JwtConfig jwtConfig;
 
-    public String generateAccessToken(User user) {
+    public Jwt generateAccessToken(User user) {
        // Token expiration time in seconds (5 mins)
         return generateToken(user, jwtConfig.getAccessTokenExpiration());
     }
 
-    public String generateRefreshToken(User user) {
+    public Jwt generateRefreshToken(User user) {
         // Token expiration time in seconds (7 days)
         return generateToken(user, jwtConfig.getRefreshTokenExpiration());
     }
 
-    private String generateToken(User user, long tokenExpiration) {
-        return Jwts.builder()
+    private Jwt generateToken(User user, long tokenExpiration) {
+        var claims = Jwts.claims()
                 .subject(user.getId().toString())
                 .issuedAt(new Date())
-                .claim("name", user.getFirstName())
-                .claim("email", user.getEmail())
-                .claim("role", user.getRole())
+                .add("name", user.getFirstName())
+                .add("email", user.getEmail())
+                .add("role", user.getRole())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * tokenExpiration)) // Token valid for 24 hours
-                .signWith(jwtConfig.getSecretKey()) // Sign the token with the secret key
-                .compact();
+                .build();
+        return new Jwt(claims, jwtConfig.getSecretKey());
     }
 
-    public boolean validateToken(String token) {
+    public Jwt parseToken(String token) {
        try {
            // Parse the JWT token and extract claims
            var claims = getClaims(token);
 
-           // Check if the token's expiration date is after the current date
-           return claims.getExpiration().after(new Date());
+           // Create a new Jwt object with the claims and secret key
+           return new Jwt(claims, jwtConfig.getSecretKey());
        }
        catch (JwtException e) {
            // Return false if the token is invalid or an error occurs during parsing
-           return false;
+           return null;
        }
    }
 
@@ -62,13 +62,4 @@ public class JwtService {
                 .parseSignedClaims(token) // Parse the signed claims from the token
                 .getPayload(); // Extract the payload (claims)
     }
-
-    public Long getUserIdFromToken(String token) {
-        return Long.valueOf(getClaims(token).getSubject());
-    }
-
-    public Role getRoleFromToken(String token) {
-        return Role.valueOf(getClaims(token).get("role", String.class));
-    }
-
 }

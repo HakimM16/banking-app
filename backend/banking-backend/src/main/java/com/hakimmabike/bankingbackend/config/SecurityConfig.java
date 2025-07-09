@@ -68,7 +68,7 @@ public class SecurityConfig {
                         // Allow AdminController endpoints to be accessed by users with the ADMIN role
                         .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
                         // Allow unauthenticated access to the user registration endpoint
-                        .requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth").permitAll()
                         // Allow unauthenticated access to user registration endpoint
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         // Require authentication for all other requests
