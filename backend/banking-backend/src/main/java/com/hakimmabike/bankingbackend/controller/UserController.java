@@ -6,7 +6,7 @@ import com.hakimmabike.bankingbackend.dto.UpdateUserRequest;
 import com.hakimmabike.bankingbackend.dto.UserDto;
 import com.hakimmabike.bankingbackend.enums.UserStatus;
 import com.hakimmabike.bankingbackend.repository.UserRepository;
-import com.hakimmabike.bankingbackend.service.UserService;
+import com.hakimmabike.bankingbackend.services.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,10 +23,15 @@ public class UserController {
 
     // Register a new user
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> registerUser(
             @Valid @RequestBody RegisterUserRequest request,
             UriComponentsBuilder uriBuilder) {
+        // Check if the user already exists
+        if (userRepository.existsByEmail(request.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("User with this email already exists");
+        }
+
         // Create the user
         var userDto = userService.registerUser(request);
 
@@ -34,12 +39,6 @@ public class UserController {
         var uri = uriBuilder.path("/users/{id}")
                 .buildAndExpand(userDto.getId())
                 .toUri();
-
-        // Check if the user already exists
-        if (userRepository.existsByEmail(request.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("User with this email already exists");
-        }
 
         // Return a 201 Created response with the location of the new resource
         return ResponseEntity.created(uri).body(userDto);
