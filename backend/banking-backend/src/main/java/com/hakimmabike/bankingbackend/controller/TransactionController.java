@@ -59,4 +59,37 @@ public class TransactionController {
         // Return the list of transactions with a 200 OK status
         return ResponseEntity.ok(transactions);
     }
+
+    // Create a new transaction category
+    @PostMapping("/category")
+    public ResponseEntity<TransactionCategoryDto> createTransactionCategory(@RequestBody CreateTransactionCategoryRequest request) {
+        // Create a new transaction category
+        TransactionCategoryDto createdCategory = transactionService.createTransactionCategory(request);
+        // Return the created category with a 201 Created status
+        return ResponseEntity.status(201).body(createdCategory);
+    }
+
+    // Get a specific transaction category by name
+    @GetMapping("/category/{name}")
+    public ResponseEntity<TransactionCategoryDto> getTransactionCategory(@RequestBody GetTransactionCategoryRequest request) {
+        // Fetch the transaction category by name
+        TransactionCategoryDto category = transactionService.getTransactionCategory(request.getName());
+
+        // If the category is not found, return a 404 Not Found status
+        if (category == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Return the category with a 200 OK status
+        return ResponseEntity.ok(category);
+    }
+
+    // Get all transaction categories
+    @GetMapping("/categories")
+    public ResponseEntity<List<TransactionCategoryDto>> getAllTransactionCategories() {
+        // Fetch all transaction categories
+        List<TransactionCategoryDto> categories = transactionService.getAllTransactionCategories();
+        // Return the list of categories with a 200 OK status
+        return ResponseEntity.ok(categories);
+    }
 }

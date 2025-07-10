@@ -1,9 +1,9 @@
 package com.hakimmabike.bankingbackend.enums;
 
 public enum CategoryType {
-    PENDING("pending"),
-    COMPLETED("completed"),
-    FAILED("failed");
+    INCOME("income"),
+    EXPENSE("expense"),
+    TRANSFER("transfer");
 
     private final String value;
 

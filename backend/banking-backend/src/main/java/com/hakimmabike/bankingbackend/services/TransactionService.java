@@ -3,7 +3,9 @@ package com.hakimmabike.bankingbackend.services;
 import com.hakimmabike.bankingbackend.dto.*;
 import com.hakimmabike.bankingbackend.entity.Account;
 import com.hakimmabike.bankingbackend.entity.Transaction;
+import com.hakimmabike.bankingbackend.entity.TransactionCategory;
 import com.hakimmabike.bankingbackend.entity.Transfer;
+import com.hakimmabike.bankingbackend.enums.CategoryType;
 import com.hakimmabike.bankingbackend.enums.TransactionStatus;
 import com.hakimmabike.bankingbackend.enums.TransactionType;
 import com.hakimmabike.bankingbackend.exception.InsufficientFundsException;
@@ -76,6 +78,42 @@ public class TransactionService {
 
         // Convert to DTO
         return transactionMapper.toDto(transaction);
+    }
+
+    // Create transactionCategory
+    public TransactionCategoryDto createTransactionCategory(CreateTransactionCategoryRequest request) {
+        // Check if the category already exists
+        if (categoryRepository.findByName(request.getName()).isPresent()) {
+            throw new EntityNotFoundException("Transaction category already exists");
+        }
+
+        // Create a new transaction category
+        TransactionCategory category = new TransactionCategory();
+        category.setName(request.getName());
+        category.setDescription(request.getDescription());
+        category.setCategoryType(CategoryType.valueOf(request.getCategoryType()));
+        category.setSystem(request.isSystem());
+
+        // Save the category
+        TransactionCategory savedCategory = categoryRepository.save(category);
+
+        // Convert to DTO
+        return transactionMapper.toCategoryDto(savedCategory);
+    }
+
+    // Get Specific Transaction Category
+    public TransactionCategoryDto getTransactionCategory(String name) {
+        return categoryRepository.findByName(name)
+                .map(transactionMapper::toCategoryDto)
+                .orElseThrow(() -> new EntityNotFoundException("Transaction category not found"));
+    }
+
+    // Get all transaction categories
+    public List<TransactionCategoryDto> getAllTransactionCategories() {
+        List<TransactionCategory> categories = categoryRepository.findAll();
+        return categories.stream()
+                .map(transactionMapper::toCategoryDto)
+                .toList();
     }
 
     public TransactionDto withdraw(WithdrawRequest request) {

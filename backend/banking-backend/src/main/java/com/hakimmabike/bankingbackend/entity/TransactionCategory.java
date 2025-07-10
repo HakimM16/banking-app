@@ -32,7 +32,7 @@ public class TransactionCategory {
     private CategoryType categoryType;
 
     @Column(name = "is_system", nullable = false)
-    private boolean isSystem = false;
+    private boolean isSystem;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
