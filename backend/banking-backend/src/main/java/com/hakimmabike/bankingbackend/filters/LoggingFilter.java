@@ -14,7 +14,7 @@ public class LoggingFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // Log the incoming request URL
-        System.out.println("Request: " + request.getRequestURL());
+        System.out.println("Request Method: " + request.getMethod() + ", URL: " + request.getRequestURL());
 
         // Continue the filter chain
         filterChain.doFilter(request, response);
