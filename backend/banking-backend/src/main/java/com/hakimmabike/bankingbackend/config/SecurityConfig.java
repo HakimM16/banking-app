@@ -63,6 +63,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 // Configure authorization rules
                 .authorizeHttpRequests(c -> c
+                        // AuthController endpoints
                         // Allow unauthenticated access to the authentication endpoint
                         .requestMatchers(
                                 // Authetication
@@ -71,14 +72,23 @@ public class SecurityConfig {
                                 "/api/auth/refresh"
                         ).permitAll()
                         .requestMatchers("/api/auth/me").hasRole(Role.ADMIN.name())
+
                         // Allow AdminController endpoints to be accessed by users with the ADMIN role
                         .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
 
+                        // AccountController endpoints
                         // Allow AccountController endpoints to be accessed by users with the USER role
-                        .requestMatchers("/api/accounts/**").permitAll()
+                        .requestMatchers(
+                                "api/accounts",
+                                "api/accounts/{accountId}",
+                                "api/accounts/user/{userId}",
+                                "api/accounts/{accountId}/balance"
+                        ).permitAll()
+                        // Allow users with the ADMIN role to change account status
+                        .requestMatchers(HttpMethod.PATCH, "api/accounts/{accountId}/status").hasRole(Role.ADMIN.name())
 
                         // Allow TransactionController endpoints to be accessed by users with the USER role
-                        .requestMatchers("/api/transactions/**").permitAll()
+                        .requestMatchers("/api/transactions/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
 
                         // User Controller endpoints
                         // Allow users with the ADMIN role to update or delete users

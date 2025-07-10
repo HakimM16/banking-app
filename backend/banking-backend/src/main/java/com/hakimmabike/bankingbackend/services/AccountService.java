@@ -1,14 +1,10 @@
 package com.hakimmabike.bankingbackend.services;
 
-import com.hakimmabike.bankingbackend.dto.AccountDto;
-import com.hakimmabike.bankingbackend.dto.CreateAccountRequest;
-import com.hakimmabike.bankingbackend.dto.DeleteAccountRequest;
-import com.hakimmabike.bankingbackend.dto.UpdateAccountRequest;
+import com.hakimmabike.bankingbackend.dto.*;
 import com.hakimmabike.bankingbackend.entity.Account;
 import com.hakimmabike.bankingbackend.entity.User;
 import com.hakimmabike.bankingbackend.enums.AccountStatus;
 import com.hakimmabike.bankingbackend.enums.AccountType;
-import com.hakimmabike.bankingbackend.exception.AccountStatusException;
 import com.hakimmabike.bankingbackend.exception.ExistingBalanceException;
 import com.hakimmabike.bankingbackend.exception.InvalidObjectException;
 import com.hakimmabike.bankingbackend.exception.ObjectExistsException;
@@ -57,8 +53,25 @@ public class AccountService {
         return accountMapper.toDto(account);
     }
 
+    // Update account status
+    public AccountDto changeAccountStatus(Long accountId, UpdateAccountStatusRequest request) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+
+        // Validate the new status
+        if (!AccountStatus.isValidStatus(request.getStatus())) {
+            throw new InvalidObjectException("Invalid account status provided.");
+        }
+
+        // Update the account status
+        account.setStatus(AccountStatus.valueOf(request.getStatus()));
+        accountRepository.save(account);
+        // Map the updated account entity to a DTO
+        return accountMapper.toDto(account);
+    }
+
     // close an account
-    public void closeAccount(Long accountId, DeleteAccountRequest request) {
+    public void deleteAccount(Long accountId, DeleteAccountRequest request) {
         // Check if the account exists
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
@@ -71,7 +84,8 @@ public class AccountService {
 
         // Check if the account is already closed
         if (account.getStatus() == AccountStatus.CLOSED) {
-            throw new AccountStatusException("Account is already closed");
+            deletionProcess(account);
+            System.out.println("Account with account number " + account.getAccountNumber() + " is already closed and has been deleted.");
         }
 
         // Check if the account has a balance
@@ -82,6 +96,13 @@ public class AccountService {
         // Set the account status to CLOSED
         account.setStatus(AccountStatus.CLOSED);
 
+        deletionProcess(account);
+
+        System.out.println("Account with account number " + account.getAccountNumber() + " has been closed and successfully deleted.");
+
+    }
+
+    private void deletionProcess(Account account) {
         // delete associated transactions if needed
         transactionRepository.deleteAllByAccount(account);
 
@@ -99,9 +120,6 @@ public class AccountService {
 
         // delete the account
         accountRepository.delete(account);
-
-        System.out.println("Account with account number " + account.getAccountNumber() + " has been successfully deleted.");
-
     }
 
     public AccountDto getAccountById(Long accountId) {

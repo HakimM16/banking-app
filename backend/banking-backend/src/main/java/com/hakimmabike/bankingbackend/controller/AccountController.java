@@ -1,9 +1,6 @@
 package com.hakimmabike.bankingbackend.controller;
 
-import com.hakimmabike.bankingbackend.dto.AccountDto;
-import com.hakimmabike.bankingbackend.dto.CreateAccountRequest;
-import com.hakimmabike.bankingbackend.dto.DeleteAccountRequest;
-import com.hakimmabike.bankingbackend.dto.UpdateAccountRequest;
+import com.hakimmabike.bankingbackend.dto.*;
 import com.hakimmabike.bankingbackend.repository.AccountRepository;
 import com.hakimmabike.bankingbackend.services.AccountService;
 import lombok.AllArgsConstructor;
@@ -39,10 +36,23 @@ public class AccountController {
         return ResponseEntity.created(uri).body(accountDto);
     }
 
-    // Close an existing account
+    // Update account status
+    @PatchMapping("/{accountId}/status")
+    public ResponseEntity<AccountDto> updateAccountStatus(
+            @PathVariable Long accountId,
+            @RequestBody UpdateAccountStatusRequest request
+    ) {
+        AccountDto updatedAccount = accountService.changeAccountStatus(accountId, request);
+        if (updatedAccount == null) {
+            return ResponseEntity.notFound().build(); // Return 404 Not Found if the account does not exist
+        }
+        return ResponseEntity.ok(updatedAccount); // Return the updated account mapped to a DTO with a 200 OK status
+    }
+
+    // Delete an existing account
     @DeleteMapping("/{accountId}")
     public void closeAccount(@PathVariable Long accountId, @RequestBody DeleteAccountRequest request) {
-        accountService.closeAccount(accountId, request);
+        accountService.deleteAccount(accountId, request);
     }
 
     // Get account by ID
