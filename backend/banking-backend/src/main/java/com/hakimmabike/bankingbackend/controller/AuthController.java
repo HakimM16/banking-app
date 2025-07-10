@@ -3,10 +3,12 @@ package com.hakimmabike.bankingbackend.controller;
 import com.hakimmabike.bankingbackend.config.JwtConfig;
 import com.hakimmabike.bankingbackend.dto.JwtResponse;
 import com.hakimmabike.bankingbackend.dto.LoginUserRequest;
+import com.hakimmabike.bankingbackend.dto.RegisterUserRequest;
 import com.hakimmabike.bankingbackend.dto.UserDto;
 import com.hakimmabike.bankingbackend.mappers.UserEntityMapper;
 import com.hakimmabike.bankingbackend.repository.UserRepository;
 import com.hakimmabike.bankingbackend.services.JwtService;
+import com.hakimmabike.bankingbackend.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -19,6 +21,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @AllArgsConstructor
@@ -30,6 +33,30 @@ public class AuthController {
     private final JwtService jwtService;
     private final JwtConfig jwtConfig;
     private final UserEntityMapper userEntityMapper;
+    private final UserService userService;
+
+    // Register a new user
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(
+            @Valid @RequestBody RegisterUserRequest request,
+            UriComponentsBuilder uriBuilder) {
+        // Check if the user already exists
+        if (userRepository.existsByEmail(request.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("User with this email already exists");
+        }
+
+        // Create the user
+        var userDto = userService.registerUser(request);
+
+        // Make a new uri for the newly created user
+        var uri = uriBuilder.path("/user/{id}")
+                .buildAndExpand(userDto.getId())
+                .toUri();
+
+        // Return a 201 Created response with the location of the new resource
+        return ResponseEntity.created(uri).body(userDto);
+    }
 
     // Login endpoint
     @PostMapping("/login")

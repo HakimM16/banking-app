@@ -21,29 +21,6 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
 
-    // Register a new user
-    @PostMapping
-    public ResponseEntity<?> registerUser(
-            @Valid @RequestBody RegisterUserRequest request,
-            UriComponentsBuilder uriBuilder) {
-        // Check if the user already exists
-        if (userRepository.existsByEmail(request.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("User with this email already exists");
-        }
-
-        // Create the user
-        var userDto = userService.registerUser(request);
-
-        // Make a new uri for the newly created user
-        var uri = uriBuilder.path("/users/{id}")
-                .buildAndExpand(userDto.getId())
-                .toUri();
-
-        // Return a 201 Created response with the location of the new resource
-        return ResponseEntity.created(uri).body(userDto);
-    }
-
     // Update an existing user
     @PutMapping("/{id}")
     public UserDto updateUser(

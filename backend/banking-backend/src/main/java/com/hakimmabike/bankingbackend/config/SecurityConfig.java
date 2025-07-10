@@ -64,20 +64,35 @@ public class SecurityConfig {
                 // Configure authorization rules
                 .authorizeHttpRequests(c -> c
                         // Allow unauthenticated access to the authentication endpoint
-                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers(
+                                // Authetication
+                                "/api/auth/register",
+                                "/api/auth/login",
+                                "/api/auth/refresh"
+                        ).permitAll()
                         .requestMatchers("/api/auth/me").hasRole(Role.ADMIN.name())
-                        // Allow unauthenticated access to register a new user
-                        .requestMatchers(HttpMethod.POST, "api/user").permitAll()
                         // Allow AdminController endpoints to be accessed by users with the ADMIN role
                         .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
+
                         // Allow AccountController endpoints to be accessed by users with the USER role
-                        .requestMatchers("/api/accounts/**").hasRole(Role.USER.name())
+                        .requestMatchers("/api/accounts/**").permitAll()
+
                         // Allow TransactionController endpoints to be accessed by users with the USER role
-                        .requestMatchers("/api/transactions/**").hasRole(Role.USER.name())
+                        .requestMatchers("/api/transactions/**").permitAll()
+
+                        // User Controller endpoints
                         // Allow users with the ADMIN role to update or delete users
                         .requestMatchers(HttpMethod.DELETE, "/api/user/{id}").hasRole(Role.ADMIN.name())
+                        // Allow users with the ADMIN or USER role to update, and get user details
+                        .requestMatchers(HttpMethod.PUT, "/api/user/{id}").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
+                        .requestMatchers(HttpMethod.GET, "/api/user/{id}").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
+                        // Allow users with the ADMIN role to change user status
+                        .requestMatchers(HttpMethod.PATCH, "/api/user/{id}/status").hasRole(Role.ADMIN.name())
+                        // Allow users with the ADMIN or USER role to manage user addresses
+                        .requestMatchers(HttpMethod.POST, "api/user/{id}/address").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
+                        .requestMatchers(HttpMethod.PUT, "api/user/{id}/address").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
+                        .requestMatchers(HttpMethod.GET, "api/user/{id}/address").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
 
-                        // Add any other endpoints that should be accessible to users with the USER role
 
                         // Require authentication for all other requests
                         .anyRequest().authenticated()
