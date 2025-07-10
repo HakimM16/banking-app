@@ -60,8 +60,8 @@ public class TransactionService {
         transaction.setTransactionDate(LocalDateTime.now());
         transaction.setTransactionNumber(generateTransactionNumber());
 
-        if (request.getCategoryId() != null) {
-            transaction.setTransactionCategory(categoryRepository.findById(request.getCategoryId())
+        if (request.getCategoryName() != null) {
+            transaction.setTransactionCategory(categoryRepository.findByName(request.getCategoryName())
                     .orElseThrow(() -> new EntityNotFoundException("Transaction category not found")));
         }
 
@@ -96,8 +96,8 @@ public class TransactionService {
         transaction.setTransactionDate(LocalDateTime.now());
         transaction.setTransactionNumber(generateTransactionNumber());
 
-        if (request.getCategoryId() != null) {
-            transaction.setTransactionCategory(categoryRepository.findById(request.getCategoryId())
+        if (request.getCategoryName() != null) {
+            transaction.setTransactionCategory(categoryRepository.findByName(request.getCategoryName())
                     .orElseThrow(() -> new EntityNotFoundException("Transaction category not found")));
         }
 

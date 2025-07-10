@@ -9,5 +9,5 @@ public class DepositRequest {
     private String accountNumber;
     private BigDecimal amount;
     private String description;
-    private Long categoryId;
+    private String categoryName;
 }
