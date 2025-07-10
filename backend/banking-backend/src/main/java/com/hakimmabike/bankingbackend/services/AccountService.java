@@ -7,6 +7,7 @@ import com.hakimmabike.bankingbackend.dto.UpdateAccountRequest;
 import com.hakimmabike.bankingbackend.entity.Account;
 import com.hakimmabike.bankingbackend.entity.User;
 import com.hakimmabike.bankingbackend.enums.AccountStatus;
+import com.hakimmabike.bankingbackend.enums.AccountType;
 import com.hakimmabike.bankingbackend.exception.AccountStatusException;
 import com.hakimmabike.bankingbackend.exception.ExistingBalanceException;
 import com.hakimmabike.bankingbackend.exception.InvalidObjectException;
@@ -44,7 +45,7 @@ public class AccountService {
         var account = new Account();
 
         // Set the account properties
-        account.setAccountType(request.getAccountType());
+        account.setAccountType(AccountType.valueOf(request.getAccountType()));
         account.setUser(user);
         account.setAccountNumber(generateAccountNumber());
         account.setStatus(AccountStatus.OPEN);
@@ -63,7 +64,8 @@ public class AccountService {
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
         // Check if account matches with request details
-        if (!account.getAccountNumber().equals(request.getAccountNumber()) && !account.getAccountType().equals(request.getAccountType())) {
+        Boolean isAccountTypeValid = account.getAccountType().equals(AccountType.valueOf(request.getAccountType()));
+        if (!account.getAccountNumber().equals(request.getAccountNumber()) && !isAccountTypeValid) {
             throw new InvalidObjectException("Account details do not match. Please check the account number and type.");
         }
 

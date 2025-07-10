@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 public class DeleteAccountRequest {
     private String accountNumber;
-    private AccountType accountType;
+    private String accountType;
     private String reason;
 }

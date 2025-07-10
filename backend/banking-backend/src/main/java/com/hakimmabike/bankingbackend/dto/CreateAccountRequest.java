@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 public class CreateAccountRequest {
     @NotNull(message = "Account Type is required")
-    private AccountType accountType;
+    private String accountType;
 }
