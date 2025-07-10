@@ -73,13 +73,13 @@ public class UserService {
         userRepository.delete(existingUser);
     }
 
-    public void changeUserStatus(Long userId, UserStatus status) {
+    public void changeUserStatus(Long userId, UpdateStatusRequest status) {
         // Find the existing user
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         // Update the user's status
-        existingUser.setStatus(status);
+        existingUser.setStatus(UserStatus.valueOf(status.getStatus()));
 
         // Save the updated user
         userRepository.save(existingUser);

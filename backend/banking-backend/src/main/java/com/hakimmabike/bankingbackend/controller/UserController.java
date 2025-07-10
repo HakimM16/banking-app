@@ -1,9 +1,6 @@
 package com.hakimmabike.bankingbackend.controller;
 
-import com.hakimmabike.bankingbackend.dto.CustomiseAddressRequest;
-import com.hakimmabike.bankingbackend.dto.RegisterUserRequest;
-import com.hakimmabike.bankingbackend.dto.UpdateUserRequest;
-import com.hakimmabike.bankingbackend.dto.UserDto;
+import com.hakimmabike.bankingbackend.dto.*;
 import com.hakimmabike.bankingbackend.enums.UserStatus;
 import com.hakimmabike.bankingbackend.repository.UserRepository;
 import com.hakimmabike.bankingbackend.services.UserService;
@@ -45,7 +42,7 @@ public class UserController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<?> changeUserStatus(
             @PathVariable Long id,
-            @RequestParam UserStatus status) {
+            @RequestBody UpdateStatusRequest status) {
         try {
             userService.changeUserStatus(id, status);
             return ResponseEntity.ok("User status updated successfully");
