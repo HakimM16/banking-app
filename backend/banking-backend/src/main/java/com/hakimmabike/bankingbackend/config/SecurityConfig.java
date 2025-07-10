@@ -65,6 +65,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(c -> c
                         // Allow unauthenticated access to the authentication endpoint
                         .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/api/auth/me").hasRole(Role.ADMIN.name())
                         // Allow unauthenticated access to register a new user
                         .requestMatchers(HttpMethod.POST, "api/user").permitAll()
                         // Allow AdminController endpoints to be accessed by users with the ADMIN role
@@ -73,8 +74,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/accounts/**").hasRole(Role.USER.name())
                         // Allow TransactionController endpoints to be accessed by users with the USER role
                         .requestMatchers("/api/transactions/**").hasRole(Role.USER.name())
-                        // Allow UserController endpoints to be accessed by users with the USER role
-                        .requestMatchers("/api/user/**").hasRole(Role.USER.name())
+                        // Allow users with the ADMIN role to update or delete users
+                        .requestMatchers(HttpMethod.DELETE, "/api/user/{id}").hasRole(Role.ADMIN.name())
+
+                        // Add any other endpoints that should be accessible to users with the USER role
+
                         // Require authentication for all other requests
                         .anyRequest().authenticated()
                 )

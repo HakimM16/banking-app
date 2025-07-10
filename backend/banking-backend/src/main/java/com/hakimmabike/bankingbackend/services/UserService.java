@@ -34,7 +34,7 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword())); // Hash the password before saving
         user.setStatus(UserStatus.ACTIVE);// Set the user status to ACTIVE
-        user.setRole(Role.USER);
+        user.setRole(Role.valueOf(request.getRole()));
         System.out.println("User saved: " + user);
         // Save the user to the repository
         userRepository.save(user);
