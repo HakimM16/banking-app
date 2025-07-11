@@ -99,7 +99,7 @@ public class SecurityConfig {
                         // Allow users with the ADMIN role to change user status
                         .requestMatchers(HttpMethod.PATCH, "/api/user/{id}/status").hasRole(Role.ADMIN.name())
                         // Allow users with the ADMIN or USER role to manage user addresses
-                        .requestMatchers(HttpMethod.POST, "api/user/{id}/address").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
+                        .requestMatchers(HttpMethod.POST, "api/user/{id}/create_address").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
                         .requestMatchers(HttpMethod.PUT, "api/user/{id}/address").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
                         .requestMatchers(HttpMethod.GET, "api/user/{id}/address").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
                         // Require authentication for all other requests

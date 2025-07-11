@@ -105,11 +105,35 @@ public class UserController {
     }
 
     // Create a new user address
-    @PostMapping("/{id}/address")
+    @PostMapping("/{id}/create_address")
     public ResponseEntity<?> createUserAddress(
             @PathVariable Long id,
             @Valid @RequestBody CustomiseAddressRequest request,
             UriComponentsBuilder uriBuilder) {
+        // Check if the user exists
+        if (!userRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // check if body is empty
+        if (request.getStreet().isEmpty() && request.getCity().isEmpty() &&
+                request.getPostCode().isEmpty() && request.getCountry().isEmpty() &&
+                request.getCounty().isEmpty()) {
+            return ResponseEntity.badRequest().body("Address cannot be empty");
+        }
+
+        // check if field is empty
+        if (request.getStreet().isEmpty() || request.getCity().isEmpty() ||
+            request.getPostCode().isEmpty() || request.getCountry().isEmpty() ||
+            request.getCounty().isEmpty()) {
+            return ResponseEntity.badRequest().body("Address fields cannot be empty");
+        }
+
+        // check if postcode is in correct format
+        if (!request.getPostCode().matches("^[A-Z0-9]{2,10}$")) {
+            return ResponseEntity.badRequest().body("Invalid postcode format");
+        }
+
 
         var userAddressDto = userService.createUserAddress(id, request);
         var uri = uriBuilder.path("/user/{id}/address")
