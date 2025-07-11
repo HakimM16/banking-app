@@ -42,7 +42,7 @@ public class AuthController {
             UriComponentsBuilder uriBuilder) {
         // Check if the user already exists
         if (userRepository.existsByEmail(request.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            return ResponseEntity.status(HttpStatus.CONFLICT) // Return 409 Conflict if user already exists
                     .body("User with this email already exists");
         }
 

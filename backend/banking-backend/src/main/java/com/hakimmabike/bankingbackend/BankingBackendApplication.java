@@ -104,14 +104,14 @@ public class BankingBackendApplication {
 		TransactionCategory incomeCategory = TransactionCategory.builder()
 				.name("Salary")
 				.description("Monthly income")
-				.categoryType(CategoryType.PENDING)
+				.categoryType(CategoryType.INCOME)
 				.isSystem(true)
 				.build();
 
 		TransactionCategory expenseCategory = TransactionCategory.builder()
 				.name("Shopping")
 				.description("Retail purchases")
-				.categoryType(CategoryType.COMPLETED)
+				.categoryType(CategoryType.EXPENSE)
 				.isSystem(true)
 				.build();
 
@@ -160,7 +160,7 @@ public class BankingBackendApplication {
 		TransactionCategory transferCategory = TransactionCategory.builder()
 				.name("Transfer")
 				.description("Account to Account Transfer")
-				.categoryType(CategoryType.PENDING)
+				.categoryType(CategoryType.TRANSFER)
 				.isSystem(true)
 				.build();
 
@@ -218,14 +218,14 @@ public class BankingBackendApplication {
 		TransactionCategory salaryCategory = TransactionCategory.builder()
 				.name("Salary")
 				.description("Monthly salary deposit")
-				.categoryType(CategoryType.PENDING)
+				.categoryType(CategoryType.INCOME)
 				.isSystem(true)
 				.build();
 
 		TransactionCategory billsCategory = TransactionCategory.builder()
 				.name("Bills")
 				.description("Monthly utilities")
-				.categoryType(CategoryType.COMPLETED)
+				.categoryType(CategoryType.EXPENSE)
 				.isSystem(true)
 				.build();
 

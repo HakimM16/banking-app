@@ -102,8 +102,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "api/user/{id}/address").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
                         .requestMatchers(HttpMethod.PUT, "api/user/{id}/address").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
                         .requestMatchers(HttpMethod.GET, "api/user/{id}/address").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
-
-
                         // Require authentication for all other requests
                         .anyRequest().authenticated()
                 )
