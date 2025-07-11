@@ -28,8 +28,16 @@ public class UserController {
 
     // Get user by ID
     @GetMapping("/{id}")
-    public UserDto getUser(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
+        // check if the user exists
+        if (!userRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var userDto = userService.getUserById(id);
+        return userDto != null
+                ? ResponseEntity.ok(userDto)
+                : ResponseEntity.notFound().build();
     }
 
     // Delete a user

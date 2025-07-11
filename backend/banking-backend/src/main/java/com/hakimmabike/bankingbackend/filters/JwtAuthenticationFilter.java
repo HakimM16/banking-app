@@ -43,6 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Extract the token by removing the "Bearer " prefix
         var token = authHeader.replace("Bearer ", "");
         var jwt = jwtService.parseToken(token);
+        // check if token is invalid
         if (jwt == null || jwt.isExpired()) {
             // If the token is invalid, continue the filter chain without setting authentication
             filterChain.doFilter(request, response);

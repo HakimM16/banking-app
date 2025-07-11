@@ -64,6 +64,11 @@ public class AuthController {
             @Valid @RequestBody LoginUserRequest loginUserRequest,
             HttpServletResponse response
     ) {
+        // check if the user exists in the database
+        if (!userRepository.existsByEmail(loginUserRequest.getEmail())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Return 404 Unauthorized if user does not exist
+        }
+
         // Authenticate the user using the provided email and password
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -71,6 +76,8 @@ public class AuthController {
                         loginUserRequest.getPassword() // User's password
                 )
         );
+
+
         // If authentication is successful, generate a JWT token
         var user = userRepository.findByEmail(loginUserRequest.getEmail()).orElseThrow();
 
