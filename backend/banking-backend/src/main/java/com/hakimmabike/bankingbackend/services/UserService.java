@@ -4,7 +4,6 @@ import com.hakimmabike.bankingbackend.dto.*;
 import com.hakimmabike.bankingbackend.entity.User;
 import com.hakimmabike.bankingbackend.enums.Role;
 import com.hakimmabike.bankingbackend.exception.ExistingObjectException;
-import com.hakimmabike.bankingbackend.mappers.UserAddressMapper;
 import com.hakimmabike.bankingbackend.mappers.UserEntityMapper;
 import com.hakimmabike.bankingbackend.entity.UserAddress;
 import com.hakimmabike.bankingbackend.enums.UserStatus;
@@ -22,7 +21,6 @@ public class UserService {
     private final UserAddressRepository userAddressRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserEntityMapper userEntityMapper;
-    private final UserAddressMapper userAddressMapper;
 
     public UserDto registerUser(RegisterUserRequest request) {
         // Check if the user already exists
@@ -129,7 +127,7 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("Address not found for user"));
 
         // Convert the UserAddress entity to UserAddressDto and return it
-        return userAddressMapper.toDto(address);
+        return mapToUserAddressDto(address);
     }
 
     // Change User address by Id

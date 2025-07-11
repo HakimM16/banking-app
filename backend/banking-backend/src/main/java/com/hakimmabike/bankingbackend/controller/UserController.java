@@ -185,7 +185,18 @@ public class UserController {
     // Get user addresses
     @GetMapping("/{id}/address")
     public ResponseEntity<?> getUserAddress(@PathVariable Long id) {
+        // Check if the user exists
+        if (!userRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Check if the user has an address
+        if (!userService.userHasAddress(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User does not have an address");
+        }
+
         var userAddress = userService.getUserAddressById(id);
+
         return userAddress != null
                 ? ResponseEntity.ok(userAddress)
                 : ResponseEntity.notFound().build();
