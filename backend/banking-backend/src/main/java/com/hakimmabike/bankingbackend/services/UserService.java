@@ -182,4 +182,13 @@ public class UserService {
         existingAddress.setCountry(request.getCountry());
         return existingAddress;
     }
+
+    public boolean userHasAddress(Long id) {
+        // Check if the user exists
+        if (!userRepository.existsById(id)) {
+            throw new EntityNotFoundException("User not found");
+        }
+        // Check if the user has an address
+        return userAddressRepository.findByUserId(id).isPresent();
+    }
 }

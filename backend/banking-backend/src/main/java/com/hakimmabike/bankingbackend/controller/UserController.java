@@ -147,6 +147,35 @@ public class UserController {
     public ResponseEntity<?> updateUserAddress(
             @PathVariable Long id,
             @Valid @RequestBody CustomiseAddressRequest request) {
+        // Check if the user exists
+        if (!userRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // check if body is empty
+        if (request.getStreet().isEmpty() && request.getCity().isEmpty() &&
+                request.getPostCode().isEmpty() && request.getCountry().isEmpty() &&
+                request.getCounty().isEmpty()) {
+            return ResponseEntity.badRequest().body("Address cannot be empty");
+        }
+
+        // check if field is empty
+        if (request.getStreet().isEmpty() || request.getCity().isEmpty() ||
+                request.getPostCode().isEmpty() || request.getCountry().isEmpty() ||
+                request.getCounty().isEmpty()) {
+            return ResponseEntity.badRequest().body("Address fields cannot be empty");
+        }
+
+        // check if postcode is in correct format
+        if (!request.getPostCode().matches("^[A-Z0-9]{2,10}$")) {
+            return ResponseEntity.badRequest().body("Invalid postcode format");
+        }
+
+        // check if user has an address
+        if (!userService.userHasAddress(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User does not have an address");
+        }
+
         var updatedAddress = userService.updateUserAddress(id, request);
         return updatedAddress != null
                 ? ResponseEntity.ok(updatedAddress)

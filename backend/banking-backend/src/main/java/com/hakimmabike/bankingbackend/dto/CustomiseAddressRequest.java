@@ -16,7 +16,7 @@ public class CustomiseAddressRequest {
     @NotNull(message = "County is required")
     private String county;
 
-    @NotBlank(message = "Post Code is required")
+    @NotNull(message = "Post Code is required")
     private String postCode;
 
     @NotNull(message = "Country is required")
