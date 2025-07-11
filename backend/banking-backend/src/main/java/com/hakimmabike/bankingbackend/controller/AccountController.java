@@ -17,10 +17,10 @@ public class AccountController {
     private final AccountRepository accountRepository;
 
     // Create a new account
-    @PostMapping
+    @PostMapping("/{userId}/create_account")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<AccountDto> createAccount(
-            @RequestParam Long userId,
+            @PathVariable Long userId,
             @RequestBody CreateAccountRequest request,
             UriComponentsBuilder uriBuilder
     ) {
@@ -28,8 +28,8 @@ public class AccountController {
         AccountDto accountDto = accountService.createAccount(userId, request);
 
         // Build the URI for the newly created account resource
-        var uri = uriBuilder.path("/accounts/{accountId}")
-                .buildAndExpand(accountDto.getId())
+        var uri = uriBuilder.path("/{userId}/{accountId}")
+                .buildAndExpand(userId, accountDto.getId())
                 .toUri();
 
         // Return a 201 Created response with the location of the new resource
@@ -37,7 +37,7 @@ public class AccountController {
     }
 
     // Update account status
-    @PatchMapping("/{accountId}/status")
+    @PatchMapping("/{userId}/{accountId}/status")
     public ResponseEntity<AccountDto> updateAccountStatus(
             @PathVariable Long accountId,
             @RequestBody UpdateAccountStatusRequest request
@@ -50,13 +50,13 @@ public class AccountController {
     }
 
     // Delete an existing account
-    @DeleteMapping("/{accountId}")
+    @DeleteMapping("/{userId}/{accountId}")
     public void closeAccount(@PathVariable Long accountId, @RequestBody DeleteAccountRequest request) {
         accountService.deleteAccount(accountId, request);
     }
 
     // Get account by ID
-    @GetMapping("/{accountId}")
+    @GetMapping("/{userId}/{accountId}")
     public ResponseEntity<AccountDto> getAccount(@PathVariable Long accountId) {
         AccountDto accountDto = accountService.getAccountById(accountId);
         if (accountDto == null) {
@@ -66,7 +66,7 @@ public class AccountController {
     }
 
     // update an existing account
-    @PutMapping("/{accountId}")
+    @PutMapping("/{userId}/{accountId}")
     public ResponseEntity<AccountDto> updateAccount(
             @PathVariable Long accountId,
             @RequestBody UpdateAccountRequest request
@@ -89,7 +89,7 @@ public class AccountController {
     }
 
     // Get account balance
-    @GetMapping("/{accountId}/balance")
+    @GetMapping("/{userId}/{accountId}/balance")
     public ResponseEntity<?> getBalance(@PathVariable Long accountId) {
         var balance = accountService.getAccountBalance(accountId);
         if (balance == null) {
