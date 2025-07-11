@@ -65,10 +65,12 @@ public class AccountController {
     // Update account status
     @PatchMapping("/{userId}/{accountId}/status")
     public ResponseEntity<AccountDto> updateAccountStatus(
+            @PathVariable Long userId,
             @PathVariable Long accountId,
             @RequestBody UpdateAccountStatusRequest request
     ) {
-        AccountDto updatedAccount = accountService.changeAccountStatus(accountId, request);
+        // check if account
+        AccountDto updatedAccount = accountService.changeAccountStatus(userId, accountId, request);
         if (updatedAccount == null) {
             return ResponseEntity.notFound().build(); // Return 404 Not Found if the account does not exist
         }

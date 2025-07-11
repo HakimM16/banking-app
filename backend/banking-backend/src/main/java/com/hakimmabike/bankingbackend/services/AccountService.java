@@ -56,8 +56,8 @@ public class AccountService {
     }
 
     // Update account status
-    public AccountDto changeAccountStatus(Long accountId, UpdateAccountStatusRequest request) {
-        Account account = accountRepository.findById(accountId)
+    public AccountDto changeAccountStatus(Long userId, Long accountId, UpdateAccountStatusRequest request) {
+        Account account = accountRepository.findByIdandUserId(accountId, userId)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
         // Validate the new status
