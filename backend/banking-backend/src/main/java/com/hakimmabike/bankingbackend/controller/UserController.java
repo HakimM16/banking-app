@@ -42,8 +42,17 @@ public class UserController {
 
     // Delete a user
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        // Check if the user exists
+        if (!userRepository.existsById(id))  {
+            return ResponseEntity.notFound().build();
+        }
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.ok("User deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     // Change users' status
