@@ -143,13 +143,13 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("Address not found for user"));
 
         // Update the existing address with new details
-        var updated = userAddressMapper.update(request,existingAddress);
+        var updated = updateUserAddress(request,existingAddress);
 
         // Save the updated address to the repository
         var updatedAddress = userAddressRepository.save(existingAddress);
 
         // Convert the updated UserAddress entity to UserAddressDto and return it
-        return userAddressMapper.toDto(updatedAddress);
+        return mapToUserAddressDto(updatedAddress);
     }
 
     private UserAddress mapToUserAddress(CustomiseAddressRequest request) {
@@ -171,5 +171,15 @@ public class UserService {
                 .postCode(userAddress.getPostCode())
                 .userId(userAddress.getId())
                 .build();
+    }
+
+    // Make a method to update user address
+    private UserAddress updateUserAddress(CustomiseAddressRequest request, UserAddress existingAddress) {
+        existingAddress.setStreet(request.getStreet());
+        existingAddress.setCity(request.getCity());
+        existingAddress.setCounty(request.getCounty());
+        existingAddress.setPostCode(request.getPostCode());
+        existingAddress.setCountry(request.getCountry());
+        return existingAddress;
     }
 }
