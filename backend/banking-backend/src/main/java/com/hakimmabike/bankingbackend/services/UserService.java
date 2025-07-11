@@ -104,16 +104,18 @@ public class UserService {
         if (userAddressRepository.findByUserId(user.getId()).isPresent()) {
             throw new ExistingObjectException("User already has an address");
         }
+        System.out.println("postcode: " + request.getPostCode());
 
         // Convert the request to UserAddress entity
-        UserAddress newAddress = userAddressMapper.toEntity(request);
+        var newAddress = mapToUserAddress(request);
 
+        System.out.println("postcode: " + newAddress.getPostCode());
         // Set the user for the new address
         newAddress.setUser(user);
         // Save the new address to the repository
         var savedAddress = userAddressRepository.save(newAddress);
         // Convert the saved UserAddress entity to UserAddressDto and return it
-        return userAddressMapper.toDto(savedAddress);
+        return mapToUserAddressDto(savedAddress);
     }
 
     // Get User address by Id
@@ -150,4 +152,24 @@ public class UserService {
         return userAddressMapper.toDto(updatedAddress);
     }
 
+    private UserAddress mapToUserAddress(CustomiseAddressRequest request) {
+        return UserAddress.builder()
+                .street(request.getStreet())
+                .city(request.getCity())
+                .county(request.getCounty())
+                .postCode(request.getPostCode()) // Make sure this matches
+                .country(request.getCountry())
+                .build();
+    }
+
+    // make a method from userAddress to UserAddressDto
+    private UserAddressDto mapToUserAddressDto(UserAddress userAddress) {
+        return UserAddressDto.builder()
+                .id(userAddress.getId())
+                .street(userAddress.getStreet())
+                .city(userAddress.getCity())
+                .postCode(userAddress.getPostCode())
+                .userId(userAddress.getId())
+                .build();
+    }
 }

@@ -110,8 +110,9 @@ public class UserController {
             @PathVariable Long id,
             @Valid @RequestBody CustomiseAddressRequest request,
             UriComponentsBuilder uriBuilder) {
+
         var userAddressDto = userService.createUserAddress(id, request);
-        var uri = uriBuilder.path("/users/{id}/address")
+        var uri = uriBuilder.path("/user/{id}/address")
                 .buildAndExpand(userAddressDto.getId())
                 .toUri();
         return ResponseEntity.created(uri).body(userAddressDto);

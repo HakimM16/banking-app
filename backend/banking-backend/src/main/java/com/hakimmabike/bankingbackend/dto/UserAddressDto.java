@@ -1,10 +1,12 @@
 package com.hakimmabike.bankingbackend.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
+@Builder
 public class UserAddressDto {
     private Long id;
     private String street;
