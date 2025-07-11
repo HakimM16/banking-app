@@ -21,6 +21,9 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     // Find accounts by user and account type
     List<Account> findByUserAndAccountType(User user, AccountType accountType);
 
+    // check if an account exists by account type
+    boolean existsByUserAndAccountType(User user, AccountType accountType);
+
     // Find accounts by status
     List<Account> findByStatus(AccountStatus status);
 
@@ -29,4 +32,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     // Checks if an account exists by user
     boolean existsByUser(User user);
+
+    int countByUserId(Long userId);
 }

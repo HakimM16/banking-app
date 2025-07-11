@@ -11,6 +11,7 @@ import com.hakimmabike.bankingbackend.exception.ObjectExistsException;
 import com.hakimmabike.bankingbackend.mappers.AccountMapper;
 import com.hakimmabike.bankingbackend.repository.*;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,11 +33,12 @@ public class AccountService {
     }
 
     public AccountDto createAccount(Long userId, CreateAccountRequest request) {
+        // Users are allowed to have a maximum of 3 accounts
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        // Check if the user already has an account
-        if (accountRepository.existsByUser(user)) {
-            throw new ObjectExistsException("User already has an account");
+        // Check if the user already has an account of the same account type
+        if (accountRepository.existsByUser(user) && accountRepository.existsByUserAndAccountType(user, AccountType.valueOf(request.getAccountType()))) {
+            throw new ObjectExistsException("User already has an account of that type.");
         }
         var account = new Account();
 
@@ -156,5 +158,6 @@ public class AccountService {
 
         return account.getBalance();
     }
+
 
 }

@@ -1,7 +1,9 @@
 package com.hakimmabike.bankingbackend.controller;
 
 import com.hakimmabike.bankingbackend.dto.*;
+import com.hakimmabike.bankingbackend.enums.AccountType;
 import com.hakimmabike.bankingbackend.repository.AccountRepository;
+import com.hakimmabike.bankingbackend.repository.UserRepository;
 import com.hakimmabike.bankingbackend.services.AccountService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,15 +17,39 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class AccountController {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
 
     // Create a new account
-    @PostMapping("/{userId}/create_account")
+    @PostMapping("/{userId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<AccountDto> createAccount(
+    public ResponseEntity<?> createAccount(
             @PathVariable Long userId,
             @RequestBody CreateAccountRequest request,
             UriComponentsBuilder uriBuilder
     ) {
+        // Check if the user exists
+        if (!userRepository.existsById(userId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User with ID " + userId + " does not exist.");
+        }
+
+        // Check if the account type is valid
+        if (!AccountType.isValidType(request.getAccountType())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid account type: " + request.getAccountType());
+        }
+        // check if the account type is blank
+        if (request.getAccountType() == null || request.getAccountType().isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Account type cannot be blank.");
+        }
+
+        // Check if user has 3 or more accounts
+        if (accountRepository.countByUserId(userId) >= 3) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("User with ID " + userId + " already has 3 accounts.");
+        }
+
         // Create the account
         AccountDto accountDto = accountService.createAccount(userId, request);
 
