@@ -1,6 +1,7 @@
 package com.hakimmabike.bankingbackend.controller;
 
 import com.hakimmabike.bankingbackend.dto.*;
+import com.hakimmabike.bankingbackend.enums.AccountStatus;
 import com.hakimmabike.bankingbackend.enums.AccountType;
 import com.hakimmabike.bankingbackend.repository.AccountRepository;
 import com.hakimmabike.bankingbackend.repository.UserRepository;
@@ -64,12 +65,37 @@ public class AccountController {
 
     // Update account status
     @PatchMapping("/{userId}/{accountId}/status")
-    public ResponseEntity<AccountDto> updateAccountStatus(
+    public ResponseEntity<?> updateAccountStatus(
             @PathVariable Long userId,
             @PathVariable Long accountId,
             @RequestBody UpdateAccountStatusRequest request
     ) {
-        // check if account
+        // check if account ID is found
+        if (!accountRepository.existsById(accountId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Account with ID " + accountId + " does not exist.");
+        }
+
+        // check if account status is valid
+        if (!AccountStatus.isValidStatus(request.getStatus())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid account status: " + request.getStatus());
+        }
+
+        // Checki if account is closed
+        if (request.getStatus().equalsIgnoreCase("CLOSED")) {
+            if (accountRepository.findById(accountId).orElseThrow().getStatus() == AccountStatus.CLOSED) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Account with ID " + accountId + " is already closed.");
+            }
+        }
+
+        // Check if status is blank
+        if (request.getStatus() == null || request.getStatus().isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Account status cannot be blank.");
+        }
+
         AccountDto updatedAccount = accountService.changeAccountStatus(userId, accountId, request);
         if (updatedAccount == null) {
             return ResponseEntity.notFound().build(); // Return 404 Not Found if the account does not exist
