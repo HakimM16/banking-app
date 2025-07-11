@@ -27,5 +27,5 @@ public class UpdateUserRequest {
     private String phoneNumber;
 
     @NotBlank(message = "Status is required")
-    private UserStatus status;
+    private String status;
 }

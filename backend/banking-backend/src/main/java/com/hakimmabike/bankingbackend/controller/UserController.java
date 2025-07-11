@@ -20,10 +20,31 @@ public class UserController {
 
     // Update an existing user
     @PutMapping("/{id}")
-    public UserDto updateUser(
+    public ResponseEntity<UserDto> updateUser(
             @PathVariable Long id,
             @Valid @RequestBody UpdateUserRequest request) {
-        return userService.updateUser(id, request);
+        // check if the user exists
+        if (!userRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // check if email or phone number are in correct format
+        if (!request.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$") ||
+                !request.getPhoneNumber().matches("^\\+?[0-9]{10,15}$")) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        // check if status is valid
+        if (!UserStatus.isValidStatus(request.getStatus())) {
+            System.out.println("Invalid status: " + request.getStatus());
+            return ResponseEntity.badRequest().build();
+        }
+
+        // Update the user
+        var updatedUser = userService.updateUser(id, request);
+        return updatedUser != null
+                ? ResponseEntity.ok(updatedUser)
+                : ResponseEntity.notFound().build();
     }
 
     // Get user by ID
@@ -60,6 +81,21 @@ public class UserController {
     public ResponseEntity<?> changeUserStatus(
             @PathVariable Long id,
             @RequestBody UpdateStatusRequest status) {
+        // Check if the user exists
+        if (!userRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // check if status is valid
+        if (!UserStatus.isValidStatus(status.getStatus()) && !status.getStatus().equals("")) {
+            return ResponseEntity.badRequest().body("Invalid status provided");
+        }
+
+        // check if request body is empty
+        if (status.getStatus().equals("")) {
+            return ResponseEntity.badRequest().body("Status cannot be blank");
+        }
+
         try {
             userService.changeUserStatus(id, status);
             return ResponseEntity.ok("User status updated successfully");
