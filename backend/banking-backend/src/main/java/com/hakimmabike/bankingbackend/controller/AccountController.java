@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.math.BigDecimal;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/accounts")
@@ -82,7 +84,7 @@ public class AccountController {
                     .body("Invalid account status: " + request.getStatus());
         }
 
-        // Checki if account is closed
+        // Check if account is closed
         if (request.getStatus().equalsIgnoreCase("CLOSED")) {
             if (accountRepository.findById(accountId).orElseThrow().getStatus() == AccountStatus.CLOSED) {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -105,13 +107,56 @@ public class AccountController {
 
     // Delete an existing account
     @DeleteMapping("/{userId}/{accountId}")
-    public void closeAccount(@PathVariable Long accountId, @RequestBody DeleteAccountRequest request) {
+    public ResponseEntity<?> closeAccount(@PathVariable Long accountId, @RequestBody DeleteAccountRequest request) {
+        // check if account ID is valid
+        if (!accountRepository.existsById(accountId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Account with ID " + accountId + " does not exist.");
+        }
+
+        //check if account number is valid
+        if (!accountRepository.existsByAccountNumber(request.getAccountNumber()) && !request.getAccountNumber().isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Account number " + request.getAccountNumber() + " is invalid.");
+        } else if (request.getAccountNumber().equals("") || request.getAccountNumber().isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Account number cannot be blank.");
+        }
+
+        // Check if account type is valid
+        if (!AccountType.isValidType(request.getAccountType()) && !request.getAccountType().isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid account type: " + request.getAccountType());
+        } else if (request.getAccountType().equals("") || request.getAccountType().isBlank()) {
+            // check if account type or account Type is blank
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Account type cannot be blank.");
+        }
+
+        if (request.getReason() == null || request.getReason().isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Reason for account closure cannot be blank.");
+        }
+
+
+        // Check if the account has a balance
+        if (accountRepository.findById(accountId).orElseThrow().getBalance().compareTo(BigDecimal.ZERO) != 0) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Cannot delete account with a non-zero balance. Please withdraw or transfer funds first.");
+        }
+
         accountService.deleteAccount(accountId, request);
+        return ResponseEntity.ok().build();
     }
 
     // Get account by ID
     @GetMapping("/{userId}/{accountId}")
-    public ResponseEntity<AccountDto> getAccount(@PathVariable Long accountId) {
+    public ResponseEntity<?> getAccount(@PathVariable Long accountId) {
+        // Check if account ID is valid
+        if (!accountRepository.existsById(accountId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Account with ID " + accountId + " does not exist.");
+        }
         AccountDto accountDto = accountService.getAccountById(accountId);
         if (accountDto == null) {
             return ResponseEntity.notFound().build(); // Return 404 Not Found if the account does not exist
