@@ -232,8 +232,22 @@ public class AccountController {
 
     // Get account balance
     @GetMapping("/{userId}/{accountId}/balance")
-    public ResponseEntity<?> getBalance(@PathVariable Long accountId) {
-        var balance = accountService.getAccountBalance(accountId);
+    public ResponseEntity<?> getBalance(
+            @PathVariable Long userId,
+            @PathVariable Long accountId
+    ) {
+        // Check if account ID is valid
+        if (!accountRepository.existsByIdAndUserId(accountId, userId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Account with ID " + accountId + " does not exist.");
+        }
+        // check if account is closed
+        if (accountRepository.findById(accountId).orElseThrow().getStatus() == AccountStatus.CLOSED) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Account with ID " + accountId + " is closed and cannot be accessed.");
+        }
+
+        var balance = accountService.getAccountBalance(accountId, userId);
         if (balance == null) {
             return ResponseEntity.notFound().build(); // Return 404 Not Found if the account does not exist
         }

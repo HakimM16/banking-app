@@ -154,8 +154,8 @@ public class AccountService {
                 .toList();
     }
 
-    public BigDecimal getAccountBalance(Long accountId) {
-        var account = accountRepository.findById(accountId)
+    public BigDecimal getAccountBalance(Long accountId, Long userId) {
+        var account = accountRepository.findByIdAndUserId(accountId, userId)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
         return account.getBalance();
