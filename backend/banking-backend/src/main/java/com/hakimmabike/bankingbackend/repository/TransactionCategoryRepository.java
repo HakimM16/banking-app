@@ -3,7 +3,9 @@ package com.hakimmabike.bankingbackend.repository;
 import com.hakimmabike.bankingbackend.entity.Account;
 import com.hakimmabike.bankingbackend.entity.TransactionCategory;
 import com.hakimmabike.bankingbackend.enums.CategoryType;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -27,6 +29,8 @@ public interface TransactionCategoryRepository extends JpaRepository<Transaction
     Optional<TransactionCategory> findByName(String name);
 
     // delete all categories by account
+    @Modifying
+    @Transactional
     @Query("DELETE FROM TransactionCategory tc WHERE tc.id IN (SELECT t.transactionCategory.id FROM Transaction t WHERE t.account = :account)")
     void deleteAllByAccount(Account account);
 }

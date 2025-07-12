@@ -11,6 +11,7 @@ import com.hakimmabike.bankingbackend.exception.ObjectExistsException;
 import com.hakimmabike.bankingbackend.mappers.AccountMapper;
 import com.hakimmabike.bankingbackend.repository.*;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -73,6 +74,7 @@ public class AccountService {
     }
 
     // close an account
+    @Transactional
     public void deleteAccount(Long accountId, DeleteAccountRequest request) {
         // Check if the account exists
         Account account = accountRepository.findById(accountId)
@@ -105,22 +107,22 @@ public class AccountService {
     }
 
     private void deletionProcess(Account account) {
-        // delete associated transactions if needed
-        transactionRepository.deleteAllByAccount(account);
-
-        // Delete all sent and received transfers associated with this account
+        // First delete transfers
         transferRepository.deleteAllBySenderAccount(account);
         transferRepository.deleteAllByReceiverAccount(account);
 
-        // delete associated transaction categories if needed
+        // Then delete transactions
+        transactionRepository.deleteAllByAccount(account);
+
+        // Then delete categories
         categoryRepository.deleteAllByAccount(account);
 
-        // If you want to remove the account from the user's account list, you can do that as well
+        // Update user relationship
         User user = account.getUser();
         user.getAccounts().remove(account);
-        userRepository.save(user); // Save the user to update the relationship
+        userRepository.save(user);
 
-        // delete the account
+        // Finally delete the account
         accountRepository.delete(account);
     }
 

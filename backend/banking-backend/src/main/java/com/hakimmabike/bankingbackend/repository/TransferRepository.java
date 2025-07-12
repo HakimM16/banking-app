@@ -3,7 +3,9 @@ package com.hakimmabike.bankingbackend.repository;
 import com.hakimmabike.bankingbackend.entity.Account;
 import com.hakimmabike.bankingbackend.entity.Transfer;
 import com.hakimmabike.bankingbackend.enums.TransactionStatus;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -31,7 +33,11 @@ public interface TransferRepository extends JpaRepository<Transfer, Long> {
     List<Transfer> findByTransferDateBetween(LocalDateTime start, LocalDateTime end);
 
     // delete all transfers by account (sender or receiver)
+    @Modifying
+    @Transactional
     void deleteAllBySenderAccount(Account account);
 
+    @Modifying
+    @Transactional
     void deleteAllByReceiverAccount(Account account);
 }

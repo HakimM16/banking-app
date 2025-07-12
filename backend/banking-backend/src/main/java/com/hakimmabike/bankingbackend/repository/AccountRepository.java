@@ -5,6 +5,9 @@ import com.hakimmabike.bankingbackend.entity.User;
 import com.hakimmabike.bankingbackend.enums.AccountStatus;
 import com.hakimmabike.bankingbackend.enums.AccountType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
