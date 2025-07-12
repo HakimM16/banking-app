@@ -6,6 +6,7 @@ import com.hakimmabike.bankingbackend.enums.AccountType;
 import com.hakimmabike.bankingbackend.repository.AccountRepository;
 import com.hakimmabike.bankingbackend.repository.UserRepository;
 import com.hakimmabike.bankingbackend.services.AccountService;
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -164,13 +165,45 @@ public class AccountController {
         return ResponseEntity.ok(accountDto); // Return the account mapped to a DTO with a 200 OK status
     }
 
-    // update an existing account
-    @PutMapping("/{userId}/{accountId}")
-    public ResponseEntity<AccountDto> updateAccount(
+    // update type on existing account
+    @PatchMapping("/{userId}/{accountId}")
+    public ResponseEntity<?> updateAccountType(
+            @PathVariable Long userId,
             @PathVariable Long accountId,
             @RequestBody UpdateAccountRequest request
     ) {
-        AccountDto updatedAccount = accountService.updateAccount(accountId, request);
+        // Check if account ID is valid
+        if (!accountRepository.existsByIdAndUserId(accountId, userId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Account with ID " + accountId + " does not exist.");
+        }
+
+        // Check if account type is valid
+        if (request.getAccountType() == null || request.getAccountType().isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Account type cannot be blank.");
+        }
+
+        if (!AccountType.isValidType(request.getAccountType())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid account type: " + request.getAccountType());
+        }
+
+
+
+        // Check if account is closed
+        if (accountRepository.findById(accountId).orElseThrow().getStatus() == AccountStatus.CLOSED) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Account with ID " + accountId + " is closed and cannot be updated.");
+        }
+
+        // check if there is already an account with the same type for the user
+        if (accountRepository.existsByUserAndAccountType(userRepository.findById(userId).orElseThrow(), AccountType.valueOf(request.getAccountType()))) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("User with ID " + userId + " already has an account of type " + request.getAccountType() + ".");
+        }
+
+        AccountDto updatedAccount = accountService.updateAccountType(userId, accountId, request);
         if (updatedAccount == null) {
             return ResponseEntity.notFound().build(); // Return 404 Not Found if the account does not exist
         }

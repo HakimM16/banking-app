@@ -79,13 +79,16 @@ public class SecurityConfig {
                         // AccountController endpoints
                         // Allow AccountController endpoints to be accessed by users with the USER role
                         .requestMatchers(
-                                "api/accounts",
-                                "api/accounts/{accountId}",
+                                "api/accounts/{userId}",
                                 "api/accounts/user/{userId}",
-                                "api/accounts/{accountId}/balance"
+                                "api/accounts/{userId}/{accountId}/balance"
                         ).permitAll()
+                        // Allow users with the ADMIN or USER role to delete and get accounts
+                        .requestMatchers(HttpMethod.DELETE, "api/accounts/{userId}/{accountId}").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
+                        .requestMatchers(HttpMethod.GET, "api/accounts/{userId}/{accountId}").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
                         // Allow users with the ADMIN role to change account status
-                        .requestMatchers(HttpMethod.PATCH, "api/accounts/{accountId}/status").hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PATCH, "api/accounts/{userId}/{accountId}/status").hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PATCH, "api/accounts/{userId}/{accountId}").hasRole(Role.ADMIN.name())
 
                         // Allow TransactionController endpoints to be accessed by users with the USER role
                         .requestMatchers("/api/transactions/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name())

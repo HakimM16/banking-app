@@ -132,8 +132,8 @@ public class AccountService {
         return accountMapper.toDto(account);
     }
 
-    public AccountDto updateAccount(Long accountId, UpdateAccountRequest request) {
-        Account existingAccount = accountRepository.findById(accountId)
+    public AccountDto updateAccountType(Long userId, Long accountId, UpdateAccountRequest request) {
+        Account existingAccount = accountRepository.findByIdAndUserId(accountId, userId)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
         // Update the account details
