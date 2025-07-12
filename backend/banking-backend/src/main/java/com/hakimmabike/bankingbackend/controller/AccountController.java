@@ -151,13 +151,13 @@ public class AccountController {
 
     // Get account by ID
     @GetMapping("/{userId}/{accountId}")
-    public ResponseEntity<?> getAccount(@PathVariable Long accountId) {
+    public ResponseEntity<?> getAccount(@PathVariable Long userId,@PathVariable Long accountId) {
         // Check if account ID is valid
-        if (!accountRepository.existsById(accountId)) {
+        if (!accountRepository.existsByIdAndUserId(accountId, userId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Account with ID " + accountId + " does not exist.");
         }
-        AccountDto accountDto = accountService.getAccountById(accountId);
+        AccountDto accountDto = accountService.getAccountById(accountId, userId);
         if (accountDto == null) {
             return ResponseEntity.notFound().build(); // Return 404 Not Found if the account does not exist
         }

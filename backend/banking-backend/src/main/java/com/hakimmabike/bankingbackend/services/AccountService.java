@@ -126,8 +126,8 @@ public class AccountService {
         accountRepository.delete(account);
     }
 
-    public AccountDto getAccountById(Long accountId) {
-        var account =  accountRepository.findById(accountId)
+    public AccountDto getAccountById(Long accountId, Long userId) {
+        var account =  accountRepository.findByIdAndUserId(accountId, userId)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
         return accountMapper.toDto(account);
     }
