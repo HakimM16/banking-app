@@ -213,6 +213,16 @@ public class AccountController {
     // Get all accounts for a user
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getAllAccountsByUserId(@PathVariable Long userId) {
+        // Check if user ID is valid
+        if (!userRepository.existsById(userId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User with ID " + userId + " does not exist.");
+        }
+
+        // check if user doesn't have any accounts
+        if (!accountRepository.existsByUserId(userId)) {
+            return ResponseEntity.noContent().build(); // Return 204 No Content if the user has no accounts
+        }
         var accounts = accountService.getUserAccounts(userId);
         if (accounts.isEmpty()) {
             return ResponseEntity.noContent().build(); // Return 204 No Content if no accounts found

@@ -39,6 +39,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     // Checks if an account exists by user
     boolean existsByUser(User user);
 
+    boolean existsByUserId(Long userId);
+
     int countByUserId(Long userId);
 
     boolean existsByIdAndUserId(Long accountId, Long userId);
