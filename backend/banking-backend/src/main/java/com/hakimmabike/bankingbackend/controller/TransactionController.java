@@ -122,7 +122,50 @@ public class TransactionController {
 
     // Transfer money between accounts
     @PostMapping("/{userId}/transfer")
-    public ResponseEntity<TransferDto> transfer(@RequestBody TransferRequest request) {
+    public ResponseEntity<?> transfer(@RequestBody TransferRequest request) {
+        // Check if source account number exists
+        if (!transactionService.accountExists(request.getFromAccount())) {
+            return ResponseEntity.badRequest().body("Source account doesn't exist"); // Return 400 Bad Request if source account number does not exist
+        }
+        // Check if destination account number exists
+        if (!transactionService.accountExists(request.getToAccount())) {
+            return ResponseEntity.badRequest().body("Destination account doesn't exist"); // Return 400 Bad Request if destination account number does not exist
+        }
+        // Check if amount is more than from account balance
+        BigDecimal fromAccountBalance = accountService.getAccountBalanceByAccountNumber(request.getFromAccount());
+        if (fromAccountBalance == null || request.getAmount().compareTo(fromAccountBalance) > 0) {
+            return ResponseEntity.badRequest().body("Insufficient funds for transfer"); // Return 400 Bad Request if insufficient funds
+        }
+        // Check if amount is negative or zero
+        if (request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            return ResponseEntity.badRequest().body("Amount must be greater than zero"); // Return 400 Bad Request if amount is negative or zero
+        }
+        // check if fields are empty
+        if (request.getFromAccount() == null || request.getFromAccount().isEmpty()) {
+            return ResponseEntity.badRequest().body("Source account number can't be empty"); // Return 400 Bad Request if source account number is empty
+        }
+        if (request.getToAccount() == null || request.getToAccount().isEmpty()) {
+            return ResponseEntity.badRequest().body("Destination account number can't be empty"); // Return 400 Bad Request if destination account number is empty
+        }
+        if (request.getDescription() == null || request.getDescription().isEmpty()) {
+            return ResponseEntity.badRequest().body("Description can't be empty"); // Return 400 Bad Request if description is empty
+        }
+        if (request.getAmount() == null) {
+            return ResponseEntity.badRequest().body("Amount can't be empty"); // Return 400 Bad Request if amount is empty
+        }
+        // check if accounts are closed
+        if (transactionService.isAccountClosed(request.getFromAccount())) {
+            // return 409 Conflict if the source account is closed
+            return ResponseEntity.status(HttpStatusCode.valueOf(409)).body("Source account is closed, can't make a transfer");
+        }
+        if (transactionService.isAccountClosed(request.getToAccount())) {
+            // return 409 Conflict if the destination account is closed
+            return ResponseEntity.status(HttpStatusCode.valueOf(409)).body("Destination account is closed, can't receive a transfer");
+        }
+        // Check if the source and destination accounts are the same
+        if (request.getFromAccount().equals(request.getToAccount())) {
+            return ResponseEntity.badRequest().body("Source and destination accounts cannot be the same"); // Return 400 Bad Request if accounts are the same
+        }
         // make a transfer transaction
         TransferDto transfer = transactionService.transfer(request);
         // Return the transaction details with a 201 Created status
