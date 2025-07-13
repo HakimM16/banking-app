@@ -44,4 +44,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     void deleteAllByAccount(@Param("account") Account account);
 
     String account(Account account);
+
+    // check if account has transactions
+    @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END FROM Transaction t WHERE t.account.id = :accountId")
+    boolean existsByAccountByAccountId(Long accountId);
 }

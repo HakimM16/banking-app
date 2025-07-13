@@ -177,7 +177,18 @@ public class TransactionController {
     public ResponseEntity<?> getAllTransactionsByAccountId(
             @PathVariable Long accountId,
             @RequestBody GetTransactionsRequest request
-    ) {
+    ) {// check if account has no transactions
+        if (!transactionRepository.existsByAccountByAccountId(accountId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No transactions found for account with ID: " + accountId);
+        }
+
+        // Check if account number exists
+        if (!transactionService.accountExists(request.getAccountNumber())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Account not found with account number: " + request.getAccountNumber());
+        }
+
         // Fetch all transactions for the specified account ID
         List<TransactionDto> transactions = transactionService.getAllTransactions(accountId, request);
 
