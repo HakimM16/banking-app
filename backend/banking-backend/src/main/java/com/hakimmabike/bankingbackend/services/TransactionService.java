@@ -5,6 +5,7 @@ import com.hakimmabike.bankingbackend.entity.Account;
 import com.hakimmabike.bankingbackend.entity.Transaction;
 import com.hakimmabike.bankingbackend.entity.TransactionCategory;
 import com.hakimmabike.bankingbackend.entity.Transfer;
+import com.hakimmabike.bankingbackend.enums.AccountStatus;
 import com.hakimmabike.bankingbackend.enums.CategoryType;
 import com.hakimmabike.bankingbackend.enums.TransactionStatus;
 import com.hakimmabike.bankingbackend.enums.TransactionType;
@@ -248,5 +249,19 @@ public class TransactionService {
 
         transactionRepository.save(card1);
         transactionRepository.save(card2);
+    }
+
+    public boolean accountExists(String accountNumber) {
+        return accountRepository.existsByAccountNumber(accountNumber);
+    }
+
+    public boolean categoryExists(String categoryName) {
+        return categoryRepository.existsByName(categoryName);
+    }
+
+    public boolean isAccountClosed(String accountNumber) {
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new EntityNotFoundException("Account not found with number: " + accountNumber));
+        return account.getStatus() == AccountStatus.CLOSED;
     }
 }
