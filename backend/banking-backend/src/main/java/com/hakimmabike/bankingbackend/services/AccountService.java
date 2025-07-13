@@ -161,5 +161,19 @@ public class AccountService {
         return account.getBalance();
     }
 
+    // Get account balance by account number
+    public BigDecimal getAccountBalanceByAccountNumber(@NotNull String accountNumber) {
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new EntityNotFoundException("Account not found with account number: " + accountNumber));
+        return account.getBalance();
+    }
 
+
+    public boolean accountExists(String accountNumber) {
+        try {
+            return accountRepository.existsByAccountNumber(accountNumber);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

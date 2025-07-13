@@ -11,6 +11,15 @@ public enum CategoryType {
         this.value = value;
     }
 
+    public static boolean isValidCategoryType(String categoryType) {
+        for (CategoryType type : CategoryType.values()) {
+            if (type.getValue().equalsIgnoreCase(categoryType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String getValue() {
         return value;
     }

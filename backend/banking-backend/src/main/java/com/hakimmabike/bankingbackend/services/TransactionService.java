@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @AllArgsConstructor
@@ -37,8 +38,10 @@ public class TransactionService {
     private final TransactionMapper transactionMapper;
     private final TransferMapper transferMapper;
 
-    private String generateTransactionNumber() {
-        return "TXN" + System.currentTimeMillis();
+    public String generateTransactionNumber() {
+        long timestamp = System.currentTimeMillis();
+        int random = new Random().nextInt(1000); // 3-digit random number
+        return String.format("TXN%d%03d", timestamp, random);
     }
 
     @Transactional
