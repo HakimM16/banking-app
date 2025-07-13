@@ -28,6 +28,9 @@ public interface TransactionCategoryRepository extends JpaRepository<Transaction
     @Query("SELECT tc FROM TransactionCategory tc WHERE tc.name = :name")
     Optional<TransactionCategory> findByName(String name);
 
+    // check if a category exists by name
+    Boolean existsByName(String name);
+
     // delete all categories by account
     @Modifying
     @Transactional

@@ -41,8 +41,8 @@ public class TransactionService {
     }
 
     @Transactional
-    public TransactionDto deposit(DepositRequest request) {
-        Account account = accountRepository.findByAccountNumber(request.getAccountNumber())
+    public TransactionDto deposit(Long userId, DepositRequest request) {
+        Account account = accountRepository.findByAccountNumberAndUserId(request.getAccountNumber(), userId)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
         // Make a deposit transaction
@@ -92,7 +92,7 @@ public class TransactionService {
         category.setName(request.getName());
         category.setDescription(request.getDescription());
         category.setCategoryType(CategoryType.valueOf(request.getCategoryType()));
-        category.setSystem(request.isSystem());
+        category.setSystem(Boolean.valueOf(request.getIsSystem()));
 
         // Save the category
         TransactionCategory savedCategory = categoryRepository.save(category);

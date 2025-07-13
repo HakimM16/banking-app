@@ -11,6 +11,15 @@ public enum TransactionType {
         this.value = value;
     }
 
+    public static boolean isValidCategoryType(String categoryType) {
+        for (TransactionType type : TransactionType.values()) {
+            if (type.getValue().equalsIgnoreCase(categoryType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String getValue() {
         return value;
     }

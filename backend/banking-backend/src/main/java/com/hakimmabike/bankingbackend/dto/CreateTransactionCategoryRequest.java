@@ -7,6 +7,6 @@ public class CreateTransactionCategoryRequest {
     private String name;
     private String description;
     private String categoryType;
-    private boolean isSystem;
+    private String isSystem;
 
 }
