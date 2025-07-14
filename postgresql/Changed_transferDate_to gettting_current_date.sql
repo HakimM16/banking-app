@@ -1,0 +1,4 @@
+ALTER TABLE transfers
+ALTER COLUMN transfer_date SET DEFAULT CURRENT_TIMESTAMP;
+
+SELECT * FROM transfers;
