@@ -60,7 +60,7 @@ public class AuthController {
 
     // Login endpoint
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(
+    public ResponseEntity<?> login(
             @Valid @RequestBody LoginUserRequest loginUserRequest,
             HttpServletResponse response
     ) {
@@ -96,7 +96,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<JwtResponse> refresh(
+    public ResponseEntity<?> refresh(
             @CookieValue(value = "refreshToken") String refreshToken
     ) {
         var jwt = jwtService.parseToken(refreshToken);
@@ -112,7 +112,7 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserDto> me() {
+    public ResponseEntity<?> me() {
         // Get the current authentication from the SecurityContext
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         // Retrieve the email of the authenticated user from the SecurityContext

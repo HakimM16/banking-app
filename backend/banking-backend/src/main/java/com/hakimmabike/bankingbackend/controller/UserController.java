@@ -20,7 +20,7 @@ public class UserController {
 
     // Update an existing user
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(
+    public ResponseEntity<?> updateUser(
             @PathVariable Long id,
             @Valid @RequestBody UpdateUserRequest request) {
         // check if the user exists
@@ -49,7 +49,7 @@ public class UserController {
 
     // Get user by ID
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
+    public ResponseEntity<?> getUser(@PathVariable Long id) {
         // check if the user exists
         if (!userRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
