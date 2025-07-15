@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Added repsonse as not found to getTransactionCategory()">
+    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Got back all of the files">
       <change afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/securityRules/AccountSecurityRules.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/securityRules/AuthSecurityRules.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/securityRules/SecurityRules.java" afterDir="false" />

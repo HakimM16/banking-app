@@ -1,7 +1,6 @@
 /* src/app/global.css */
 @import "tailwindcss/preflight";
 @tailwind utilities;
-
 /* Add any other global styles here */
 body {
   font-family: 'Inter', sans-serif; /* Example font */

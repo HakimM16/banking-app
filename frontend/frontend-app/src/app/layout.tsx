@@ -1,5 +1,5 @@
 // src/app/layout.tsx
-import './globals.css'; // Global styles for Tailwind CSS
+import '@/styles/globals.css' // Global styles for Tailwind CSS
 import type { Metadata } from 'next'; // Import Metadata type
 
 export const metadata: Metadata = {
