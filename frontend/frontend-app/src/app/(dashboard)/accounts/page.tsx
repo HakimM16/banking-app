@@ -44,8 +44,8 @@ export default function AccountsPage() {
         <div className="p-6">
             <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-800 mb-2">Accounts</h1>
-                    <p className="text-gray-600">Manage your bank accounts</p>
+                    <h1 className="text-3xl font-bold text-gray-50 mb-2">Accounts</h1>
+                    <p className="text-gray-200">Manage your bank accounts</p>
                 </div>
                 <button
                     onClick={() => setIsCreatingAccount(true)}

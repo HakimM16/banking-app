@@ -3,7 +3,7 @@ import '@/styles/globals.css' // Global styles for Tailwind CSS
 import type { Metadata } from 'next'; // Import Metadata type
 
 export const metadata: Metadata = {
-    title: 'SecureBank',
+    title: 'Vesta',
     description: 'Your secure online banking platform',
 };
 

@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { DollarSign, CreditCard, ArrowUpDown } from 'lucide-react';
+import {DollarSign, CreditCard, ArrowUpDown, PoundSterling} from 'lucide-react';
 import { formatCurrency } from '@/utils/helpers';
 import { getUserByUserId } from '@/lib/data';
 import { User, Account } from '@/types';
@@ -48,7 +48,7 @@ const DashboardSummary: React.FC<DashboardSummaryProps> = ({ userId }) => {
                         <p className="text-blue-100 mb-1">Total Balance</p>
                         <p className="text-2xl font-bold">{formatCurrency(getTotalBalance())}</p>
                     </div>
-                    <DollarSign size={40} className="text-blue-200" />
+                    <PoundSterling size={40} className="text-blue-200" />
                 </div>
             </div>
 

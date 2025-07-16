@@ -6,7 +6,8 @@ import { Minus } from 'lucide-react';
 import { useAccounts } from '@/providers/AccountProvider';
 import { useTransactions } from '@/providers/TransactionProvider';
 import { useAlerts } from '@/hooks/useAlerts';
-import { WithdrawalFormInputs } from '@/types'; // Import type
+import { WithdrawalFormInputs } from '@/types';
+import {redirect} from "next/navigation"; // Import type
 
 const WithdrawalForm: React.FC = () => {
     const { accounts } = useAccounts();
@@ -28,6 +29,7 @@ const WithdrawalForm: React.FC = () => {
         } else {
             addAlert(result.message || 'Withdrawal failed.', 'error');
         }
+        return redirect('/home');
     };
 
     return (

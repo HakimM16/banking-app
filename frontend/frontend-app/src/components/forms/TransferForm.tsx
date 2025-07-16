@@ -6,7 +6,8 @@ import { Send } from 'lucide-react';
 import { useAccounts } from '@/providers/AccountProvider';
 import { useTransactions } from '@/providers/TransactionProvider';
 import { useAlerts } from '@/hooks/useAlerts';
-import { TransferFormInputs } from '@/types'; // Import type
+import { TransferFormInputs } from '@/types';
+import {redirect} from "next/navigation"; // Import type
 
 const TransferForm: React.FC = () => {
     const { accounts } = useAccounts();
@@ -29,6 +30,7 @@ const TransferForm: React.FC = () => {
         } else {
             addAlert(result.message || 'Transfer failed.', 'error');
         }
+        return redirect('/home');
     };
 
     return (

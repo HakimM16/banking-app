@@ -6,7 +6,8 @@ import { Plus } from 'lucide-react';
 import { useAccounts } from '@/providers/AccountProvider';
 import { useTransactions } from '@/providers/TransactionProvider';
 import { useAlerts } from '@/hooks/useAlerts';
-import { DepositFormInputs } from '@/types'; // Import type
+import { DepositFormInputs } from '@/types';
+import {redirect} from "next/navigation"; // Import type
 
 const DepositForm: React.FC = () => {
     const { accounts } = useAccounts();
@@ -28,6 +29,7 @@ const DepositForm: React.FC = () => {
         } else {
             addAlert(result.message || 'Deposit failed.', 'error');
         }
+        return redirect('/home');
     };
 
     return (

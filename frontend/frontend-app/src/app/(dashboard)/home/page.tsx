@@ -20,14 +20,14 @@ export default function DashboardPage() {
     const recentTransactions = getFilteredTransactions('all', '').slice(0, 5);
 
     if (!currentUser) {
-        return <p>Loading user data...</p>;
+        return <p className="text-gray-50">Loading user data...</p>;
     }
 
     return (
         <div className="p-6">
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-800 mb-2">Dashboard</h1>
-                <p className="text-gray-600">Welcome back, {currentUser?.firstName}!</p>
+                <h1 className="text-3xl font-bold text-gray-50 mb-2">Dashboard</h1>
+                <p className="text-gray-200">Welcome back, {currentUser?.firstName}!</p>
             </div>
 
             <DashboardSummary userId={currentUser.id} />

@@ -52,7 +52,7 @@ export default function ProfilePage() {
 
     return (
         <div className="p-6">
-            <h1 className="text-3xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-gray-50 mb-8 flex items-center gap-3">
                 <User size={32} /> Profile Settings
             </h1>
 

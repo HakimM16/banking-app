@@ -7,6 +7,7 @@ import { useAlerts } from '@/hooks/useAlerts';
 import { useRouter } from 'next/navigation';
 import { registerNewUser } from '@/lib/data';
 import { RegisterFormInputs } from '@/types'; // Import type
+import LogoForForms from '@/components/ui/LogoForForms'; // Import your LogoForForms component
 
 const RegisterForm: React.FC = () => {
     const [registerForm, setRegisterForm] = useState<RegisterFormInputs>({
@@ -41,10 +42,8 @@ const RegisterForm: React.FC = () => {
         <div className="min-h-screen bg-gradient-to-br from-blue-900 to-purple-900 flex items-center justify-center p-4">
             <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md">
                 <div className="text-center mb-8">
-                    <div className="bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Shield className="text-white" size={32} />
-                    </div>
-                    <h1 className="text-3xl font-bold text-gray-800 mb-2">SecureBank</h1>
+                    <LogoForForms />
+                    <h1 className="text-3xl font-bold text-gray-800 mb-2">Vesta</h1>
                     <p className="text-gray-600">Create your account</p>
                 </div>
 
@@ -143,7 +142,7 @@ const RegisterForm: React.FC = () => {
 
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                        className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
                     >
                         Register
                     </button>
@@ -152,7 +151,7 @@ const RegisterForm: React.FC = () => {
                         <button
                             type="button"
                             onClick={() => router.push('/login')}
-                            className="text-blue-600 hover:text-blue-800 text-sm"
+                            className="text-indigo-600 hover:text-blue-800 text-sm"
                         >
                             Already have an account? Login here
                         </button>
