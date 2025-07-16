@@ -1,0 +1,204 @@
+// src/lib/data.ts
+// This simulates your backend data storage
+import { User, Account, Transaction, RegisterFormInputs, ProfileFormInputs } from '@/types'; // Import types
+
+let users: User[] = [
+    {
+        id: 1,
+        username: 'john_doe',
+        email: 'john@example.com',
+        password: 'password123', // In a real app, hash this!
+        firstName: 'John',
+        lastName: 'Doe',
+        phone: '+1-555-0123',
+        address: '123 Main St, City, State 12345',
+        accounts: [
+            {
+                id: 'acc_001',
+                type: 'checking',
+                balance: 5420.50,
+                accountNumber: '****1234',
+                status: 'active',
+                createdAt: '2024-01-15'
+            },
+            {
+                id: 'acc_002',
+                type: 'savings',
+                balance: 12850.75,
+                accountNumber: '****5678',
+                status: 'active',
+                createdAt: '2024-01-20'
+            }
+        ]
+    }
+];
+
+let transactions: Transaction[] = [
+    {
+        id: 'txn_001',
+        userId: 1,
+        fromAccount: 'acc_001',
+        toAccount: 'acc_002',
+        amount: 500,
+        type: 'transfer',
+        description: 'Monthly savings transfer',
+        date: '2024-07-15',
+        status: 'completed'
+    },
+    {
+        id: 'txn_002',
+        userId: 1,
+        fromAccount: null,
+        toAccount: 'acc_001',
+        amount: 2500,
+        type: 'deposit',
+        description: 'Salary deposit',
+        date: '2024-07-14',
+        status: 'completed'
+    },
+    {
+        id: 'txn_003',
+        userId: 1,
+        fromAccount: 'acc_001',
+        toAccount: null,
+        amount: 150,
+        type: 'withdrawal',
+        description: 'ATM withdrawal',
+        date: '2024-07-13',
+        status: 'completed'
+    }
+];
+
+// --- Simulated API functions ---
+
+export async function getUserByUsernamePassword(username: string, password: string): Promise<User | undefined> {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return users.find(u => u.username === username && u.password === password);
+}
+
+export async function getUserByUserId(userId: number): Promise<User | undefined> {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return users.find(u => u.id === userId);
+}
+
+export async function registerNewUser(userData: RegisterFormInputs): Promise<{ success: boolean; message?: string; user?: User }> {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    if (users.find(u => u.username === userData.username)) {
+        return { success: false, message: 'Username already exists!' };
+    }
+    const newUser: User = {
+        id: users.length + 1,
+        ...userData,
+        accounts: []
+    };
+    users.push(newUser);
+    return { success: true, user: newUser };
+}
+
+export async function getUserAccounts(userId: number): Promise<Account[]> {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 300));
+    const user = users.find(u => u.id === userId);
+    return user ? user.accounts : [];
+}
+
+export async function createNewAccount(userId: number, accountType: 'checking' | 'savings'): Promise<{ success: boolean; message?: string; account?: Account; updatedUser?: User }> {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    const userIndex = users.findIndex(u => u.id === userId);
+    if (userIndex === -1) {
+        return { success: false, message: 'User not found' };
+    }
+
+    const newAccount: Account = {
+        id: `acc_${Date.now()}`,
+        type: accountType,
+        balance: 0,
+        accountNumber: `****${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`,
+        status: 'active',
+        createdAt: new Date().toISOString().split('T')[0]
+    };
+
+    users[userIndex].accounts.push(newAccount);
+    return { success: true, account: newAccount, updatedUser: users[userIndex] };
+}
+
+export async function toggleAccountStatusInDB(userId: number, accountId: string): Promise<{ success: boolean; message?: string; updatedUser?: User }> {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    const userIndex = users.findIndex(u => u.id === userId);
+    if (userIndex === -1) return { success: false, message: 'User not found' };
+
+    const accountIndex = users[userIndex].accounts.findIndex(acc => acc.id === accountId);
+    if (accountIndex === -1) return { success: false, message: 'Account not found' };
+
+    const currentStatus = users[userIndex].accounts[accountIndex].status;
+    users[userIndex].accounts[accountIndex].status = currentStatus === 'active' ? 'inactive' : 'active';
+    return { success: true, updatedUser: users[userIndex] };
+}
+
+export async function getUserTransactions(userId: number): Promise<Transaction[]> {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return transactions.filter(t => t.userId === userId);
+}
+
+export async function addTransaction(transactionData: Omit<Transaction, 'id' | 'date' | 'status'>): Promise<{ success: boolean; message?: string; transaction?: Transaction }> {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    const newTransaction: Transaction = {
+        id: `txn_${Date.now()}`,
+        date: new Date().toISOString().split('T')[0],
+        status: 'completed',
+        ...transactionData
+    };
+    transactions.push(newTransaction);
+    return { success: true, transaction: newTransaction };
+}
+
+export async function updateAccountBalances(userId: number, fromAccountId: string | null, toAccountId: string | null, amount: number, type: 'transfer' | 'deposit' | 'withdrawal'): Promise<{ success: boolean; message?: string; updatedUser?: User }> {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    const userIndex = users.findIndex(u => u.id === userId);
+    if (userIndex === -1) return { success: false, message: 'User not found' };
+
+    const user = users[userIndex];
+
+    if (fromAccountId) {
+        const fromAccount = user.accounts.find(acc => acc.id === fromAccountId);
+        if (!fromAccount) { // Account not found in user's accounts
+            return { success: false, message: 'Invalid source account.' };
+        }
+        if (fromAccount.balance < amount) {
+            return { success: false, message: 'Insufficient funds in source account.' };
+        }
+        fromAccount.balance -= amount;
+    }
+
+    if (toAccountId) {
+        const toAccount = user.accounts.find(acc => acc.id === toAccountId);
+        if (!toAccount) { // Account not found in user's accounts
+            return { success: false, message: 'Invalid destination account.' };
+        }
+        toAccount.balance += amount;
+    }
+
+    // Ensure balance updates are reflected in the global users object
+    users[userIndex] = { ...user, accounts: [...user.accounts] };
+
+    return { success: true, updatedUser: users[userIndex] };
+}
+
+export async function updateUserData(userId: number, newData: Partial<ProfileFormInputs>): Promise<{ success: boolean; message?: string; updatedUser?: User }> {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    const userIndex = users.findIndex(u => u.id === userId);
+    if (userIndex === -1) {
+        return { success: false, message: 'User not found' };
+    }
+    users[userIndex] = { ...users[userIndex], ...newData };
+    return { success: true, updatedUser: users[userIndex] };
+}
