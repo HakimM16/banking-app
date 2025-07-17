@@ -1,12 +1,14 @@
 // src/types/index.d.ts
 import { Decimal } from 'decimal.js';
 
+// In this file, we define the DTOs (Data Transfer Objects) from the backend to the frontend in TypeScript.
+
 export interface User {
     id: number;
     email: string
     firstName: string;
     lastName: string;
-    phone: string;
+    phoneNumber: string;
 }
 
 export interface Address {
@@ -61,3 +63,31 @@ export interface Balance {
     balance: Decimal;
 }
 
+export interface RegisterFormInputs {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    password: string;
+    role: String;
+}
+
+export interface TransferFormInputs {
+    fromAccount: string;
+    toAccount: string;
+    amount: string; // Use string for input, convert to number for processing
+    description: string;
+}
+
+export interface LoginFormInputs {
+    email: string;
+    password: string;
+}
+
+export interface ProfileFormInputs {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    address: string;
+}
