@@ -5,13 +5,12 @@ import com.hakimmabike.bankingbackend.dto.UpdateUserRequest;
 import com.hakimmabike.bankingbackend.dto.UserDto;
 import com.hakimmabike.bankingbackend.entity.User;
 import com.hakimmabike.bankingbackend.enums.Role;
-import com.hakimmabike.bankingbackend.enums.UserStatus;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-07-12T23:12:54+0100",
+    date = "2025-07-17T08:42:19+0100",
     comments = "version: 1.6.1, compiler: javac, environment: Java 24.0.1 (Oracle Corporation)"
 )
 @Component
@@ -26,14 +25,16 @@ public class UserEntityMapperImpl implements UserEntityMapper {
         Long id = null;
         String email = null;
         String firstName = null;
+        String lastName = null;
         String phoneNumber = null;
 
         id = userEntity.getId();
         email = userEntity.getEmail();
         firstName = userEntity.getFirstName();
+        lastName = userEntity.getLastName();
         phoneNumber = userEntity.getPhoneNumber();
 
-        UserDto userDto = new UserDto( id, email, firstName, phoneNumber );
+        UserDto userDto = new UserDto( id, email, firstName, lastName, phoneNumber );
 
         return userDto;
     }
@@ -68,12 +69,6 @@ public class UserEntityMapperImpl implements UserEntityMapper {
         userEntity.setFirstName( request.getFirstName() );
         userEntity.setLastName( request.getLastName() );
         userEntity.setPhoneNumber( request.getPhoneNumber() );
-        if ( request.getStatus() != null ) {
-            userEntity.setStatus( Enum.valueOf( UserStatus.class, request.getStatus() ) );
-        }
-        else {
-            userEntity.setStatus( null );
-        }
 
         return userEntity;
     }
