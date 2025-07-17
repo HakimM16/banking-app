@@ -34,12 +34,6 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
 
-        // check if status is valid
-        if (!UserStatus.isValidStatus(request.getStatus())) {
-            System.out.println("Invalid status: " + request.getStatus());
-            return ResponseEntity.badRequest().build();
-        }
-
         // Update the user
         var updatedUser = userService.updateUser(id, request);
         return updatedUser != null

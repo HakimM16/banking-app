@@ -11,8 +11,9 @@ import java.math.BigDecimal;
 public class TransactionDto {
     private Long id;
     private String transactionNumber;
-    private TransactionType transactionType;
+    private String transactionType;
     private BigDecimal amount;
-    private Double balanceAfterTransaction;
+    private BigDecimal balanceAfterTransaction;
+    private String categoryName;
     private String description;
 }

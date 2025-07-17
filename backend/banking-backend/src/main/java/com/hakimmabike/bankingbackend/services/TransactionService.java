@@ -52,7 +52,7 @@ public class TransactionService {
         // Make a deposit transaction
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
-        transaction.setTransactionType(TransactionType.DEPOSIT);
+        transaction.setTransactionType(String.valueOf(TransactionType.DEPOSIT));
 
         // Make sure the amount is positive
         if (request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
@@ -131,7 +131,7 @@ public class TransactionService {
         // Make a withdrawal transaction
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
-        transaction.setTransactionType(TransactionType.WITHDRAWAL);
+        transaction.setTransactionType(String.valueOf(TransactionType.WITHDRAWAL));
         transaction.setAmount(request.getAmount());
         transaction.setDescription(request.getDescription());
         transaction.setStatus(TransactionStatus.COMPLETED);
@@ -230,7 +230,7 @@ public class TransactionService {
     private void createTransferTransactions(Transfer transfer, BigDecimal fromBalance, BigDecimal toBalance) {
         Transaction card1 = new Transaction();
         card1.setAccount(transfer.getSenderAccount());
-        card1.setTransactionType(TransactionType.TRANSFER);
+        card1.setTransactionType(String.valueOf(TransactionType.TRANSFER));
         card1.setAmount(transfer.getAmount());
         card1.setDescription("Transfer to " + transfer.getReceiverAccount().getAccountNumber());
         card1.setStatus(TransactionStatus.COMPLETED);
@@ -241,7 +241,7 @@ public class TransactionService {
 
         Transaction card2 = new Transaction();
         card2.setAccount(transfer.getSenderAccount());
-        card2.setTransactionType(TransactionType.TRANSFER);
+        card2.setTransactionType(String.valueOf(TransactionType.TRANSFER));
         card2.setAmount(transfer.getAmount());
         card2.setDescription("Transfer from " + transfer.getReceiverAccount().getAccountNumber());
         card2.setStatus(TransactionStatus.COMPLETED);

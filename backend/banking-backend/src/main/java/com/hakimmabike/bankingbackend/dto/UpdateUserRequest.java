@@ -26,6 +26,4 @@ public class UpdateUserRequest {
     @Size(max = 15, message = "Phone number must be less than 16 characters")
     private String phoneNumber;
 
-    @NotBlank(message = "Status is required")
-    private String status;
 }

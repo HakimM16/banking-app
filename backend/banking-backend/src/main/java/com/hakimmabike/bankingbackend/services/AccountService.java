@@ -154,11 +154,11 @@ public class AccountService {
                 .toList();
     }
 
-    public BigDecimal getAccountBalance(Long accountId, Long userId) {
+    public BalanceDto getAccountBalance(Long accountId, Long userId) {
         var account = accountRepository.findByIdAndUserId(accountId, userId)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
-        return account.getBalance();
+        return new BalanceDto(account.getAccountNumber() ,account.getBalance());
     }
 
     // Get account balance by account number

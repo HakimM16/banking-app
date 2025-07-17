@@ -189,8 +189,6 @@ public class AccountController {
                     .body("Invalid account type: " + request.getAccountType());
         }
 
-
-
         // Check if account is closed
         if (accountRepository.findById(accountId).orElseThrow().getStatus() == AccountStatus.CLOSED) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -247,7 +245,7 @@ public class AccountController {
                     .body("Account with ID " + accountId + " is closed and cannot be accessed.");
         }
 
-        var balance = accountService.getAccountBalance(accountId, userId);
+        BalanceDto balance = accountService.getAccountBalance(accountId, userId);
         if (balance == null) {
             return ResponseEntity.notFound().build(); // Return 404 Not Found if the account does not exist
         }
