@@ -137,7 +137,7 @@ public class UserController {
     }
 
     // Update user address
-    @PutMapping("/{id}/address")
+    @PutMapping("/{id}/update_address")
     public ResponseEntity<?> updateUserAddress(
             @PathVariable Long id,
             @Valid @RequestBody CustomiseAddressRequest request) {

@@ -171,7 +171,7 @@ public class AccountController {
             @PathVariable Long userId,
             @PathVariable Long accountId,
             @RequestBody UpdateAccountRequest request
-    ) {
+    )   {
         // Check if account ID is valid
         if (!accountRepository.existsByIdAndUserId(accountId, userId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
