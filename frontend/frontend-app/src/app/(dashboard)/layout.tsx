@@ -1,7 +1,7 @@
 // src/app/(dashboard)/layout.tsx
 'use client';
 
-import { AuthProvider, useAuth } from '@/providers/AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 import { AccountProvider } from '@/providers/AccountProvider';
 import { TransactionProvider } from '@/providers/TransactionProvider';
 import { useAlerts } from '@/hooks/useAlerts';
@@ -24,31 +24,51 @@ const AlertProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
+    const { isAuthenticated, loading, currentUser } = useAuth();
     const router = useRouter();
 
-    // Client-side redirection if user is not logged in
+    console.log('Dashboard Layout - isAuthenticated:', isAuthenticated, 'loading:', loading, 'currentUser:', currentUser);
+
     useEffect(() => {
-        const storedUser = localStorage.getItem('currentUser');
-        if (!storedUser) {
+        console.log('Dashboard useEffect - isAuthenticated:', isAuthenticated, 'loading:', loading);
+        if (!loading && !isAuthenticated) {
+            console.log('Redirecting to login');
             router.replace('/login');
         }
-    }, [router]);
+    }, [isAuthenticated, loading, router]);
 
+    if (loading) {
+        console.log('Dashboard showing loading screen');
+        return (
+            <div className="flex h-screen items-center justify-center bg-indigo-900">
+                <div className="text-white text-xl">Checking authentication...</div>
+            </div>
+        );
+    }
 
+    if (!isAuthenticated) {
+        console.log('Dashboard showing not authenticated screen');
+        return (
+            <div className="flex h-screen items-center justify-center bg-indigo-900">
+                <div className="text-white text-xl">Not authenticated, redirecting...</div>
+            </div>
+        );
+    }
+
+    console.log('Dashboard showing authenticated content');
     return (
-        <AuthProvider>
-            <AccountProvider>
-                <TransactionProvider>
-                    <AlertProvider>
-                        <div className="flex h-screen bg-indigo-900">
-                            <Sidebar />
-                            <main className="flex-1 overflow-y-auto">
-                                {children}
-                            </main>
-                        </div>
-                    </AlertProvider>
-                </TransactionProvider>
-            </AccountProvider>
-        </AuthProvider>
+        <AccountProvider>
+            <TransactionProvider>
+                <AlertProvider>
+                    <div className="flex h-screen bg-indigo-900">
+                        <Sidebar />
+                        <main className="flex-1 overflow-y-auto">
+                            {children}
+                        </main>
+                    </div>
+                </AlertProvider>
+            </TransactionProvider>
+        </AccountProvider>
     );
 }
+

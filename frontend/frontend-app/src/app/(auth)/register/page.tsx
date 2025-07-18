@@ -1,8 +1,6 @@
 // src/app/(auth)/register/page.tsx
 'use client';
 import RegisterForm from '@/components/forms/RegisterForm';
-import { AuthProvider } from '@/providers/AuthProvider';
-import { AlertState } from '@/types'; // Import type
 import { useAlerts } from '@/hooks/useAlerts';
 import Alert from '@/components/ui/Alert';
 import React, { ReactNode } from 'react';
@@ -23,9 +21,8 @@ const PageAlertProvider = ({ children }: { children: ReactNode }) => {
 export default function RegisterPage() {
     return (
         <PageAlertProvider>
-            <AuthProvider>
-                <RegisterForm />
-            </AuthProvider>
+            <RegisterForm />
         </PageAlertProvider>
     );
 }
+

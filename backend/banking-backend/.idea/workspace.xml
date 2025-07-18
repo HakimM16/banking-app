@@ -4,13 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Made changes to code for Typescript interfaces">
+    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Made a change to UserSecurityRules">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/BankingBackendApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/BankingBackendApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/services/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/services/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/BankingBackendApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/BankingBackendApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/AccountMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/AccountMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransactionMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransactionMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransferMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransferMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserAddressMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserAddressMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserEntityMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserEntityMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/forms/LoginForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/forms/LoginForm.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,15 +183,8 @@
       <workItem from="1752426806546" duration="9854000" />
       <workItem from="1752484006357" duration="3683000" />
       <workItem from="1752736561216" duration="5765000" />
-      <workItem from="1752829642010" duration="4782000" />
-    </task>
-    <task id="LOCAL-00015" summary="Created AccountController&#10;Changed the root of UserController to &quot;api/users&quot;">
-      <option name="closed" value="true" />
-      <created>1752000883813</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1752000883813</updated>
+      <workItem from="1752829642010" duration="5498000" />
+      <workItem from="1752847720849" duration="3823000" />
     </task>
     <task id="LOCAL-00016" summary="Created TransactionController">
       <option name="closed" value="true" />
@@ -574,7 +570,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752442298302</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="Made a change to UserSecurityRules">
+      <option name="closed" value="true" />
+      <created>1752836152445</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1752836152445</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -592,7 +596,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added 404 response in deleteUser" />
     <MESSAGE value="Changed Updating user to only Admin&#10;Temporary change to accessTokenExpiration&#10;Added bad request and not found responses in changeUserStatus." />
     <MESSAGE value="Sorted out the mapping issue to the database and made it give a 200 response" />
     <MESSAGE value="Changed the address for making a new address to create_address.&#10;Added responses such as not found and bad request to createUserAddress" />
@@ -617,6 +620,7 @@
     <MESSAGE value="Added repsonse as not found to getTransactionCategory()" />
     <MESSAGE value="workspace.xml commit" />
     <MESSAGE value="Made changes to code for Typescript interfaces" />
-    <option name="LAST_COMMIT_MESSAGE" value="Made changes to code for Typescript interfaces" />
+    <MESSAGE value="Made a change to UserSecurityRules" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made a change to UserSecurityRules" />
   </component>
 </project>

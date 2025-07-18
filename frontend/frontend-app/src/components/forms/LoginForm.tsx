@@ -5,12 +5,13 @@ import React, { useState } from 'react';
 import { Eye, EyeOff, Shield } from 'lucide-react';
 import { useAuth } from '@/providers/AuthProvider';
 import { useAlerts } from '@/hooks/useAlerts';
-import { useRouter } from 'next/navigation';
+import {redirect, useRouter} from 'next/navigation';
 import { LoginFormInputs } from '@/types'; // Import type
 import LogoForForms from '@/components/ui/LogoForForms'; // Import your LogoForForms component
+import { api } from '@/services/api'; // Import your API service
 
 const LoginForm: React.FC = () => {
-    const [loginForm, setLoginForm] = useState<LoginFormInputs>({ username: '', password: '' });
+    const [loginForm, setLoginForm] = useState<LoginFormInputs>({ email: '', password: '' });
     const [showPassword, setShowPassword] = useState(false);
     const { login } = useAuth();
     const { addAlert } = useAlerts();
@@ -18,10 +19,11 @@ const LoginForm: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const result = await login(loginForm.username, loginForm.password);
+        const result = await login(loginForm); // Now this matches
+
         if (result.success) {
             addAlert('Login successful!', 'success');
-            router.push('/home'); // Redirect to home page after successful login
+            router.push('/home');
         } else {
             addAlert(result.message || 'Invalid credentials. Please try again.', 'error');
         }
@@ -41,8 +43,8 @@ const LoginForm: React.FC = () => {
                         <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
                         <input
                             type="text"
-                            value={loginForm.username}
-                            onChange={(e) => setLoginForm({...loginForm, username: e.target.value})}
+                            value={loginForm.email}
+                            onChange={(e) => setLoginForm({...loginForm, email: e.target.value})}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Enter username"
                             required
