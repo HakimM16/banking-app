@@ -181,7 +181,7 @@ public class BankingBackendApplication {
 				.transactionCategory(transferCategory)
 				.description("Transfer to " + destinationAccount.getAccountNumber())
 				.status(TransactionStatus.COMPLETED)
-				.transactionType(TransactionType.TRANSFER)  // Add transaction type if required
+				.transactionType(String.valueOf(TransactionType.TRANSFER))  // Add transaction type if required
 				.build();
 
 		Transaction creditTransaction = Transaction.builder()
@@ -191,7 +191,7 @@ public class BankingBackendApplication {
 				.transactionCategory(transferCategory)
 				.description("Transfer from " + sourceAccount.getAccountNumber())
 				.status(TransactionStatus.COMPLETED)
-				.transactionType(TransactionType.TRANSFER)  // Add transaction type if required
+				.transactionType(String.valueOf(TransactionType.TRANSFER))  // Add transaction type if required
 				.build();
 
 		System.out.println(sourceAccount);
@@ -233,7 +233,7 @@ public class BankingBackendApplication {
 		Transaction salaryDeposit = Transaction.builder()
 				.account(account)
 				.transactionNumber("DEP-001")
-				.transactionType(TransactionType.DEPOSIT)
+				.transactionType(String.valueOf(TransactionType.DEPOSIT))
 				.amount(BigDecimal.valueOf(2500.0))
 				.balanceAfterTransaction(account.getBalance().add(BigDecimal.valueOf(2500.0)).doubleValue())
 				.description("Monthly salary deposit")
@@ -245,7 +245,7 @@ public class BankingBackendApplication {
 		Transaction billPayment = Transaction.builder()
 				.account(account)
 				.transactionNumber("BILL-001")
-				.transactionType(TransactionType.WITHDRAWAL)
+				.transactionType(String.valueOf(TransactionType.WITHDRAWAL))
 				.amount(BigDecimal.valueOf(-150.0))
 				.balanceAfterTransaction(account.getBalance().subtract(BigDecimal.valueOf(150.0)).doubleValue())
 				.description("Electricity bill payment")

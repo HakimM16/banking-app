@@ -20,7 +20,7 @@ public class UserSecurityRules implements SecurityRules{
                 .requestMatchers(HttpMethod.PATCH, "/api/user/{id}/status").hasRole(Role.ADMIN.name())
                 // Allow users with the ADMIN or USER role to manage user addresses
                 .requestMatchers(HttpMethod.POST, "api/user/{id}/create_address").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
-                .requestMatchers(HttpMethod.PUT, "api/user/{id}/address").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
+                .requestMatchers(HttpMethod.PUT, "api/user/{id}/update_address").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
                 .requestMatchers(HttpMethod.GET, "api/user/{id}/address").hasAnyRole(Role.ADMIN.name(), Role.USER.name());
     }
 }
