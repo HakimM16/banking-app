@@ -3,6 +3,7 @@ import { Decimal } from 'decimal.js';
 
 // In this file, we define the DTOs (Data Transfer Objects) from the backend to the frontend in TypeScript.
 
+// UserDto
 export interface User {
     id: number;
     email: string
@@ -11,6 +12,7 @@ export interface User {
     phoneNumber: string;
 }
 
+// UserAddressDto
 export interface Address {
     id: number;
     street: string;
@@ -20,16 +22,18 @@ export interface Address {
     userId: number;
 }
 
+// TransactionDto
 export interface Transaction {
     id: number;
     transactionNumber: string;
     transactionType: string;
     amount: Decimal;
     balanceAfter: Decimal;
-    category: string;
+    categoryName: string;
     description: string;
 }
 
+// TransferDto
 export interface Transfer {
     id: number;
     amount: Decimal;
@@ -38,6 +42,7 @@ export interface Transfer {
     toAccount: string;
 }
 
+// TransactionCategoryDto
 export interface transactionCategory {
     id: number;
     name: string;
@@ -46,10 +51,12 @@ export interface transactionCategory {
     isSystemCategory: boolean;
 }
 
-export interface Token {
+// JwtResponse
+export interface JwtResponse {
     accessToken: string;
 }
 
+// AccountDto
 export interface Account {
     id: number;
     accountNumber: string;
@@ -58,11 +65,13 @@ export interface Account {
     status: string;
 }
 
+// BalanceDto
 export interface Balance {
     accountNumber: string;
     balance: Decimal;
 }
 
+// RegisterUserRequest
 export interface RegisterFormInputs {
     firstName: string;
     lastName: string;
@@ -72,6 +81,7 @@ export interface RegisterFormInputs {
     role: String;
 }
 
+// TransferRequest
 export interface TransferFormInputs {
     fromAccount: string;
     toAccount: string;
@@ -79,15 +89,86 @@ export interface TransferFormInputs {
     description: string;
 }
 
+// LoginUserRequest
 export interface LoginFormInputs {
     email: string;
     password: string;
 }
 
-export interface ProfileFormInputs {
+// CreateAccountRequest
+export interface CreateAccountFormInputs {
+    accountType: string;
+}
+
+// createTransactionCategoryRequest
+export interface CreateTransactionCategoryFormInputs {
+    name: string;
+    description: string;
+    categoryType: string;
+    isSystem: boolean;
+}
+
+// CustomiseAddressRequest
+export interface CustomiseAddressFormInputs {
+    street: string;
+    city: string;
+    county: string;
+    postCode: string;
+    country: string;
+}
+
+// DeleteAccountRequest
+export interface DeleteAccountRequest {
+    accountNumber: string;
+    accountType: string;
+    reason: string;
+}
+
+// DepositRequest
+export interface DepositFormInputs {
+    accountNumber: string;
+    amount: Decimal;
+    description: string;
+    categoryName: string;
+}
+
+// GetTransactionCategoryRequest
+export interface GetTransactionCategoryRequest {
+    name: string;
+}
+
+// GetTransactionsRequest
+export interface GetTransactionsRequest {
+    accountNumber: string;
+}
+
+// UpdateAccountRequest
+export interface UpdateAccountFormInputs {
+    accountType: string;
+}
+
+// UpdateAccountStatusRequest
+export interface UpdateAccountStatusFormInputs {
+    status: string; // e.g., 'active', 'inactive', 'closed'
+}
+
+// UpdateStatusRequest
+export interface UpdateStatusFormInputs {
+    status: string; // e.g., 'active', 'inactive', 'closed'
+}
+
+// UpdateUserRequest
+export interface UpdateUserFormInputs {
     firstName: string;
     lastName: string;
     email: string;
-    phone: string;
-    address: string;
+    phoneNumber: string;
+}
+
+// withdrawRequest
+export interface WithdrawFormInputs {
+    accountNumber: string;
+    amount: Decimal;
+    description: string;
+    categoryName: string;
 }

@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Made changes to code for Typescript interfaces">
-      <change afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/services/api.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/types/ff.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/lib/data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/lib/data.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/types/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/types/index.d.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -179,7 +176,8 @@
       <workItem from="1752346336664" duration="7229000" />
       <workItem from="1752426806546" duration="9854000" />
       <workItem from="1752484006357" duration="3683000" />
-      <workItem from="1752736561216" duration="4982000" />
+      <workItem from="1752736561216" duration="5765000" />
+      <workItem from="1752829642010" duration="2258000" />
     </task>
     <task id="LOCAL-00015" summary="Created AccountController&#10;Changed the root of UserController to &quot;api/users&quot;">
       <option name="closed" value="true" />
