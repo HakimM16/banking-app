@@ -12,7 +12,7 @@ spring:
       auto: update
   jwt:
     secret: ${JWT_SECRET}
-    accessTokenExpiration: 3000 # 50 minutes
+    accessTokenExpiration: 300 # 5 minutes
     refreshTokenExpiration: 604800 # 7 days
   flyway:
     enabled: true
