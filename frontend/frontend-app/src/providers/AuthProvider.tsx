@@ -48,13 +48,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
             const response = await api.login(loginData);
             console.log('API response:', response);
-            if (response) {
+
+            if (response && response.token) {
                 console.log('Setting user and auth state');
-                setCurrentUser(response.user);
+                setCurrentUser(response.email);
                 setIsAuthenticated(true);
-                localStorage.setItem('currentUser', JSON.stringify(response.user));
+
+                // Store user data and token in localStorage
+                localStorage.setItem('id', response.id.toString());
+                localStorage.setItem('currentUser', JSON.stringify(response.email));
+                localStorage.setItem('authToken', response.token);
+
                 console.log('Auth state updated - isAuthenticated should be true');
-                return { success: true, user: response.user };
+                return { success: true, user: response.email };
             } else {
                 console.log('Login failed:', response.message);
                 return { success: false, message: response.message || 'Invalid credentials' };

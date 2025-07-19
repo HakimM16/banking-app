@@ -30,6 +30,7 @@ export const api = {
     // User login
     login: async (data: LoginFormInputs) => {
         const response = await axios.post(`${API_BASE_URL}/auth/login`, data);
+        console.log(`Response data: email=${data.email}, password=${data.password}`);
         return response.data;
     },
     // User registration

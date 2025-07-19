@@ -7,12 +7,18 @@
     <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Made a change to UserSecurityRules">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/JwtResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/JwtResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/BankingBackendApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/BankingBackendApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/AccountMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/AccountMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransactionMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransactionMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransferMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransferMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserAddressMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserAddressMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserEntityMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserEntityMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/AuthController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/dto/TransactionDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/dto/TransactionDto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/dto/UserAddressDto$UserAddressDtoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/dto/UserAddressDto$UserAddressDtoBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/dto/UserAddressDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/dto/UserAddressDto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/entity/Transaction$TransactionBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/entity/Transaction$TransactionBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/entity/Transaction.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/entity/Transaction.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/mappers/TransactionMapperImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/mappers/TransactionMapperImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/mappers/UserAddressMapperImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/mappers/UserAddressMapperImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/TransactionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/TransactionService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/forms/LoginForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/forms/LoginForm.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -184,7 +190,9 @@
       <workItem from="1752484006357" duration="3683000" />
       <workItem from="1752736561216" duration="5765000" />
       <workItem from="1752829642010" duration="5498000" />
-      <workItem from="1752847720849" duration="3823000" />
+      <workItem from="1752847720849" duration="4027000" />
+      <workItem from="1752870766323" duration="736000" />
+      <workItem from="1752946393737" duration="3169000" />
     </task>
     <task id="LOCAL-00016" summary="Created TransactionController">
       <option name="closed" value="true" />

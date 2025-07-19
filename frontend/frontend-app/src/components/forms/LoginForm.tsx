@@ -13,6 +13,7 @@ import { api } from '@/services/api'; // Import your API service
 const LoginForm: React.FC = () => {
     const [loginForm, setLoginForm] = useState<LoginFormInputs>({ email: '', password: '' });
     const [showPassword, setShowPassword] = useState(false);
+    const [isValidated, setIsValidated] = useState(true); // This state is used to show an invalid message if the form is not validated
     const { login } = useAuth();
     const { addAlert } = useAlerts();
     const router = useRouter();
@@ -26,6 +27,7 @@ const LoginForm: React.FC = () => {
             router.push('/home');
         } else {
             addAlert(result.message || 'Invalid credentials. Please try again.', 'error');
+            setIsValidated(false);
         }
     };
 
@@ -40,13 +42,13 @@ const LoginForm: React.FC = () => {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                         <input
                             type="text"
                             value={loginForm.email}
                             onChange={(e) => setLoginForm({...loginForm, email: e.target.value})}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter username"
+                            placeholder="Enter Email"
                             required
                         />
                     </div>
@@ -88,6 +90,12 @@ const LoginForm: React.FC = () => {
                             Don't have an account? Register here
                         </button>
                     </div>
+                    {!isValidated ?
+                    <div className="text-red-500 text-base font-semibold text-center mt-2">
+                        Invalid email or password. Please try again.
+                    </div>
+                        : null
+                    }
                 </form>
             </div>
         </div>
