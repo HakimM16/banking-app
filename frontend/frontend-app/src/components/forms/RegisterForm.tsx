@@ -7,34 +7,44 @@ import { useAlerts } from '@/hooks/useAlerts';
 import { useRouter } from 'next/navigation';
 import { registerNewUser } from '@/lib/data';
 import { RegisterFormInputs } from '@/types'; // Import type
-import LogoForForms from '@/components/ui/LogoForForms'; // Import your LogoForForms component
+import LogoForForms from '@/components/ui/LogoForForms';
+import {useAuth} from "@/providers/AuthProvider"; // Import your LogoForForms component
 
 const RegisterForm: React.FC = () => {
     const [registerForm, setRegisterForm] = useState<RegisterFormInputs>({
-        username: '',
-        email: '',
-        password: '',
         firstName: '',
         lastName: '',
-        phone: '',
-        address: ''
+        email: '',
+        phoneNumber: '',
+        password: '',
+        role: 'USER'
     });
+
     const [showPassword, setShowPassword] = useState(false);
+    const [isValidated, setIsValidated] = useState(true); // This state is used to show an invalid message if the form is not validated
     const { addAlert } = useAlerts();
     const router = useRouter();
+    const { register, createAddress} = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const result = await registerNewUser(registerForm);
+        const result = await register(registerForm);
+
         if (result.success) {
             addAlert('Registration successful! Please login.', 'success');
-            router.push('/login');
-            setRegisterForm({ // Clear form
-                username: '', email: '', password: '', firstName: '',
-                lastName: '', phone: '', address: ''
-            });
+            console.log(result.id);
+
+            // Store user ID in localStorage
+            if (result.id) {
+                localStorage.setItem('registeredUserId', result.id.toString());
+            } else {
+                console.error('Registration successful, but no ID was returned.');
+            }
+            // Navigate to the address page (without query params)
+            router.push('/create_address');
         } else {
             addAlert(result.message || 'Registration failed. Please try again.', 'error');
+            setIsValidated(false);
         }
     };
 
@@ -74,18 +84,6 @@ const RegisterForm: React.FC = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
-                        <input
-                            type="text"
-                            value={registerForm.username}
-                            onChange={(e) => setRegisterForm({...registerForm, username: e.target.value})}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Choose username"
-                            required
-                        />
-                    </div>
-
-                    <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                         <input
                             type="email"
@@ -101,21 +99,10 @@ const RegisterForm: React.FC = () => {
                         <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
                         <input
                             type="tel"
-                            value={registerForm.phone}
-                            onChange={(e) => setRegisterForm({...registerForm, phone: e.target.value})}
+                            value={registerForm.phoneNumber}
+                            onChange={(e) => setRegisterForm({...registerForm, phoneNumber: e.target.value})}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Phone number"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                        <input
-                            type="text"
-                            value={registerForm.address}
-                            onChange={(e) => setRegisterForm({...registerForm, address: e.target.value})}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Full address"
                         />
                     </div>
 
@@ -142,20 +129,27 @@ const RegisterForm: React.FC = () => {
 
                     <button
                         type="submit"
-                        className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                        className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
                     >
-                        Register
+                        <Shield size={20} className="inline-block mr-2" />
+                        Enter Address
                     </button>
 
                     <div className="text-center">
                         <button
                             type="button"
                             onClick={() => router.push('/login')}
-                            className="text-indigo-600 hover:text-blue-800 text-sm"
+                            className="text-indigo-600 hover:text-blue-800 text-sm cursor-pointer"
                         >
                             Already have an account? Login here
                         </button>
                     </div>
+                    {!isValidated ?
+                        <div className="text-red-500 text-base font-semibold text-center mt-2">
+                            Invalid credentials. Please try again.
+                        </div>
+                        : null
+                    }
                 </form>
             </div>
         </div>

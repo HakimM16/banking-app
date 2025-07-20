@@ -4,11 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Made a change to UserSecurityRules">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/JwtResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/JwtResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/dto/JwtResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/dto/JwtResponse.class" afterDir="false" />
+    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Added id and email to JwtResponse and change access token expiration to 5 minutes.">
+      <change afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/app/(auth)/create_address/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/forms/AddressForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/config/SecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/next.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/forms/RegisterForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/forms/RegisterForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/AuthProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/AuthProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/services/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/services/api.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,13 +100,16 @@
       <recent name="com.hakimmabike.bankingbackend.securityRules" />
       <recent name="com.hakimmabike.bankingbackend.repository" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.hakimmabike.bankingbackend.config" />
+    </key>
   </component>
   <component name="RunManager" selected="Spring Boot.BankingBackendApplication">
     <configuration name="BankingBackendApplicationTests.testUserAndAccountCreation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="banking-backend" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.hakimmabike.bankingbackend.*" />
+          <option name="PATTERN" value="com.hakimmabike.bankingbackend.config.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -181,15 +193,8 @@
       <workItem from="1752829642010" duration="5498000" />
       <workItem from="1752847720849" duration="4027000" />
       <workItem from="1752870766323" duration="736000" />
-      <workItem from="1752946393737" duration="3510000" />
-    </task>
-    <task id="LOCAL-00016" summary="Created TransactionController">
-      <option name="closed" value="true" />
-      <created>1752005455813</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1752005455813</updated>
+      <workItem from="1752946393737" duration="8088000" />
+      <workItem from="1753031989972" duration="4388000" />
     </task>
     <task id="LOCAL-00017" summary="Configured security settings.&#10;Built the login API.&#10;Added AuthenticationManager">
       <option name="closed" value="true" />
@@ -575,7 +580,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752836152445</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="Added id and email to JwtResponse and change access token expiration to 5 minutes.">
+      <option name="closed" value="true" />
+      <created>1752950806400</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1752950806400</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -593,7 +606,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Changed Updating user to only Admin&#10;Temporary change to accessTokenExpiration&#10;Added bad request and not found responses in changeUserStatus." />
     <MESSAGE value="Sorted out the mapping issue to the database and made it give a 200 response" />
     <MESSAGE value="Changed the address for making a new address to create_address.&#10;Added responses such as not found and bad request to createUserAddress" />
     <MESSAGE value="Sorted out the mapping issue for updateUserAddress" />
@@ -618,6 +630,7 @@
     <MESSAGE value="workspace.xml commit" />
     <MESSAGE value="Made changes to code for Typescript interfaces" />
     <MESSAGE value="Made a change to UserSecurityRules" />
-    <option name="LAST_COMMIT_MESSAGE" value="Made a change to UserSecurityRules" />
+    <MESSAGE value="Added id and email to JwtResponse and change access token expiration to 5 minutes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added id and email to JwtResponse and change access token expiration to 5 minutes." />
   </component>
 </project>

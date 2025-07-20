@@ -36,42 +36,43 @@ export const api = {
     // User registration
     register: async (data: RegisterFormInputs) => {
         const response = await axios.post(`${API_BASE_URL}/auth/register`, data);
+        console.log(`Response data: email=${data.email}, password=${data.password}`);
         return response.data;
     },
 
     // USERS
     getUserProfile: async (userId: number) => {
-        const response = await axios.get<User>(`${API_BASE_URL}/users/${userId}`);
+        const response = await axios.get<User>(`${API_BASE_URL}/user/${userId}`);
         return response.data;
     },
 
     updateUserProfile: async (userId: number, data: UpdateUserFormInputs) => {
-        const response = await axios.put<User>(`${API_BASE_URL}/users/${userId}`, data);
+        const response = await axios.put<User>(`${API_BASE_URL}/user/${userId}`, data);
         return response.data;
     },
 
     deleteUser: async (userId: number) => {
-        const response = await axios.delete(`${API_BASE_URL}/users/${userId}`);
+        const response = await axios.delete(`${API_BASE_URL}/user/${userId}`);
         return response.data;
     },
 
     changeUserStatus: async (userId: number, data: UpdateStatusFormInputs) => {
-        const response = await axios.put<User>(`${API_BASE_URL}/users/${userId}/status`, data);
+        const response = await axios.put<User>(`${API_BASE_URL}/user/${userId}/status`, data);
         return response.data;
     },
 
     createUserAddress: async (userId: number, data: CustomiseAddressFormInputs) => {
-        const response = await axios.post<Address>(`${API_BASE_URL}/users/${userId}/create_address`, data);
+        const response = await axios.post<Address>(`${API_BASE_URL}/user/${userId}/create_address`, data);
         return response.data;
     },
 
     updateUserAddress: async (userId: number, data: CustomiseAddressFormInputs) => {
-        const response = await axios.put<Address>(`${API_BASE_URL}/users/${userId}/update_address`, data);
+        const response = await axios.put<Address>(`/api/user/${userId}/update_address`, data);
         return response.data;
     },
 
     getUserAddress: async (userId: number) => {
-        const response = await axios.get<Address>(`${API_BASE_URL}/users/${userId}/address`);
+        const response = await axios.get<Address>(`${API_BASE_URL}/user/${userId}/address`);
         return response.data;
     },
 

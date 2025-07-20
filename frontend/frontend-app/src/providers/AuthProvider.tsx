@@ -3,12 +3,14 @@
 
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { getUserByUsernamePassword } from '@/lib/data';
-import { User, LoginFormInputs } from '@/types';
+import {User, LoginFormInputs, RegisterFormInputs, CustomiseAddressFormInputs} from '@/types';
 import {api} from "@/services/api"; // Import types
 
 interface AuthContextType {
     currentUser: User | null;
+    register: (registerData: RegisterFormInputs) => Promise<{ success: boolean; id?: number; message?: string }>;
     login: (loginData: LoginFormInputs) => Promise<{ success: boolean; message?: string; user?: User }>;
+    createAddress: (addressData: CustomiseAddressFormInputs, id: number | null) => Promise<{ success: boolean; message?: string }>;
     logout: () => void;
     updateUserInContext: (updatedUser: User) => void;
     isAuthenticated: boolean;
@@ -43,6 +45,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         initAuth();
     }, []);
 
+    const register = async (registerData: RegisterFormInputs): Promise<{ success: boolean; id?: number; message?: string;  }> => {
+        console.log('Register function called with data:', registerData);
+        try {
+            const response = await api.register(registerData);
+            console.log('API response:', response);
+
+            if (response) {
+                console.log('Registration successful');
+                return { success: true, id: response.id };
+            } else {
+                console.log('Registration failed:', response.message);
+                return { success: false, message: response.message || 'Registration failed' };
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
+            return { success: false, message: 'Registration failed. Please try again.' };
+        }
+    };
+
     const login = async (loginData: LoginFormInputs): Promise<{ success: boolean; message?: string; user?: User }> => {
         console.log('Login function called');
         try {
@@ -71,6 +92,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    const createAddress = async (addressData: CustomiseAddressFormInputs, id: number | null): Promise<{ success: boolean; message?: string }> => {
+        console.log('Create address function called with data:', addressData);
+        try {
+
+            if (id !== null) {
+
+                const response = await api.createUserAddress(id, addressData);
+                console.log('API response:', response);
+
+                if (response) {
+                    console.log('Address creation successful');
+                    return {success: true};
+                } else {
+                    console.log('Address creation failed:');
+                    return {success: false, message: 'Address creation failed'};
+                }
+            } else {
+                return { success: false, message: 'Invalid user ID' };
+            }
+        } catch (error) {
+            console.error('Address creation error:', error);
+            return { success: false, message: 'Address creation failed. Please try again.' };
+        }
+    }
+
     const logout = () => {
         setCurrentUser(null);
         setIsAuthenticated(false);
@@ -84,7 +130,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // Always provide the context, don't block the entire app with loading screen
     return (
-        <AuthContext.Provider value={{ currentUser, login, logout, updateUserInContext, isAuthenticated, loading }}>
+        <AuthContext.Provider value={{ currentUser, register, login, createAddress, logout, updateUserInContext, isAuthenticated, loading }}>
             {children}
         </AuthContext.Provider>
     );

@@ -76,7 +76,7 @@ const LoginForm: React.FC = () => {
 
                     <button
                         type="submit"
-                        className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                        className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
                     >
                         Login
                     </button>
@@ -85,7 +85,7 @@ const LoginForm: React.FC = () => {
                         <button
                             type="button"
                             onClick={() => router.push('/register')}
-                            className="text-indigo-600 hover:text-blue-800 text-sm"
+                            className="text-indigo-600 hover:text-blue-800 text-sm cursor-pointer"
                         >
                             Don't have an account? Register here
                         </button>
