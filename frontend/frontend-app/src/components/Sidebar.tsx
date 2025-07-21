@@ -7,10 +7,41 @@ import { usePathname } from 'next/navigation';
 import { User, CreditCard, ArrowUpDown, History, Settings, LogOut, Shield, TrendingUp } from 'lucide-react';
 import { useAuth } from '@/providers/AuthProvider';
 import LogoForSidebar from "@/components/ui/LogoForSidebar";
+import {jwtDecode} from "jwt-decode";
 
 const Sidebar: React.FC = () => {
     const pathname = usePathname();
     const { currentUser, logout } = useAuth();
+    const token = localStorage.getItem('token');
+
+    // check if token is valid
+    const getTokenExpiration = (token: string) => {
+        if (!token) return null;
+        try {
+            const decoded: any = jwtDecode(token);
+            return decoded.exp ? new Date(decoded.exp * 1000) : null;
+        } catch (error) {
+            console.error('Invalid token:', error);
+            return null;
+        }
+    }
+
+    const timeRemaining = (token: string) => {
+        const expirationDate = getTokenExpiration(token || '');
+        if (!expirationDate) return null;
+        const now = new Date();
+        const timeLeft = expirationDate.getTime() - now.getTime();
+        return timeLeft > 0 ? Math.ceil(timeLeft / 1000) : 0; // Return time left in seconds
+    }
+
+    const isValidToken = (token: string) => {
+        // @ts-ignore
+        if (token && timeRemaining(token) < 0) {
+            // alert user that the token is expired
+            alert('Your session has expired. Please log in again.');
+            logout();
+        }
+    };
 
     const handleLogout = () => {
         logout();
