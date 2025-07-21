@@ -1,14 +1,17 @@
 // src/utils/helpers.ts
-import { Account } from '@/types'; // Import Account type
+// src/utils/helpers.ts
+import { Account } from '@/types';
+import { Decimal } from "decimal.js";
 
-export const formatCurrency = (amount: number): string => {
+export const formatCurrency = (amount: Decimal | number): string => {
+    const numericValue = amount instanceof Decimal ? amount.toNumber() : Number(amount);
     return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'GBP',
-    }).format(amount);
+    }).format(numericValue);
 };
 
 export const getAccountDisplayName = (account?: Account | null): string => {
     if (!account) return 'N/A';
-    return `${account.type.charAt(0).toUpperCase() + account.type.slice(1)} ${account.accountNumber}`;
+    return `${account.accountType.toLowerCase()} ${account.accountNumber}`;
 };

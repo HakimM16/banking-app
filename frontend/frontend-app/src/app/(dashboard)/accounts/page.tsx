@@ -12,19 +12,31 @@ export default function AccountsPage() {
     const { currentUser } = useAuth();
     const { accounts, createAccount, toggleAccountStatus } = useAccounts();
     const { addAlert } = useAlerts();
+    const [id, setId] = React.useState<number | null>(null);
 
     const [isCreatingAccount, setIsCreatingAccount] = useState(false);
-    const [newAccountType, setNewAccountType] = useState<'checking' | 'savings'>('checking');
+    const [accountForm, setAccountForm] = useState({
+        accountType: 'DEBIT', // Default to Debit
+    });
+
+    // Get id from localStorage if not in URL params
+    const storedId = localStorage.getItem('id');
+    React.useEffect(() => {
+        if (storedId) {
+            setId(parseInt(storedId, 10));
+        }
+    }, [storedId]);
 
     const handleCreateAccount = async () => {
-        const result = await createAccount(newAccountType);
-        if (result.success) {
-            addAlert(`${newAccountType.charAt(0).toUpperCase() + newAccountType.slice(1)} account created successfully!`, 'success');
-            setIsCreatingAccount(false);
-            setNewAccountType('checking');
-        } else {
-            addAlert(result.message || 'Failed to create account.', 'error');
+        if (id) {
+            const result = await createAccount(id, accountForm);
+            console.log(accountForm)
+            if (result.success) {
+
+                addAlert(result.message || 'Failed to create account.', 'error');
+            }
         }
+
     };
 
     const handleToggleStatus = async (accountId: string) => {
@@ -64,12 +76,13 @@ export default function AccountsPage() {
                             <label htmlFor="accountType" className="block text-sm font-medium text-gray-700 mb-2">Account Type</label>
                             <select
                                 id="accountType"
-                                value={newAccountType}
-                                onChange={(e) => setNewAccountType(e.target.value as 'checking' | 'savings')}
+                                value={accountForm.accountType}
+                                onChange={(e) => setAccountForm({...accountForm, accountType: e.target.value.toUpperCase()})}
                                 className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
-                                <option value="checking">Checking</option>
-                                <option value="savings">Savings</option>
+                                <option value="DEBIT">Debit</option>
+                                <option value="SAVINGS">Savings</option>
+                                <option value="CREDIT">Credit</option>
                             </select>
                         </div>
                         <button
@@ -99,12 +112,12 @@ export default function AccountsPage() {
                                 <button
                                     onClick={() => handleToggleStatus(account.id)}
                                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                                        account.status === 'active'
+                                        account.status === 'OPEN'
                                             ? 'bg-red-500 text-white hover:bg-red-600'
                                             : 'bg-green-500 text-white hover:bg-green-600'
                                     }`}
                                 >
-                                    {account.status === 'active' ? 'Deactivate' : 'Activate'}
+                                    {account.status === 'OPEN' ? 'Deactivate' : 'Activate'}
                                 </button>
                             </div>
                         </div>

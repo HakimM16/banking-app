@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Added id and email to JwtResponse and change access token expiration to 5 minutes.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/app/(dashboard)/profile/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/app/(dashboard)/profile/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/app/(dashboard)/update/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/app/(dashboard)/update/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/AuthProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/AuthProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/services/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/services/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AccountController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,7 +184,7 @@
       <workItem from="1752870766323" duration="736000" />
       <workItem from="1752946393737" duration="8088000" />
       <workItem from="1753031989972" duration="5957000" />
-      <workItem from="1753078496551" duration="8501000" />
+      <workItem from="1753078496551" duration="11911000" />
     </task>
     <task id="LOCAL-00017" summary="Configured security settings.&#10;Built the login API.&#10;Added AuthenticationManager">
       <option name="closed" value="true" />

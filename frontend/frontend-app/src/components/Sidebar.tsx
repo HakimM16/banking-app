@@ -25,7 +25,7 @@ const Sidebar: React.FC = () => {
                     <LogoForSidebar />
                     <div>
                         <h2 className="text-xl font-bold">Vesta</h2>
-                        <p className="text-sm text-gray-300">Welcome, {currentUser?.firstName}</p>
+                        <p className="text-sm text-gray-300">Welcome, user</p>
                     </div>
                 </div>
             </div>
