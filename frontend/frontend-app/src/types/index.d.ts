@@ -19,7 +19,20 @@ export interface Address {
     city: string;
     postCode: string;
     country: string;
+    county: string;
     userId: number;
+}
+
+export interface ProfileFormInputs {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    street: string;
+    city: string;
+    county: string;
+    postCode: string;
+    country: string;
 }
 
 // TransactionDto

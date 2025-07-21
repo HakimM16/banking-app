@@ -9,28 +9,54 @@ import { updateUserData } from '@/lib/data';
 import { ProfileFormInputs } from '@/types'; // Import type
 
 export default function ProfilePage() {
-    const { currentUser, updateUserInContext } = useAuth();
+    const { currentUser, updateUserInContext, getAddress, getUser } = useAuth();
     const { addAlert } = useAlerts();
+    const [id, setId] = React.useState<number | null>(null);
 
     const [profileForm, setProfileForm] = useState<ProfileFormInputs>({
         firstName: '',
         lastName: '',
         email: '',
         phone: '',
-        address: ''
+        street: '',
+        city: '',
+        county: '',
+        postCode: '',
+        country: ''
     });
 
-    useEffect(() => {
-        if (currentUser) {
-            setProfileForm({
-                firstName: currentUser.firstName || '',
-                lastName: currentUser.lastName || '',
-                email: currentUser.email || '',
-                phone: currentUser.phone || '',
-                address: currentUser.address || ''
-            });
+    // Get id from localStorage if not in URL params
+    const storedId = localStorage.getItem('id');
+    React.useEffect(() => {
+        if (storedId) {
+            setId(parseInt(storedId, 10));
         }
-    }, [currentUser]);
+    }, [storedId]);
+    const user = getUser(id);
+    const address = getAddress(id);
+
+    // Fetch user and address data when id is valid
+    useEffect(() => {
+        if (user && address && !profileForm.firstName) { // Check if form is empty
+            console.log("Fetching user and address data");
+            const fetchInfo = async () => {
+                const resolvedUser = await user;
+                const resolvedAddress = await address;
+                setProfileForm({
+                    firstName: resolvedUser?.firstName || '',
+                    lastName: resolvedUser?.lastName || '',
+                    email: resolvedUser?.email || '',
+                    phone: resolvedUser?.phoneNumber || '',
+                    street: resolvedAddress?.address?.street || '',
+                    city: resolvedAddress?.address?.city || '',
+                    county: resolvedAddress?.address?.county || '',
+                    postCode: resolvedAddress?.address?.postCode || '',
+                    country: resolvedAddress?.address?.country || ''
+                });
+            };
+            fetchInfo();
+        }
+    }, [user, address, id, profileForm.firstName]); // Add profileForm.firstName as dependency
 
     const handleProfileUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -68,7 +94,7 @@ export default function ProfilePage() {
                         <div>
                             <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
                             <div className="rounded-full bg-gray-100 px-4 py-2 inline-block">
-                                <p>{profileForm.firstName}</p>
+                                <p>{profileForm.lastName}</p>
                             </div>
                         </div>
                     </div>
@@ -88,9 +114,37 @@ export default function ProfilePage() {
                     </div>
                     <br/>
                     <div>
-                        <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                        <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">Street</label>
                         <div className="rounded-full bg-gray-100 px-4 py-2 inline-block">
-                            <p>{profileForm.address}</p>
+                            <p>{profileForm.street}</p>
+                        </div>
+                    </div>
+                    <br/>
+                    <div>
+                        <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">City</label>
+                        <div className="rounded-full bg-gray-100 px-4 py-2 inline-block">
+                            <p>{profileForm.city}</p>
+                        </div>
+                    </div>
+                    <br/>
+                    <div>
+                        <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">County</label>
+                        <div className="rounded-full bg-gray-100 px-4 py-2 inline-block">
+                            <p>{profileForm.county}</p>
+                        </div>
+                    </div>
+                    <br/>
+                    <div>
+                        <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">PostCode</label>
+                        <div className="rounded-full bg-gray-100 px-4 py-2 inline-block">
+                            <p>{profileForm.postCode}</p>
+                        </div>
+                    </div>
+                    <br/>
+                    <div>
+                        <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">Country</label>
+                        <div className="rounded-full bg-gray-100 px-4 py-2 inline-block">
+                            <p>{profileForm.country}</p>
                         </div>
                     </div>
                     <br/>

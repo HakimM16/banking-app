@@ -31,6 +31,13 @@ export const api = {
     login: async (data: LoginFormInputs) => {
         const response = await axios.post(`${API_BASE_URL}/auth/login`, data);
         console.log(`Response data: email=${data.email}, password=${data.password}`);
+        if (response.data.token) {
+            // Store the token in localStorage (if needed)
+            localStorage.setItem('authToken', response.data.token);
+
+            // Set the default Authorization header for all future axios requests
+            axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+        }
         return response.data;
     },
     // User registration

@@ -10,7 +10,9 @@ interface AuthContextType {
     currentUser: User | null;
     register: (registerData: RegisterFormInputs) => Promise<{ success: boolean; id?: number; message?: string }>;
     login: (loginData: LoginFormInputs) => Promise<{ success: boolean; message?: string; user?: User }>;
+    getUser: (id: number | null) => Promise<User | null>;
     createAddress: (addressData: CustomiseAddressFormInputs, id: number | null) => Promise<{ success: boolean; message?: string }>;
+    getAddress: (id: number | null) => Promise<{ success: boolean; address?: CustomiseAddressFormInputs; message?: string }>;
     logout: () => void;
     updateUserInContext: (updatedUser: User) => void;
     isAuthenticated: boolean;
@@ -78,7 +80,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 // Store user data and token in localStorage
                 localStorage.setItem('id', response.id.toString());
                 localStorage.setItem('currentUser', JSON.stringify(response.email));
-                localStorage.setItem('authToken', response.token);
 
                 console.log('Auth state updated - isAuthenticated should be true');
                 return { success: true, user: response.email };
@@ -91,6 +92,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             return { success: false, message: 'Login failed. Please try again.' };
         }
     };
+
+    const getUser = async (id: number | null): Promise<User | null> => {
+        console.log('Get user function called with ID:', id);
+        try {
+            if (id !== null) {
+                const response = await api.getUserProfile(id);
+                console.log('API response:', response);
+
+                if (response) {
+                    console.log('User retrieval successful');
+                    return response;
+                } else {
+                    console.log('User retrieval failed');
+                    return null;
+                }
+            } else {
+                console.log('Invalid user ID');
+                return null;
+            }
+        } catch (error) {
+            console.error('User retrieval error:', error);
+            return null;
+        }
+    }
 
     const createAddress = async (addressData: CustomiseAddressFormInputs, id: number | null): Promise<{ success: boolean; message?: string }> => {
         console.log('Create address function called with data:', addressData);
@@ -117,6 +142,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    const getAddress = async (id: number | null): Promise<{ success: boolean; address?: CustomiseAddressFormInputs; message?: string }> => {
+        console.log('Get address function called with ID:', id);
+        try {
+            if (id !== null) {
+                const response = await api.getUserAddress(id);
+                console.log('API response:', response);
+
+                if (response) {
+                    console.log('Address retrieval successful');
+                    return { success: true, address: response };
+                } else {
+                    console.log('Address retrieval failed');
+                    return { success: false, message: 'Address retrieval failed' };
+                }
+            } else {
+                return { success: false, message: 'Invalid user ID' };
+            }
+        } catch (error) {
+            console.error('Address retrieval error:', error);
+            return { success: false, message: 'Address retrieval failed. Please try again.' };
+        }
+    }
+
     const logout = () => {
         setCurrentUser(null);
         setIsAuthenticated(false);
@@ -130,7 +178,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // Always provide the context, don't block the entire app with loading screen
     return (
-        <AuthContext.Provider value={{ currentUser, register, login, createAddress, logout, updateUserInContext, isAuthenticated, loading }}>
+        <AuthContext.Provider value={{ currentUser, register, login, getUser, createAddress, getAddress, logout, updateUserInContext, isAuthenticated, loading }}>
             {children}
         </AuthContext.Provider>
     );

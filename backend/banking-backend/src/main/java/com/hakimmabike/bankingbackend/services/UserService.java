@@ -127,7 +127,11 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("Address not found for user"));
 
         // Convert the UserAddress entity to UserAddressDto and return it
-        return mapToUserAddressDto(address);
+        UserAddressDto addressDto = mapToUserAddressDto(address);
+        // set country and county
+        addressDto.setCountry(address.getCountry());
+        addressDto.setCounty(address.getCounty());
+        return addressDto;
     }
 
     // Change User address by Id
