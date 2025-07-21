@@ -8,10 +8,11 @@ import { useAuth } from '@/providers/AuthProvider';
 import { useAlerts } from '@/hooks/useAlerts';
 import AccountCard from '@/components/AccountCard';
 import {UpdateAccountStatusFormInputs} from "@/types";
+import axios from "axios";
 
 export default function AccountsPage() {
     const { currentUser } = useAuth();
-    const { accounts, createAccount, toggleAccountStatus, changeAccountStatus } = useAccounts();
+    const { accounts, createAccount, changeAccountStatus } = useAccounts();
     const { addAlert } = useAlerts();
     const [id, setId] = React.useState<number | null>(null);
 
@@ -33,6 +34,9 @@ export default function AccountsPage() {
     }, [storedId]);
 
     const handleCreateAccount = async () => {
+        const token = localStorage.getItem('authToken');
+        // Set the default Authorization header for all future axios requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
         if (id) {
             const result = await createAccount(id, accountForm);
             console.log(accountForm)
@@ -44,6 +48,9 @@ export default function AccountsPage() {
     };
 
     const handleToggleStatus = async (accountId: number) => {
+        const token = localStorage.getItem('authToken');
+        // Set the default Authorization header for all future axios requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
         if (accountStatus.status === 'OPEN') {
             setAccountStatus({ status: 'CLOSED' });
         } else {

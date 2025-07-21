@@ -5,13 +5,15 @@ import React, { createContext, useState, useEffect, useContext, ReactNode } from
 import { useAuth } from './AuthProvider';
 import { addTransaction, getUserTransactions, updateAccountBalances } from '@/lib/data';
 import { useAccounts } from './AccountProvider';
-import { Transaction, TransferFormInputs, DepositFormInputs, WithdrawalFormInputs } from '@/types'; // Import types
+import { Transaction, TransferFormInputs, DepositFormInputs, WithdrawFormInputs } from '@/types'; // Import types
+import Decimal from 'decimal.js';
+import {api} from "@/services/api";
 
 interface TransactionContextType {
     transactions: Transaction[];
     loadingTransactions: boolean;
+    makeDeposit: (userId: number, request: DepositFormInputs) => Promise<{ success: boolean; message?: string }>;
     processTransfer: (data: TransferFormInputs) => Promise<{ success: boolean; message?: string }>;
-    processDeposit: (data: DepositFormInputs) => Promise<{ success: boolean; message?: string }>;
     processWithdrawal: (data: WithdrawalFormInputs) => Promise<{ success: boolean; message?: string }>;
     getFilteredTransactions: (filter: string, searchTerm: string) => Transaction[];
 }
@@ -38,6 +40,63 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
         };
         fetchTransactions();
     }, [currentUser]);
+
+    const makeDeposit = async (userId: number, request: DepositFormInputs): Promise<{ success: boolean; message?: string }> => {
+        if (!currentUser) return { success: false, message: 'User not logged in.' };
+        console.log(request)
+
+        const amount = new Decimal(request.amount).toNumber();
+        if (isNaN(amount) || amount <= 0) return { success: false, message: 'Amount must be a positive number.' };
+        if (amount > 50000) return { success: false, message: 'Deposit limit exceeded. Maximum amount is $50,000.' };
+
+        try {
+            // change the amount to a decimal
+            request.amount = new Decimal(request.amount); // Convert Decimal to string
+            console.log("After conversion: " + request);
+
+            const deposit = await api.deposit(userId, request);
+            if (deposit) {
+                return { success: true };
+            } else {
+                return { success: false, message: 'Failed to process deposit.' };
+            }
+        } catch (error) {
+            console.error('Error processing deposit:', error);
+            return { success: false, message: 'Failed to process deposit.' };
+        }
+
+        /*const account = accounts.find(acc => acc.id === request.account);
+        if (!account) return { success: false, message: 'Account not found.' };
+
+        const { success: balanceUpdateSuccess, updatedUser, message: balanceUpdateMessage } = await updateAccountBalances(
+            userId,
+            null,
+            request.account,
+            amount,
+            'deposit'
+        );
+
+        if (!balanceUpdateSuccess) {
+            return { success: false, message: balanceUpdateMessage };
+        }
+
+        const newTransactionData: Omit<Transaction, 'id' | 'date' | 'status'> = {
+            userId,
+            fromAccount: null,
+            toAccount: request.account,
+            amount,
+            type: 'deposit',
+            description: request.description || 'Cash deposit',
+        };
+
+        const { success: txnSuccess, transaction, message: txnMessage } = await addTransaction(newTransactionData);
+
+        if (txnSuccess && transaction && updatedUser) {
+            setTransactions(prev => [...prev, transaction]);
+            updateUserInContext(updatedUser);
+        }
+        return { success: txnSuccess, message: txnMessage };*/
+    }
 
     const processTransfer = async (transferData: TransferFormInputs): Promise<{ success: boolean; message?: string }> => {
         if (!currentUser) return { success: false, message: 'User not logged in.' };
@@ -68,43 +127,6 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             amount,
             type: 'transfer',
             description: transferData.description || 'Internal transfer',
-        };
-
-        const { success: txnSuccess, transaction, message: txnMessage } = await addTransaction(newTransactionData);
-
-        if (txnSuccess && transaction && updatedUser) {
-            setTransactions(prev => [...prev, transaction]);
-            updateUserInContext(updatedUser);
-        }
-        return { success: txnSuccess, message: txnMessage };
-    };
-
-    const processDeposit = async (depositData: DepositFormInputs): Promise<{ success: boolean; message?: string }> => {
-        if (!currentUser) return { success: false, message: 'User not logged in.' };
-
-        const amount = parseFloat(depositData.amount);
-        if (isNaN(amount) || amount <= 0) return { success: false, message: 'Amount must be a positive number.' };
-        if (amount > 50000) return { success: false, message: 'Deposit limit exceeded. Maximum amount is $50,000.' };
-
-        const { success: balanceUpdateSuccess, updatedUser, message: balanceUpdateMessage } = await updateAccountBalances(
-            currentUser.id,
-            null,
-            depositData.account,
-            amount,
-            'deposit'
-        );
-
-        if (!balanceUpdateSuccess) {
-            return { success: false, message: balanceUpdateMessage };
-        }
-
-        const newTransactionData: Omit<Transaction, 'id' | 'date' | 'status'> = {
-            userId: currentUser.id,
-            fromAccount: null,
-            toAccount: depositData.account,
-            amount,
-            type: 'deposit',
-            description: depositData.description || 'Cash deposit',
         };
 
         const { success: txnSuccess, transaction, message: txnMessage } = await addTransaction(newTransactionData);
@@ -177,8 +199,8 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
         <TransactionContext.Provider value={{
             transactions,
             loadingTransactions,
+            makeDeposit,
             processTransfer,
-            processDeposit,
             processWithdrawal,
             getFilteredTransactions
         }}>

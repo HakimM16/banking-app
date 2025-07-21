@@ -8,29 +8,48 @@ import { useTransactions } from '@/providers/TransactionProvider';
 import { useAlerts } from '@/hooks/useAlerts';
 import { DepositFormInputs } from '@/types';
 import { Decimal } from 'decimal.js';
-import { redirect } from 'next/navigation';
+import axios from "axios";
 
 const DepositForm: React.FC = () => {
     const { accounts } = useAccounts();
-    const { processDeposit } = useTransactions();
+    const { makeDeposit } = useTransactions();
     const { addAlert } = useAlerts();
+
 
     const [depositForm, setDepositForm] = useState<DepositFormInputs>({
         accountNumber: '',
         amount: new Decimal(0),
         description: '',
+        categoryName: 'Google'
     });
+
+    const id = localStorage.getItem('id');
 
     const handleDeposit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const result = await processDeposit(depositForm);
-        if (result.success) {
-            addAlert('Deposit completed successfully!', 'success');
-            setDepositForm({ accountNumber: '', amount: new Decimal(0), description: '' });
-        } else {
-            addAlert(result.message || 'Deposit failed.', 'error');
+        const token = localStorage.getItem('authToken');
+        // Set the default Authorization header for all future axios requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
+        if (id) {
+            const userId = parseInt(id, 10);
+
+            // Create a modified version of the form data with the amount as a string or number
+            const depositData = {
+                ...depositForm,
+                amount: depositForm.amount
+            };
+
+            const result = await makeDeposit(userId, depositData);
+            if (result.success) {
+                addAlert('Deposit completed successfully!', 'success');
+                setDepositForm({ accountNumber: '', amount: new Decimal(0), description: '', categoryName: 'Google' });
+                window.location.reload();
+
+            } else {
+                addAlert(result.message || 'Deposit failed.', 'error');
+            }
         }
-        return redirect('/home');
     };
 
     return (
@@ -51,7 +70,7 @@ const DepositForm: React.FC = () => {
                         <option value="">Select an account</option>
                         {accounts.map(acc => (
                             <option key={acc.id} value={acc.accountNumber}>
-                                {acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} ({acc.accountNumber}) - ${acc.balance.toLocaleString()}
+                                {acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} ({acc.accountNumber}) - £{acc.balance.toLocaleString()}
                             </option>
                         ))}
                     </select>
@@ -62,8 +81,18 @@ const DepositForm: React.FC = () => {
                     <input
                         type="number"
                         id="depositAmount"
-                        value={depositForm.amount.toString()}
-                        onChange={(e) => setDepositForm({...depositForm, amount: new Decimal(e.target.value)})}
+                        value={depositForm.amount.isNaN() ? '' : depositForm.amount.toString()}
+                        onChange={(e) => {
+                            const inputValue = e.target.value;
+                            try {
+                                // Only create a new Decimal if the value is not empty
+                                const newAmount = inputValue === '' ? new Decimal(0) : new Decimal(inputValue);
+                                setDepositForm({...depositForm, amount: newAmount});
+                            } catch (error) {
+                                // If the value cannot be converted to a Decimal, keep the previous value
+                                console.error("Invalid decimal value:", error);
+                            }
+                        }}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="e.g., 1000.00"
                         step="0.01"

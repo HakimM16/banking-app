@@ -3,7 +3,6 @@
 
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { useAuth } from './AuthProvider';
-import { getUserAccounts, createNewAccount, toggleAccountStatusInDB } from '@/lib/data';
 import {Account, CreateAccountFormInputs, UpdateAccountFormInputs, UpdateAccountStatusFormInputs, User} from '@/types';
 import {api} from "@/services/api"; // Import types
 
@@ -13,7 +12,6 @@ interface AccountContextType {
     changeAccountStatus: (userId: number, accountId: number, request: UpdateAccountStatusFormInputs) => Promise<{ success: boolean; message?: string }>;
     loadingAccounts: boolean;
     createAccount: (id: number, account: CreateAccountFormInputs) => Promise<{ success: boolean; message?: string }>;
-    toggleAccountStatus: (accountId: string) => Promise<{ success: boolean; message?: string }>;
 }
 
 export const AccountContext = createContext<AccountContextType | null>(null);
@@ -80,21 +78,6 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
-    const toggleAccountStatus = async (accountId: string): Promise<{ success: boolean; message?: string }> => {
-        if (!id) return { success: false, message: 'User not logged in.' };
-        const { success, updatedUser, message } = await toggleAccountStatusInDB(id, accountId);
-        if (success && updatedUser) {
-            setAccounts(prevAccounts =>
-                prevAccounts.map(account =>
-                    account.id === accountId ? { ...account, isActive: !account.status } : account
-                )
-            );
-        } else {
-            console.error('Error toggling account status:', message);
-        }
-        return { success, message };
-    };
-
     const changeAccountStatus = async(userId: number, accountId: number, request: UpdateAccountStatusFormInputs) : Promise<{ success: boolean; message?: string }> => {
         if (!userId || !accountId) return { success: false, message: 'Invalid user or account ID.' };
         try {
@@ -115,7 +98,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     }
 
     return (
-        <AccountContext.Provider value={{ accounts, loadingAccounts, createAccount, changeAccountStatus, getAccounts, toggleAccountStatus }}>
+        <AccountContext.Provider value={{ accounts, loadingAccounts, createAccount, changeAccountStatus, getAccounts }}>
             {children}
         </AccountContext.Provider>
     );

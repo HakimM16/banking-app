@@ -6,17 +6,18 @@ import { Minus } from 'lucide-react';
 import { useAccounts } from '@/providers/AccountProvider';
 import { useTransactions } from '@/providers/TransactionProvider';
 import { useAlerts } from '@/hooks/useAlerts';
-import { WithdrawalFormInputs } from '@/types';
-import {redirect} from "next/navigation"; // Import type
+import { WithdrawFormInputs } from '@/types';
+import {redirect} from "next/navigation";
+import {Decimal} from "decimal.js"; // Import type
 
 const WithdrawalForm: React.FC = () => {
     const { accounts } = useAccounts();
     const { processWithdrawal } = useTransactions();
     const { addAlert } = useAlerts();
 
-    const [withdrawalForm, setWithdrawalForm] = useState<WithdrawalFormInputs>({
-        account: '',
-        amount: '',
+    const [withdrawalForm, setWithdrawalForm] = useState<WithdrawFormInputs>({
+        accountNumber: '',
+        amount: new Decimal(0),
         description: ''
     });
 
@@ -25,7 +26,7 @@ const WithdrawalForm: React.FC = () => {
         const result = await processWithdrawal(withdrawalForm);
         if (result.success) {
             addAlert('Withdrawal completed successfully!', 'success');
-            setWithdrawalForm({ account: '', amount: '', description: '' });
+            setWithdrawalForm({ accountNumber: '', amount: new Decimal(0), description: '' });
         } else {
             addAlert(result.message || 'Withdrawal failed.', 'error');
         }
@@ -42,15 +43,15 @@ const WithdrawalForm: React.FC = () => {
                     <label htmlFor="withdrawalAccount" className="block text-sm font-medium text-gray-700 mb-2">From Account</label>
                     <select
                         id="withdrawalAccount"
-                        value={withdrawalForm.account}
-                        onChange={(e) => setWithdrawalForm({...withdrawalForm, account: e.target.value})}
+                        value={withdrawalForm.accountNumber}
+                        onChange={(e) => setWithdrawalForm({...withdrawalForm, accountNumber: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
                     >
                         <option value="">Select an account</option>
                         {accounts.map(acc => (
-                            <option key={acc.id} value={acc.id}>
-                                {acc.type.charAt(0).toUpperCase() + acc.type.slice(1)} ({acc.accountNumber}) - ${acc.balance.toLocaleString()}
+                            <option key={acc.id} value={acc.accountNumber}>
+                                {acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} ({acc.accountNumber}) - £{acc.balance.toLocaleString()}
                             </option>
                         ))}
                     </select>
@@ -61,8 +62,8 @@ const WithdrawalForm: React.FC = () => {
                     <input
                         type="number"
                         id="withdrawalAmount"
-                        value={withdrawalForm.amount}
-                        onChange={(e) => setWithdrawalForm({...withdrawalForm, amount: e.target.value})}
+                        value={withdrawalForm.amount.toString()}
+                        onChange={(e) => setWithdrawalForm({...withdrawalForm, amount: new Decimal(e.target.value)})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="e.g., 100.00"
                         step="0.01"
