@@ -14,6 +14,8 @@ const Sidebar: React.FC = () => {
 
     const handleLogout = () => {
         logout();
+        // Clear localStorage
+        localStorage.clear();
     };
 
     return (
