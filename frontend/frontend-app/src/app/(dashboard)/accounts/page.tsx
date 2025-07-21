@@ -7,16 +7,21 @@ import { useAccounts } from '@/providers/AccountProvider';
 import { useAuth } from '@/providers/AuthProvider';
 import { useAlerts } from '@/hooks/useAlerts';
 import AccountCard from '@/components/AccountCard';
+import {UpdateAccountStatusFormInputs} from "@/types";
 
 export default function AccountsPage() {
     const { currentUser } = useAuth();
-    const { accounts, createAccount, toggleAccountStatus } = useAccounts();
+    const { accounts, createAccount, toggleAccountStatus, changeAccountStatus } = useAccounts();
     const { addAlert } = useAlerts();
     const [id, setId] = React.useState<number | null>(null);
 
     const [isCreatingAccount, setIsCreatingAccount] = useState(false);
     const [accountForm, setAccountForm] = useState({
         accountType: 'DEBIT', // Default to Debit
+    });
+
+    const [accountStatus, setAccountStatus] = useState<UpdateAccountStatusFormInputs>({
+        status: 'OPEN', // Default to OPEN
     });
 
     // Get id from localStorage if not in URL params
@@ -32,19 +37,26 @@ export default function AccountsPage() {
             const result = await createAccount(id, accountForm);
             console.log(accountForm)
             if (result.success) {
-
                 addAlert(result.message || 'Failed to create account.', 'error');
             }
         }
 
     };
 
-    const handleToggleStatus = async (accountId: string) => {
-        const result = await toggleAccountStatus(accountId);
-        if (result.success) {
-            addAlert('Account status updated successfully!', 'success');
+    const handleToggleStatus = async (accountId: number) => {
+        if (accountStatus.status === 'OPEN') {
+            setAccountStatus({ status: 'CLOSED' });
         } else {
-            addAlert(result.message || 'Failed to update account status.', 'error');
+            setAccountStatus({ status: 'OPEN' });
+        }
+
+        if (id) {
+            const result = await changeAccountStatus(id, accountId, accountStatus);
+            if (result.success) {
+                addAlert('Account status updated successfully!', 'success');
+            } else {
+                addAlert(result.message || 'Failed to update account status.', 'error');
+            }
         }
     };
 

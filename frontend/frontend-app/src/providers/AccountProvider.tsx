@@ -4,11 +4,13 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { useAuth } from './AuthProvider';
 import { getUserAccounts, createNewAccount, toggleAccountStatusInDB } from '@/lib/data';
-import {Account, CreateAccountFormInputs, User} from '@/types';
+import {Account, CreateAccountFormInputs, UpdateAccountFormInputs, UpdateAccountStatusFormInputs, User} from '@/types';
 import {api} from "@/services/api"; // Import types
 
 interface AccountContextType {
     accounts: Account[];
+    getAccounts: (userId: number) => Promise<Account[]>;
+    changeAccountStatus: (userId: number, accountId: number, request: UpdateAccountStatusFormInputs) => Promise<{ success: boolean; message?: string }>;
     loadingAccounts: boolean;
     createAccount: (id: number, account: CreateAccountFormInputs) => Promise<{ success: boolean; message?: string }>;
     toggleAccountStatus: (accountId: string) => Promise<{ success: boolean; message?: string }>;
@@ -29,11 +31,12 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
         }
     }, [storedId]);
 
+    // Fetch accounts when the component mounts or when id changes
     useEffect(() => {
         const fetchAccounts = async () => {
             if (id) {
                 setLoadingAccounts(true);
-                const userAccounts = await getUserAccounts(id);
+                const userAccounts = await getAccounts(id);
                 setAccounts(userAccounts);
                 setLoadingAccounts(false);
             } else {
@@ -59,6 +62,24 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    const getAccounts = async (userId: number): Promise<Account[]> => {
+        if (!userId) return [];
+        const accounts = await api.getAccounts(userId);
+        console.log(accounts)
+        try {
+            const accounts = await api.getAccounts(userId);
+            if (!accounts) {
+                console.error('Failed to fetch accounts');
+                return [];
+            }
+            setAccounts(accounts);
+            return accounts;
+        } catch (error) {
+            console.error('Error fetching accounts:', error);
+            return [];
+        }
+    }
+
     const toggleAccountStatus = async (accountId: string): Promise<{ success: boolean; message?: string }> => {
         if (!id) return { success: false, message: 'User not logged in.' };
         const { success, updatedUser, message } = await toggleAccountStatusInDB(id, accountId);
@@ -74,8 +95,27 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
         return { success, message };
     };
 
+    const changeAccountStatus = async(userId: number, accountId: number, request: UpdateAccountStatusFormInputs) : Promise<{ success: boolean; message?: string }> => {
+        if (!userId || !accountId) return { success: false, message: 'Invalid user or account ID.' };
+        try {
+            const updatedAccount = await api.updateAccountStatus(userId, accountId, request);
+            if (!updatedAccount) {
+                return { success: false, message: 'Failed to update account.' };
+            }
+            setAccounts(prevAccounts =>
+                prevAccounts.map(account =>
+                    account.id === accountId ? updatedAccount : account
+                )
+            );
+            return { success: true };
+        } catch (error) {
+            console.error('Error updating account:', error);
+            return { success: false, message: 'Failed to update account.' };
+        }
+    }
+
     return (
-        <AccountContext.Provider value={{ accounts, loadingAccounts, createAccount, toggleAccountStatus }}>
+        <AccountContext.Provider value={{ accounts, loadingAccounts, createAccount, changeAccountStatus, getAccounts, toggleAccountStatus }}>
             {children}
         </AccountContext.Provider>
     );

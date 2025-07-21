@@ -105,27 +105,6 @@ export async function getUserAccounts(userId: number): Promise<Account[]> {
     return user ? user.accounts : [];
 }
 
-export async function createNewAccount(userId: number, accountType: 'checking' | 'savings'): Promise<{ success: boolean; message?: string; account?: Account; updatedUser?: User }> {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const userIndex = users.findIndex(u => u.id === userId);
-    if (userIndex === -1) {
-        return { success: false, message: 'User not found' };
-    }
-
-    const newAccount: Account = {
-        id: `acc_${Date.now()}`,
-        type: accountType,
-        balance: 0,
-        accountNumber: `****${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`,
-        status: 'active',
-        createdAt: new Date().toISOString().split('T')[0]
-    };
-
-    users[userIndex].accounts.push(newAccount);
-    return { success: true, account: newAccount, updatedUser: users[userIndex] };
-}
-
 export async function toggleAccountStatusInDB(userId: number, accountId: string): Promise<{ success: boolean; message?: string; updatedUser?: User }> {
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 500));

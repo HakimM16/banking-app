@@ -19,7 +19,7 @@ const AccountCard: React.FC<AccountCardProps> = ({ account }) => {
                 </div>
                 <div>
                     <p className="font-medium">{account.accountType.charAt(0) + account.accountType.slice(1).toLowerCase()}</p>
-                    <p className="text-sm text-gray-600">{account.accountNumber}</p>
+                    <p className="text-sm text-gray-600">{"*".repeat(4) + account.accountNumber.slice(4)}</p>
                 </div>
             </div>
             <div className="text-right">

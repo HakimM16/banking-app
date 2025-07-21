@@ -142,7 +142,6 @@ export interface DepositFormInputs {
     accountNumber: string;
     amount: Decimal;
     description: string;
-    categoryName: string;
 }
 
 // GetTransactionCategoryRequest

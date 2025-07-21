@@ -51,7 +51,7 @@ const TransferForm: React.FC = () => {
                         <option value="">Select an account</option>
                         {accounts.map(acc => (
                             <option key={acc.id} value={acc.id}>
-                                {acc.type.charAt(0).toUpperCase() + acc.type.slice(1)} ({acc.accountNumber}) - ${acc.balance.toLocaleString()}
+                                {acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} ({acc.accountNumber}) - ${acc.balance.toLocaleString()}
                             </option>
                         ))}
                     </select>
@@ -69,7 +69,7 @@ const TransferForm: React.FC = () => {
                         <option value="">Select an account</option>
                         {accounts.map(acc => (
                             <option key={acc.id} value={acc.id}>
-                                {acc.type.charAt(0).toUpperCase() + acc.type.slice(1)} ({acc.accountNumber}) - ${acc.balance.toLocaleString()}
+                                {acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} ({acc.accountNumber}) - ${acc.balance.toLocaleString()}
                             </option>
                         ))}
                     </select>

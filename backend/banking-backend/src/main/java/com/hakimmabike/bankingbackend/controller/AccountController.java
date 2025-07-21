@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/accounts")

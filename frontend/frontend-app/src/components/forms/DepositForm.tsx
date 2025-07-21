@@ -7,7 +7,8 @@ import { useAccounts } from '@/providers/AccountProvider';
 import { useTransactions } from '@/providers/TransactionProvider';
 import { useAlerts } from '@/hooks/useAlerts';
 import { DepositFormInputs } from '@/types';
-import {redirect} from "next/navigation"; // Import type
+import { Decimal } from 'decimal.js';
+import { redirect } from 'next/navigation';
 
 const DepositForm: React.FC = () => {
     const { accounts } = useAccounts();
@@ -15,9 +16,9 @@ const DepositForm: React.FC = () => {
     const { addAlert } = useAlerts();
 
     const [depositForm, setDepositForm] = useState<DepositFormInputs>({
-        account: '',
-        amount: '',
-        description: ''
+        accountNumber: '',
+        amount: new Decimal(0),
+        description: '',
     });
 
     const handleDeposit = async (e: React.FormEvent) => {
@@ -25,7 +26,7 @@ const DepositForm: React.FC = () => {
         const result = await processDeposit(depositForm);
         if (result.success) {
             addAlert('Deposit completed successfully!', 'success');
-            setDepositForm({ account: '', amount: '', description: '' });
+            setDepositForm({ accountNumber: '', amount: new Decimal(0), description: '' });
         } else {
             addAlert(result.message || 'Deposit failed.', 'error');
         }
@@ -42,15 +43,15 @@ const DepositForm: React.FC = () => {
                     <label htmlFor="depositAccount" className="block text-sm font-medium text-gray-700 mb-2">To Account</label>
                     <select
                         id="depositAccount"
-                        value={depositForm.account}
-                        onChange={(e) => setDepositForm({...depositForm, account: e.target.value})}
+                        value={depositForm.accountNumber}
+                        onChange={(e) => setDepositForm({...depositForm, accountNumber: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
                     >
                         <option value="">Select an account</option>
                         {accounts.map(acc => (
-                            <option key={acc.id} value={acc.id}>
-                                {acc.type.charAt(0).toUpperCase() + acc.type.slice(1)} ({acc.accountNumber}) - ${acc.balance.toLocaleString()}
+                            <option key={acc.id} value={acc.accountNumber}>
+                                {acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} ({acc.accountNumber}) - ${acc.balance.toLocaleString()}
                             </option>
                         ))}
                     </select>
@@ -61,8 +62,8 @@ const DepositForm: React.FC = () => {
                     <input
                         type="number"
                         id="depositAmount"
-                        value={depositForm.amount}
-                        onChange={(e) => setDepositForm({...depositForm, amount: e.target.value})}
+                        value={depositForm.amount.toString()}
+                        onChange={(e) => setDepositForm({...depositForm, amount: new Decimal(e.target.value)})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="e.g., 1000.00"
                         step="0.01"
