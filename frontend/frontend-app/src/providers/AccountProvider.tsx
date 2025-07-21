@@ -4,7 +4,8 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { useAuth } from './AuthProvider';
 import {Account, CreateAccountFormInputs, UpdateAccountFormInputs, UpdateAccountStatusFormInputs, User} from '@/types';
-import {api} from "@/services/api"; // Import types
+import {api} from "@/services/api";
+import {Decimal} from "decimal.js"; // Import types
 
 interface AccountContextType {
     accounts: Account[];
@@ -80,6 +81,18 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
 
     const changeAccountStatus = async(userId: number, accountId: number, request: UpdateAccountStatusFormInputs) : Promise<{ success: boolean; message?: string }> => {
         if (!userId || !accountId) return { success: false, message: 'Invalid user or account ID.' };
+
+        // check if balance is zero
+        const account = accounts.find(acc => acc.id === accountId);
+
+        if (account?.balance) {
+            const balanceDecimal = new Decimal(account.balance.toString());
+            if (balanceDecimal.greaterThan(0)) {
+                console.log("Balance is not zero");
+                return { success: false, message: 'Cannot change status of account with non-zero balance.' };
+            }
+        }
+
         try {
             const updatedAccount = await api.updateAccountStatus(userId, accountId, request);
             if (!updatedAccount) {
