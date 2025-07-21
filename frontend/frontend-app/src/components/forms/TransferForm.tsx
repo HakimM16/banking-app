@@ -91,7 +91,7 @@ const TransferForm: React.FC = () => {
                 </div>
 
                 <div>
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
+                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">Description</label>
                     <input
                         type="text"
                         id="description"

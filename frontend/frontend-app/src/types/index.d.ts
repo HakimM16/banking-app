@@ -183,4 +183,5 @@ export interface WithdrawFormInputs {
     accountNumber: string;
     amount: Decimal;
     description: string;
+    categoryName: string; // Optional, if you want to categorize withdrawals
 }

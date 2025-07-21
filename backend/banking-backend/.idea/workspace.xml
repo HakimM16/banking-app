@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Added id and email to JwtResponse and change access token expiration to 5 minutes." />
+    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Added id and email to JwtResponse and change access token expiration to 5 minutes.">
+      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/types/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/types/index.d.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -181,7 +183,7 @@
       <workItem from="1752870766323" duration="736000" />
       <workItem from="1752946393737" duration="8088000" />
       <workItem from="1753031989972" duration="5957000" />
-      <workItem from="1753078496551" duration="19807000" />
+      <workItem from="1753078496551" duration="20987000" />
     </task>
     <task id="LOCAL-00017" summary="Configured security settings.&#10;Built the login API.&#10;Added AuthenticationManager">
       <option name="closed" value="true" />

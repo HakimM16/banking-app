@@ -8,29 +8,49 @@ import { useTransactions } from '@/providers/TransactionProvider';
 import { useAlerts } from '@/hooks/useAlerts';
 import { WithdrawFormInputs } from '@/types';
 import {redirect} from "next/navigation";
-import {Decimal} from "decimal.js"; // Import type
+import {Decimal} from "decimal.js";
+import axios from "axios"; // Import type
 
 const WithdrawalForm: React.FC = () => {
     const { accounts } = useAccounts();
-    const { processWithdrawal } = useTransactions();
+    const { processWithdrawal, makeWithdrawal } = useTransactions();
     const { addAlert } = useAlerts();
 
     const [withdrawalForm, setWithdrawalForm] = useState<WithdrawFormInputs>({
         accountNumber: '',
         amount: new Decimal(0),
-        description: ''
+        description: '',
+        categoryName: 'Tesco'
     });
+
+    const id = localStorage.getItem('id');
 
     const handleWithdrawal = async (e: React.FormEvent) => {
         e.preventDefault();
-        const result = await processWithdrawal(withdrawalForm);
-        if (result.success) {
-            addAlert('Withdrawal completed successfully!', 'success');
-            setWithdrawalForm({ accountNumber: '', amount: new Decimal(0), description: '' });
-        } else {
-            addAlert(result.message || 'Withdrawal failed.', 'error');
+        const token = localStorage.getItem('authToken');
+        // Set the default Authorization header for all future axios requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        if (id) {
+            const userId = parseInt(id, 10);
+
+            // Create a modified version of the form data with the amount as a string or number
+            const withdrawData = {
+                ...withdrawalForm,
+                amount: withdrawalForm.amount
+            };
+
+            const result = await makeWithdrawal(userId, withdrawData);
+            if (result.success) {
+                addAlert('Withdrawal completed successfully!', 'success');
+                setWithdrawalForm({ accountNumber: '', amount: new Decimal(0), description: '', categoryName: 'Tesco' });
+                window.location.reload();
+
+            } else {
+                addAlert(result.message || 'Withdrawal failed.', 'error');
+            }
         }
-        return redirect('/home');
+
     };
 
     return (
@@ -62,8 +82,18 @@ const WithdrawalForm: React.FC = () => {
                     <input
                         type="number"
                         id="withdrawalAmount"
-                        value={withdrawalForm.amount.toString()}
-                        onChange={(e) => setWithdrawalForm({...withdrawalForm, amount: new Decimal(e.target.value)})}
+                        value={withdrawalForm.amount.isNaN() ? '' : withdrawalForm.amount.toString()}
+                        onChange={(e) => {
+                            const inputValue = e.target.value;
+                            try {
+                                // Only create a new Decimal if the value is not empty
+                                const newAmount = inputValue === '' ? new Decimal(0) : new Decimal(inputValue);
+                                setWithdrawalForm({...withdrawalForm, amount: newAmount});
+                            } catch (error) {
+                                // If the value cannot be converted to a Decimal, keep the previous value
+                                console.error("Invalid decimal value:", error);
+                            }
+                        }}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="e.g., 100.00"
                         step="0.01"
@@ -73,7 +103,7 @@ const WithdrawalForm: React.FC = () => {
                 </div>
 
                 <div>
-                    <label htmlFor="withdrawalDescription" className="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
+                    <label htmlFor="withdrawalDescription" className="block text-sm font-medium text-gray-700 mb-2">Description</label>
                     <input
                         type="text"
                         id="withdrawalDescription"
