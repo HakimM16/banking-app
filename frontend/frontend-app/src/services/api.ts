@@ -74,7 +74,7 @@ export const api = {
     },
 
     updateUserAddress: async (userId: number, data: CustomiseAddressFormInputs) => {
-        const response = await axios.put<Address>(`/api/user/${userId}/update_address`, data);
+        const response = await axios.put<Address>(`${API_BASE_URL}/user/${userId}/update_address`, data);
         return response.data;
     },
 

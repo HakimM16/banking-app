@@ -14,7 +14,7 @@ public class UserSecurityRules implements SecurityRules{
                 // Allow users with the ADMIN role to update or delete users
                 .requestMatchers(HttpMethod.DELETE, "/api/user/{id}").hasRole(Role.ADMIN.name())
                 // Allow users with the ADMIN or USER role to update, and get user details
-                .requestMatchers(HttpMethod.PUT, "/api/user/{id}").hasAnyRole(Role.ADMIN.name())
+                .requestMatchers(HttpMethod.PUT, "/api/user/{id}").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
                 .requestMatchers(HttpMethod.GET, "/api/user/{id}").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
                 // Allow users with the ADMIN role to change user status
                 .requestMatchers(HttpMethod.PATCH, "/api/user/{id}/status").hasRole(Role.ADMIN.name())

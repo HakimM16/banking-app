@@ -6,47 +6,56 @@ import { User, Settings } from 'lucide-react';
 import { useAuth } from '@/providers/AuthProvider';
 import { useAlerts } from '@/hooks/useAlerts';
 import { updateUserData } from '@/lib/data';
-import { ProfileFormInputs } from '@/types'; // Import type
+import {CustomiseAddressFormInputs, ProfileFormInputs, UpdateUserFormInputs} from '@/types';
+import { useRouter } from "next/navigation";
+import axios from "axios"; // Import type
 
 export default function ProfilePage() {
-    const {currentUser, updateUserInContext} = useAuth();
+    const router = useRouter(); // Initialize the router hook
+    const {currentUser, updateUser, updateAddress} = useAuth();
     const {addAlert} = useAlerts();
 
-    const [profileForm, setProfileForm] = useState<ProfileFormInputs>({
+    const [updateUserForm, setUpdateUserForm] = useState<UpdateUserFormInputs>({
         firstName: '',
         lastName: '',
         email: '',
-        phone: '',
-        address: ''
+        phoneNumber: '',
     });
 
-    useEffect(() => {
-        if (currentUser) {
-            setProfileForm({
-                firstName: currentUser.firstName || '',
-                lastName: currentUser.lastName || '',
-                email: currentUser.email || '',
-                phone: currentUser.phone || '',
-                address: currentUser.address || ''
-            });
-        }
-    }, [currentUser]);
+    const [addressForm, setAddressForm] = useState<CustomiseAddressFormInputs>({
+        street: '',
+        city: '',
+        county: '',
+        postCode: '',
+        country: ''
+    });
+
+    const id = localStorage.getItem('id');
 
     const handleProfileUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!currentUser) return;
 
-        const {success, updatedUser, message} = await updateUserData(currentUser.id, profileForm);
+        const token = localStorage.getItem('authToken');
+        // Set the default Authorization header for all future axios requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        if (id) {
+            const userId = parseInt(id, 10);
+            // Prepare the data to be sent
+            const user = await updateUser(userId, updateUserForm);
+            const address = await updateAddress(userId, addressForm);
 
-        if (success && updatedUser) {
-            updateUserInContext(updatedUser);
-            addAlert('Profile updated successfully!', 'success');
+            if (user.success && address.success) {
+                addAlert('Profile updated successfully!', 'success');
+                // Optionally, you can redirect or refresh the page
+                await router.push('/profile');
+            } else {
+                addAlert(user.message || 'Failed to update profile.', 'error');
+            }
         } else {
-            addAlert(message || 'Failed to update profile.', 'error');
+            addAlert('User ID not found. Please log in again.', 'error');
+            return;
         }
 
-        // redirect to profile page after update
-        window.location.href = '/profile';
 
     };
 
@@ -70,10 +79,11 @@ export default function ProfilePage() {
                             <input
                                 type="text"
                                 id="firstName"
-                                value={profileForm.firstName}
-                                onChange={(e) => setProfileForm({...profileForm, firstName: e.target.value})}
+                                value={updateUserForm.firstName}
+                                onChange={(e) => setUpdateUserForm({...updateUserForm, firstName: e.target.value})}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 required
+                                placeholder="e.g. John"
                             />
                         </div>
                         <div>
@@ -82,10 +92,11 @@ export default function ProfilePage() {
                             <input
                                 type="text"
                                 id="lastName"
-                                value={profileForm.lastName}
-                                onChange={(e) => setProfileForm({...profileForm, lastName: e.target.value})}
+                                value={updateUserForm.lastName}
+                                onChange={(e) => setUpdateUserForm({...updateUserForm, lastName: e.target.value})}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 required
+                                placeholder="e.g. Doe"
                             />
                         </div>
                     </div>
@@ -96,10 +107,11 @@ export default function ProfilePage() {
                         <input
                             type="email"
                             id="email"
-                            value={profileForm.email}
-                            onChange={(e) => setProfileForm({...profileForm, email: e.target.value})}
+                            value={updateUserForm.email}
+                            onChange={(e) => setUpdateUserForm({...updateUserForm, email: e.target.value})}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
+                            placeholder="e.g. john@gmail.com"
                         />
                     </div>
 
@@ -109,21 +121,77 @@ export default function ProfilePage() {
                         <input
                             type="tel"
                             id="phone"
-                            value={profileForm.phone}
-                            onChange={(e) => setProfileForm({...profileForm, phone: e.target.value})}
+                            value={updateUserForm.phoneNumber}
+                            onChange={(e) => setUpdateUserForm({...updateUserForm, phoneNumber: e.target.value})}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                            placeholder="e.g. 01234 567890"
                         />
                     </div>
 
                     <div>
                         <label htmlFor="address"
-                               className="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                               className="block text-sm font-medium text-gray-700 mb-2">Street</label>
                         <input
                             type="text"
                             id="address"
-                            value={profileForm.address}
-                            onChange={(e) => setProfileForm({...profileForm, address: e.target.value})}
+                            value={addressForm.street}
+                            onChange={(e) => setAddressForm({...addressForm, street: e.target.value})}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                            placeholder="e.g. 123 Main St"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="address"
+                               className="block text-sm font-medium text-gray-700 mb-2">City</label>
+                        <input
+                            type="text"
+                            id="address"
+                            value={addressForm.city}
+                            onChange={(e) => setAddressForm({...addressForm, city: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                            placeholder="e.g. London"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="address"
+                               className="block text-sm font-medium text-gray-700 mb-2">County</label>
+                        <input
+                            type="text"
+                            id="address"
+                            value={addressForm.county}
+                            onChange={(e) => setAddressForm({...addressForm, county: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                            placeholder="e.g. Hertfordshire"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="address"
+                               className="block text-sm font-medium text-gray-700 mb-2">PostCode</label>
+                        <input
+                            type="text"
+                            id="address"
+                            value={addressForm.postCode}
+                            onChange={(e) => setAddressForm({...addressForm, postCode: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                            placeholder="e.g LU40XX"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="address"
+                               className="block text-sm font-medium text-gray-700 mb-2">Country</label>
+                        <input
+                            type="text"
+                            id="address"
+                            value={addressForm.country}
+                            onChange={(e) => setAddressForm({...addressForm, country: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                            placeholder="e.g. United Kingdom"
                         />
                     </div>
 

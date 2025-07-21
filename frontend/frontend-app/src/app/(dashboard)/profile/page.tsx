@@ -5,11 +5,10 @@ import React, { useState, useEffect } from 'react';
 import { User, Settings } from 'lucide-react';
 import { useAuth } from '@/providers/AuthProvider';
 import { useAlerts } from '@/hooks/useAlerts';
-import { updateUserData } from '@/lib/data';
 import { ProfileFormInputs } from '@/types'; // Import type
 
 export default function ProfilePage() {
-    const { currentUser, updateUserInContext, getAddress, getUser } = useAuth();
+    const { currentUser, getAddress, getUser } = useAuth();
     const { addAlert } = useAlerts();
     const [id, setId] = React.useState<number | null>(null);
 
@@ -32,46 +31,41 @@ export default function ProfilePage() {
             setId(parseInt(storedId, 10));
         }
     }, [storedId]);
-    const user = getUser(id);
-    const address = getAddress(id);
+   // Remove these lines
+    // const user = getUser(id);
+    // const address = getAddress(id);
 
-    // Fetch user and address data when id is valid
+    // Replace with this useEffect
     useEffect(() => {
-        if (user && address && !profileForm.firstName) { // Check if form is empty
+        if (id !== null && !profileForm.firstName) {
             console.log("Fetching user and address data");
+
             const fetchInfo = async () => {
-                const resolvedUser = await user;
-                const resolvedAddress = await address;
-                setProfileForm({
-                    firstName: resolvedUser?.firstName || '',
-                    lastName: resolvedUser?.lastName || '',
-                    email: resolvedUser?.email || '',
-                    phone: resolvedUser?.phoneNumber || '',
-                    street: resolvedAddress?.address?.street || '',
-                    city: resolvedAddress?.address?.city || '',
-                    county: resolvedAddress?.address?.county || '',
-                    postCode: resolvedAddress?.address?.postCode || '',
-                    country: resolvedAddress?.address?.country || ''
-                });
+                try {
+                    const resolvedUser = await getUser(id);
+                    const resolvedAddress = await getAddress(id);
+
+                    console.log("Data received:", resolvedUser, resolvedAddress);
+
+                    setProfileForm({
+                        firstName: resolvedUser?.firstName || '',
+                        lastName: resolvedUser?.lastName || '',
+                        email: resolvedUser?.email || '',
+                        phone: resolvedUser?.phoneNumber || '',
+                        street: resolvedAddress?.address?.street || '',
+                        city: resolvedAddress?.address?.city || '',
+                        county: resolvedAddress?.address?.county || '',
+                        postCode: resolvedAddress?.address?.postCode || '',
+                        country: resolvedAddress?.address?.country || ''
+                    });
+                } catch (error) {
+                    console.error("Error fetching profile data:", error);
+                }
             };
+
             fetchInfo();
         }
-    }, [user, address, id, profileForm.firstName]); // Add profileForm.firstName as dependency
-
-    const handleProfileUpdate = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!currentUser) return;
-
-        const { success, updatedUser, message } = await updateUserData(currentUser.id, profileForm);
-
-        if (success && updatedUser) {
-            updateUserInContext(updatedUser);
-            addAlert('Profile updated successfully!', 'success');
-        } else {
-            addAlert(message || 'Failed to update profile.', 'error');
-        }
-    };
-
+    }, [id, getUser, getAddress, profileForm.firstName]);
     if (!currentUser) {
         return <p>Loading user data...</p>;
     }

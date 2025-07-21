@@ -3,7 +3,7 @@
 
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { getUserByUsernamePassword } from '@/lib/data';
-import {User, LoginFormInputs, RegisterFormInputs, CustomiseAddressFormInputs} from '@/types';
+import {User, LoginFormInputs, RegisterFormInputs, CustomiseAddressFormInputs, UpdateUserFormInputs} from '@/types';
 import {api} from "@/services/api"; // Import types
 
 interface AuthContextType {
@@ -11,10 +11,11 @@ interface AuthContextType {
     register: (registerData: RegisterFormInputs) => Promise<{ success: boolean; id?: number; message?: string }>;
     login: (loginData: LoginFormInputs) => Promise<{ success: boolean; message?: string; user?: User }>;
     getUser: (id: number | null) => Promise<User | null>;
+    updateUser: (id: number | null, userData: UpdateUserFormInputs) => Promise<{ success: boolean; message?: string }>;
     createAddress: (addressData: CustomiseAddressFormInputs, id: number | null) => Promise<{ success: boolean; message?: string }>;
     getAddress: (id: number | null) => Promise<{ success: boolean; address?: CustomiseAddressFormInputs; message?: string }>;
+    updateAddress: (id: number | null, addressData: CustomiseAddressFormInputs) => Promise<{ success: boolean; message?: string }>;
     logout: () => void;
-    updateUserInContext: (updatedUser: User) => void;
     isAuthenticated: boolean;
     loading: boolean;
 }
@@ -117,6 +118,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    const updateUser = async (id: number | null, userData: UpdateUserFormInputs): Promise<{ success: boolean; message?: string }> => {
+        console.log('Update user function called with ID:', id, 'and data:', userData);
+        try {
+            if (id !== null) {
+                const response = await api.updateUserProfile(id, userData);
+                console.log('API response:', response);
+
+                if (response) {
+                    console.log('User update successful');
+                    return { success: true };
+                } else {
+                    console.log('User update failed');
+                    return { success: false, message: 'User update failed' };
+                }
+            } else {
+                return { success: false, message: 'Invalid user ID' };
+            }
+        } catch (error) {
+            console.error('User update error:', error);
+            return { success: false, message: 'User update failed. Please try again.' };
+        }
+    }
+
     const createAddress = async (addressData: CustomiseAddressFormInputs, id: number | null): Promise<{ success: boolean; message?: string }> => {
         console.log('Create address function called with data:', addressData);
         try {
@@ -165,20 +189,40 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    const updateAddress = async (id: number | null, addressData: CustomiseAddressFormInputs): Promise<{ success: boolean; message?: string }> => {
+        console.log('Update address function called with ID:', id, 'and data:', addressData);
+        try {
+            if (id !== null) {
+                const response = await api.updateUserAddress(id, addressData);
+                console.log('API response:', response);
+
+                if (response) {
+                    console.log('Address update successful');
+                    return { success: true };
+                } else {
+                    console.log('Address update failed');
+                    return { success: false, message: 'Address update failed' };
+                }
+            } else {
+                return { success: false, message: 'Invalid user ID' };
+            }
+        } catch (error) {
+            console.error('Address update error:', error);
+            return { success: false, message: 'Address update failed. Please try again.' };
+        }
+    }
+
+
+
     const logout = () => {
         setCurrentUser(null);
         setIsAuthenticated(false);
         localStorage.removeItem('currentUser');
     };
 
-    const updateUserInContext = (updatedUser: User) => {
-        setCurrentUser(updatedUser);
-        localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-    };
-
     // Always provide the context, don't block the entire app with loading screen
     return (
-        <AuthContext.Provider value={{ currentUser, register, login, getUser, createAddress, getAddress, logout, updateUserInContext, isAuthenticated, loading }}>
+        <AuthContext.Provider value={{ currentUser, register, login, getUser, createAddress, getAddress, updateAddress,  logout, updateUser, isAuthenticated, loading }}>
             {children}
         </AuthContext.Provider>
     );
