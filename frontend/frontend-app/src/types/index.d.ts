@@ -98,7 +98,7 @@ export interface RegisterFormInputs {
 export interface TransferFormInputs {
     fromAccount: string;
     toAccount: string;
-    amount: string; // Use string for input, convert to number for processing
+    amount: Decimal; // Use string for input, convert to number for processing
     description: string;
 }
 

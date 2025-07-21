@@ -7,13 +7,12 @@ import { useAccounts } from '@/providers/AccountProvider';
 import { useTransactions } from '@/providers/TransactionProvider';
 import { useAlerts } from '@/hooks/useAlerts';
 import { WithdrawFormInputs } from '@/types';
-import {redirect} from "next/navigation";
 import {Decimal} from "decimal.js";
 import axios from "axios"; // Import type
 
 const WithdrawalForm: React.FC = () => {
     const { accounts } = useAccounts();
-    const { processWithdrawal, makeWithdrawal } = useTransactions();
+    const { makeWithdrawal } = useTransactions();
     const { addAlert } = useAlerts();
 
     const [withdrawalForm, setWithdrawalForm] = useState<WithdrawFormInputs>({

@@ -3,7 +3,7 @@
 
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { useAuth } from './AuthProvider';
-import { addTransaction, getUserTransactions, updateAccountBalances } from '@/lib/data';
+import { getUserTransactions } from '@/lib/data';
 import { useAccounts } from './AccountProvider';
 import { Transaction, TransferFormInputs, DepositFormInputs, WithdrawFormInputs } from '@/types'; // Import types
 import Decimal from 'decimal.js';
@@ -14,7 +14,7 @@ interface TransactionContextType {
     loadingTransactions: boolean;
     makeDeposit: (userId: number, request: DepositFormInputs) => Promise<{ success: boolean; message?: string }>;
     makeWithdrawal: (userId: number, request: WithdrawFormInputs) => Promise<{ success: boolean; message?: string }>;
-    processTransfer: (data: TransferFormInputs) => Promise<{ success: boolean; message?: string }>;
+    makeTransfer: (userId: number, request: TransferFormInputs) => Promise<{ success: boolean; message?: string }>;
     getFilteredTransactions: (filter: string, searchTerm: string) => Transaction[];
 }
 
@@ -122,45 +122,30 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
-    const processTransfer = async (transferData: TransferFormInputs): Promise<{ success: boolean; message?: string }> => {
+    const makeTransfer = async (userId: number, request: TransferFormInputs): Promise<{ success: boolean; message?: string }> => {
         if (!currentUser) return { success: false, message: 'User not logged in.' };
 
-        const amount = parseFloat(transferData.amount);
+        const amount = new Decimal(request.amount).toNumber();
         if (isNaN(amount) || amount <= 0) return { success: false, message: 'Amount must be a positive number.' };
         if (amount > 10000) return { success: false, message: 'Transfer limit exceeded. Maximum amount is $10,000.' };
+        console.log(request);
 
-        const fromAccount = accounts.find(acc => acc.id === transferData.fromAccount);
-        if (!fromAccount || fromAccount.balance < amount) return { success: false, message: 'Insufficient funds in source account.' };
+        try {
+            // change the amount to a decimal
+            request.amount = new Decimal(request.amount); // Convert Decimal to string
+            console.log("After conversion: " + request);
 
-        const { success: balanceUpdateSuccess, updatedUser, message: balanceUpdateMessage } = await updateAccountBalances(
-            currentUser.id,
-            transferData.fromAccount,
-            transferData.toAccount,
-            amount,
-            'transfer'
-        );
-
-        if (!balanceUpdateSuccess) {
-            return { success: false, message: balanceUpdateMessage };
+            const transfer = await api.transfer(userId, request);
+            if (transfer) {
+                return { success: true };
+            } else {
+                return { success: false, message: 'Failed to process transfer.' };
+            }
+        } catch (error) {
+            console.error('Error processing transfer:', error);
+            return { success: false, message: 'Failed to process transfer.' };
         }
-
-        const newTransactionData: Omit<Transaction, 'id' | 'date' | 'status'> = {
-            userId: currentUser.id,
-            fromAccount: transferData.fromAccount,
-            toAccount: transferData.toAccount,
-            amount,
-            type: 'transfer',
-            description: transferData.description || 'Internal transfer',
-        };
-
-        const { success: txnSuccess, transaction, message: txnMessage } = await addTransaction(newTransactionData);
-
-        if (txnSuccess && transaction && updatedUser) {
-            setTransactions(prev => [...prev, transaction]);
-            updateUserInContext(updatedUser);
-        }
-        return { success: txnSuccess, message: txnMessage };
-    };
+    }
 
     const getFilteredTransactions = (filter: string, searchTerm: string): Transaction[] => {
         let filtered = transactions.filter(t => t.userId === currentUser?.id);
@@ -185,7 +170,7 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             loadingTransactions,
             makeDeposit,
             makeWithdrawal,
-            processTransfer,
+            makeTransfer,
             getFilteredTransactions
         }}>
             {children}

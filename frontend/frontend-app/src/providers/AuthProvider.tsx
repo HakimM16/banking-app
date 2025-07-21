@@ -2,7 +2,6 @@
 'use client';
 
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
-import { getUserByUsernamePassword } from '@/lib/data';
 import {User, LoginFormInputs, RegisterFormInputs, CustomiseAddressFormInputs, UpdateUserFormInputs} from '@/types';
 import {api} from "@/services/api"; // Import types
 

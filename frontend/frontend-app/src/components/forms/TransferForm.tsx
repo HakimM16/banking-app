@@ -7,30 +7,46 @@ import { useAccounts } from '@/providers/AccountProvider';
 import { useTransactions } from '@/providers/TransactionProvider';
 import { useAlerts } from '@/hooks/useAlerts';
 import { TransferFormInputs } from '@/types';
-import {redirect} from "next/navigation"; // Import type
+import {Decimal} from "decimal.js";
+import axios from "axios"; // Import type
 
 const TransferForm: React.FC = () => {
     const { accounts } = useAccounts();
-    const { processTransfer } = useTransactions();
+    const { makeTransfer } = useTransactions();
     const { addAlert } = useAlerts();
 
     const [transferForm, setTransferForm] = useState<TransferFormInputs>({
         fromAccount: '',
         toAccount: '',
-        amount: '',
+        amount: new Decimal(0),
         description: ''
     });
 
+    const id = localStorage.getItem('id');
+
     const handleTransfer = async (e: React.FormEvent) => {
         e.preventDefault();
-        const result = await processTransfer(transferForm);
-        if (result.success) {
-            addAlert('Transfer completed successfully!', 'success');
-            setTransferForm({ fromAccount: '', toAccount: '', amount: '', description: '' });
-        } else {
-            addAlert(result.message || 'Transfer failed.', 'error');
+        const token = localStorage.getItem('authToken');
+        // Set the default Authorization header for all future axios requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        if (id) {
+            const userId = parseInt(id, 10);
+
+            const transferData = {
+                ...transferForm,
+                amount: transferForm.amount
+            };
+
+            const result = await makeTransfer(userId, transferData);
+            if (result.success) {
+                addAlert('Transfer completed successfully!', 'success');
+                setTransferForm({ fromAccount: '', toAccount: '', amount: new Decimal(0), description: '' });
+                window.location.reload();
+            } else {
+                addAlert(result.message || 'Transfer failed.', 'error');
+            }
         }
-        return redirect('/home');
     };
 
     return (
@@ -50,7 +66,7 @@ const TransferForm: React.FC = () => {
                     >
                         <option value="">Select an account</option>
                         {accounts.map(acc => (
-                            <option key={acc.id} value={acc.id}>
+                            <option key={acc.id} value={acc.accountNumber}>
                                 {acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} ({acc.accountNumber}) - £{acc.balance.toLocaleString()}
                             </option>
                         ))}
@@ -68,7 +84,7 @@ const TransferForm: React.FC = () => {
                     >
                         <option value="">Select an account</option>
                         {accounts.map(acc => (
-                            <option key={acc.id} value={acc.id}>
+                            <option key={acc.id} value={acc.accountNumber}>
                                 {acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} ({acc.accountNumber}) - ${acc.balance.toLocaleString()}
                             </option>
                         ))}
@@ -80,8 +96,18 @@ const TransferForm: React.FC = () => {
                     <input
                         type="number"
                         id="amount"
-                        value={transferForm.amount}
-                        onChange={(e) => setTransferForm({...transferForm, amount: e.target.value})}
+                        value={transferForm.amount.isNaN() ? '' : transferForm.amount.toString()}
+                        onChange={(e) => {
+                            const inputValue = e.target.value;
+                            try {
+                                // Only create a new Decimal if the value is not empty
+                                const newAmount = inputValue === '' ? new Decimal(0) : new Decimal(inputValue);
+                                setTransferForm({...transferForm, amount: newAmount});
+                            } catch (error) {
+                                // If the value cannot be converted to a Decimal, keep the previous value
+                                console.error("Invalid decimal value:", error);
+                            }
+                        }}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="e.g., 500.00"
                         step="0.01"
