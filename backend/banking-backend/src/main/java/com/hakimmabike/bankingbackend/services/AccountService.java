@@ -168,12 +168,36 @@ public class AccountService {
         return account.getBalance();
     }
 
-
     public boolean accountExists(String accountNumber) {
         try {
             return accountRepository.existsByAccountNumber(accountNumber);
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public TotalBalanceDto getTotalBalance(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        List<Account> accounts = accountRepository.findByUser(user);
+        BigDecimal totalBalance = accounts.stream()
+                .map(Account::getBalance)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return new TotalBalanceDto(totalBalance);
+    }
+
+    public ActiveAccountsDto getActiveAccountsCount(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        List<Account> accounts = accountRepository.findByUser(user);
+
+        int activeAccountsCount = (int) accounts.stream()
+                .filter(account -> account.getStatus() == AccountStatus.OPEN)
+                .count();
+
+        return new ActiveAccountsDto( activeAccountsCount );
     }
 }

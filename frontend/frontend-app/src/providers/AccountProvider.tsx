@@ -1,28 +1,31 @@
-// src/providers/AccountProvider.tsx
 'use client';
 
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
-import { useAuth } from './AuthProvider';
-import {Account, CreateAccountFormInputs, UpdateAccountFormInputs, UpdateAccountStatusFormInputs, User} from '@/types';
-import {api} from "@/services/api";
-import {Decimal} from "decimal.js"; // Import types
+import { Account, CreateAccountFormInputs, UpdateAccountFormInputs, UpdateAccountStatusFormInputs, User } from '@/types';
+import { api } from "@/services/api";
+import { Decimal } from "decimal.js"; // Import types
 
+// Define the shape of the Account context
 interface AccountContextType {
     accounts: Account[];
     getAccounts: (userId: number) => Promise<Account[]>;
+    getActiveAccounts: (userId: number) => Promise<{ success: boolean; number: Number; message: string }>;
+    getTotalBalance: (userId: number) => Promise<{ success: boolean; balance: Decimal; message: string }>;
     changeAccountStatus: (userId: number, accountId: number, request: UpdateAccountStatusFormInputs) => Promise<{ success: boolean; message?: string }>;
     loadingAccounts: boolean;
     createAccount: (id: number, account: CreateAccountFormInputs) => Promise<{ success: boolean; message?: string }>;
 }
 
+// Create the Account context
 export const AccountContext = createContext<AccountContextType | null>(null);
 
+// AccountProvider component to provide account-related state and functions
 export const AccountProvider = ({ children }: { children: ReactNode }) => {
-    const { getUser } = useAuth();
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [loadingAccounts, setLoadingAccounts] = useState(true);
     const [id, setId] = React.useState<number | null>(null);
 
+    // Retrieve user id from localStorage
     const storedId = localStorage.getItem('id');
     React.useEffect(() => {
         if (storedId) {
@@ -46,7 +49,8 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
         fetchAccounts();
     }, [id]);
 
-    const createAccount = async (id : number, account: CreateAccountFormInputs) : Promise<{ success: boolean; message?: string }> => {
+    // Create a new account for the user
+    const createAccount = async (id: number, account: CreateAccountFormInputs): Promise<{ success: boolean; message?: string }> => {
         if (!id) return { success: false, message: 'User not logged in.' };
         try {
             const newAccount = await api.createAccount(id, account);
@@ -61,6 +65,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    // Fetch all accounts for a user
     const getAccounts = async (userId: number): Promise<Account[]> => {
         if (!userId) return [];
         const accounts = await api.getAccounts(userId);
@@ -79,10 +84,48 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
-    const changeAccountStatus = async(userId: number, accountId: number, request: UpdateAccountStatusFormInputs) : Promise<{ success: boolean; message?: string }> => {
+    // Fetch the total balance for a user
+    const getTotalBalance = async (userId: number): Promise<{ success: boolean; balance: Decimal; message: string }> => {
+        try {
+            const response = await api.getBalance(userId);
+            console.log(response)
+            if (!response) {
+                console.error('Failed to fetch balance');
+                return { success: false, balance: new Decimal(0), message: 'Failed to fetch balance.' };
+            }
+            // Return the balance from the response
+            return {
+                success: true,
+                balance: response.balance, // Convert Decimal to string
+                message: 'Balance fetched successfully.'
+            }
+        } catch (error) {
+            console.error('Error fetching balance:', error);
+            return { success: false, balance: new Decimal(0), message: 'Error fetching balance.' };
+        }
+    };
+
+    // Fetch the number of active accounts for a user
+    const getActiveAccounts = async (userId: number): Promise<{ success: boolean; number: Number; message: string }> => {
+        try {
+            const accounts = await api.getActiveAccounts(userId);
+            console.log("Active accounts response:", accounts);
+            if (!accounts) {
+                console.error('Failed to fetch active accounts');
+                return { success: false, number: 0, message: 'Failed to fetch active accounts.' };
+            }
+            return { success: true, number: accounts.accountsCount, message: 'Active accounts fetched successfully.' };
+        } catch (error) {
+            console.error('Error fetching active accounts:', error);
+            return { success: false, number: 0, message: 'Error fetching active accounts.' };
+        }
+    }
+
+    // Change the status of an account (e.g., activate/deactivate)
+    const changeAccountStatus = async (userId: number, accountId: number, request: UpdateAccountStatusFormInputs): Promise<{ success: boolean; message?: string }> => {
         if (!userId || !accountId) return { success: false, message: 'Invalid user or account ID.' };
 
-        // check if balance is zero
+        // Check if balance is zero before changing status
         const account = accounts.find(acc => acc.id === accountId);
 
         if (account?.balance) {
@@ -110,13 +153,15 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    // Provide the context value to children components
     return (
-        <AccountContext.Provider value={{ accounts, loadingAccounts, createAccount, changeAccountStatus, getAccounts }}>
+        <AccountContext.Provider value={{ accounts, loadingAccounts, createAccount, getTotalBalance, changeAccountStatus, getAccounts, getActiveAccounts }}>
             {children}
         </AccountContext.Provider>
     );
 };
 
+// Custom hook to use the Account context
 export const useAccounts = () => {
     const context = useContext(AccountContext);
     if (!context) {

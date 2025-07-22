@@ -49,5 +49,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     int countByUserId(Long userId);
 
+    @Query("SELECT COUNT(a) FROM Account a WHERE a.user.id = :userId AND a.status = 'ACTIVE'")
+    int countActiveAccounts(Long userId);
+
     boolean existsByIdAndUserId(Long accountId, Long userId);
 }

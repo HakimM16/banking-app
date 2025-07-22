@@ -82,6 +82,14 @@ export interface Account {
     status: string;
 }
 
+export interface AccountCount {
+    accountsCount: number;
+}
+
+export interface TransactionCount {
+    transactionsCount: number;
+}
+
 // BalanceDto
 export interface Balance {
     accountNumber: string;

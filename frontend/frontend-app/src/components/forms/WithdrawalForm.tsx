@@ -10,13 +10,22 @@ import { WithdrawFormInputs } from '@/types';
 import {Decimal} from "decimal.js";
 import axios from "axios"; // Import type
 
+// WithdrawalForm component allows users to submit a withdrawal transaction
 const WithdrawalForm: React.FC = () => {
+    // Get accounts from context/provider
     const { accounts } = useAccounts();
+    // Get withdrawal function from transactions context/provider
     const { makeWithdrawal } = useTransactions();
+    // Get alert function from custom hook
     const { addAlert } = useAlerts();
 
-    const categoryNames = ["Tesco", "Rent", "Amazon", "Dining Out", "Charity", "Coffee Shop", "Public Transport", "Clothing", "Ride Sharing", "Subscription Services"];
+    // List of withdrawal categories
+    const categoryNames = [
+        "Tesco", "Rent", "Amazon", "Dining Out", "Charity", "Coffee Shop",
+        "Public Transport", "Clothing", "Ride Sharing", "Subscription Services"
+    ];
 
+    // State for withdrawal form inputs
     const [withdrawalForm, setWithdrawalForm] = useState<WithdrawFormInputs>({
         accountNumber: '',
         amount: new Decimal(0),
@@ -24,34 +33,37 @@ const WithdrawalForm: React.FC = () => {
         categoryName: ''
     });
 
+    // Get user id from local storage
     const id = localStorage.getItem('id');
 
+    // Handles form submission for withdrawal
     const handleWithdrawal = async (e: React.FormEvent) => {
         e.preventDefault();
+        // Get auth token from local storage
         const token = localStorage.getItem('authToken');
-        // Set the default Authorization header for all future axios requests
+        // Set default Authorization header for axios
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
         if (id) {
             const userId = parseInt(id, 10);
 
-            // Create a modified version of the form data with the amount as a string or number
+            // Prepare withdrawal data
             const withdrawData = {
                 ...withdrawalForm,
                 amount: withdrawalForm.amount
             };
 
+            // Call withdrawal function
             const result = await makeWithdrawal(userId, withdrawData);
             if (result.success) {
                 addAlert('Withdrawal completed successfully!', 'success');
+                // Reset form after success
                 setWithdrawalForm({ accountNumber: '', amount: new Decimal(0), description: '', categoryName: '' });
                 window.location.reload();
-
             } else {
                 addAlert(result.message || 'Withdrawal failed.', 'error');
             }
         }
-
     };
 
     return (
@@ -60,12 +72,15 @@ const WithdrawalForm: React.FC = () => {
                 <Minus size={20} /> Withdraw Money
             </h3>
             <form onSubmit={handleWithdrawal} className="space-y-4">
+                {/* Account selection */}
                 <div>
-                    <label htmlFor="withdrawalAccount" className="block text-sm font-medium text-gray-700 mb-2">From Account</label>
+                    <label htmlFor="withdrawalAccount" className="block text-sm font-medium text-gray-700 mb-2">
+                        From Account
+                    </label>
                     <select
                         id="withdrawalAccount"
                         value={withdrawalForm.accountNumber}
-                        onChange={(e) => setWithdrawalForm({...withdrawalForm, accountNumber: e.target.value})}
+                        onChange={(e) => setWithdrawalForm({ ...withdrawalForm, accountNumber: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
                     >
@@ -78,8 +93,11 @@ const WithdrawalForm: React.FC = () => {
                     </select>
                 </div>
 
+                {/* Amount input */}
                 <div>
-                    <label htmlFor="withdrawalAmount" className="block text-sm font-medium text-gray-700 mb-2">Amount</label>
+                    <label htmlFor="withdrawalAmount" className="block text-sm font-medium text-gray-700 mb-2">
+                        Amount
+                    </label>
                     <input
                         type="number"
                         id="withdrawalAmount"
@@ -89,7 +107,7 @@ const WithdrawalForm: React.FC = () => {
                             try {
                                 // Only create a new Decimal if the value is not empty
                                 const newAmount = inputValue === '' ? new Decimal(0) : new Decimal(inputValue);
-                                setWithdrawalForm({...withdrawalForm, amount: newAmount});
+                                setWithdrawalForm({ ...withdrawalForm, amount: newAmount });
                             } catch (error) {
                                 // If the value cannot be converted to a Decimal, keep the previous value
                                 console.error("Invalid decimal value:", error);
@@ -103,12 +121,15 @@ const WithdrawalForm: React.FC = () => {
                     />
                 </div>
 
+                {/* Category selection */}
                 <div>
-                    <label htmlFor="withdrawalCategory" className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                    <label htmlFor="withdrawalCategory" className="block text-sm font-medium text-gray-700 mb-2">
+                        Category
+                    </label>
                     <select
                         id="withdrawalCategory"
                         value={withdrawalForm.categoryName}
-                        onChange={(e) => setWithdrawalForm({...withdrawalForm, categoryName: e.target.value})}
+                        onChange={(e) => setWithdrawalForm({ ...withdrawalForm, categoryName: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
                     >
@@ -120,18 +141,22 @@ const WithdrawalForm: React.FC = () => {
                     </select>
                 </div>
 
+                {/* Description input */}
                 <div>
-                    <label htmlFor="withdrawalDescription" className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <label htmlFor="withdrawalDescription" className="block text-sm font-medium text-gray-700 mb-2">
+                        Description
+                    </label>
                     <input
                         type="text"
                         id="withdrawalDescription"
                         value={withdrawalForm.description}
-                        onChange={(e) => setWithdrawalForm({...withdrawalForm, description: e.target.value})}
+                        onChange={(e) => setWithdrawalForm({ ...withdrawalForm, description: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="e.g., ATM withdrawal"
                     />
                 </div>
 
+                {/* Submit button */}
                 <button
                     type="submit"
                     className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
@@ -143,5 +168,4 @@ const WithdrawalForm: React.FC = () => {
         </div>
     );
 };
-
 export default WithdrawalForm;

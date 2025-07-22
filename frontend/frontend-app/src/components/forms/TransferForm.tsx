@@ -10,11 +10,14 @@ import { TransferFormInputs } from '@/types';
 import {Decimal} from "decimal.js";
 import axios from "axios"; // Import type
 
+// TransferForm component allows users to transfer money between their accounts
 const TransferForm: React.FC = () => {
+    // Get accounts, transfer function, and alert function from context/providers
     const { accounts } = useAccounts();
     const { makeTransfer } = useTransactions();
     const { addAlert } = useAlerts();
 
+    // State for form inputs
     const [transferForm, setTransferForm] = useState<TransferFormInputs>({
         fromAccount: '',
         toAccount: '',
@@ -22,8 +25,10 @@ const TransferForm: React.FC = () => {
         description: ''
     });
 
+    // Get user id from localStorage
     const id = localStorage.getItem('id');
 
+    // Handle form submission for transfer
     const handleTransfer = async (e: React.FormEvent) => {
         e.preventDefault();
         const token = localStorage.getItem('authToken');
@@ -33,14 +38,17 @@ const TransferForm: React.FC = () => {
         if (id) {
             const userId = parseInt(id, 10);
 
+            // Prepare transfer data
             const transferData = {
                 ...transferForm,
                 amount: transferForm.amount
             };
 
+            // Call makeTransfer and handle result
             const result = await makeTransfer(userId, transferData);
             if (result.success) {
                 addAlert('Transfer completed successfully!', 'success');
+                // Reset form after successful transfer
                 setTransferForm({ fromAccount: '', toAccount: '', amount: new Decimal(0), description: '' });
                 window.location.reload();
             } else {
@@ -55,6 +63,7 @@ const TransferForm: React.FC = () => {
                 <Send size={20} /> Transfer Money
             </h3>
             <form onSubmit={handleTransfer} className="space-y-4">
+                {/* From Account selection */}
                 <div>
                     <label htmlFor="fromAccount" className="block text-sm font-medium text-gray-700 mb-2">From Account</label>
                     <select
@@ -73,6 +82,7 @@ const TransferForm: React.FC = () => {
                     </select>
                 </div>
 
+                {/* To Account selection */}
                 <div>
                     <label htmlFor="toAccount" className="block text-sm font-medium text-gray-700 mb-2">To Account</label>
                     <select
@@ -91,6 +101,7 @@ const TransferForm: React.FC = () => {
                     </select>
                 </div>
 
+                {/* Amount input */}
                 <div>
                     <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-2">Amount</label>
                     <input
@@ -116,6 +127,7 @@ const TransferForm: React.FC = () => {
                     />
                 </div>
 
+                {/* Description input */}
                 <div>
                     <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">Description</label>
                     <input
@@ -128,6 +140,7 @@ const TransferForm: React.FC = () => {
                     />
                 </div>
 
+                {/* Submit button */}
                 <button
                     type="submit"
                     className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"

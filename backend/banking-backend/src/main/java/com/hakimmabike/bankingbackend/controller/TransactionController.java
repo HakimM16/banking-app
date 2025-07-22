@@ -216,6 +216,28 @@ public class TransactionController {
         return ResponseEntity.ok(transactions);
     }
 
+    @GetMapping("/{userId}/total")
+    public ResponseEntity<?> getTransactionsCount(
+            @PathVariable Long userId
+    ) {
+        // Fetch all transactions for the specified user ID
+        List<TransactionDto> transactions = transactionService.getAllTransactions(userId);
+
+        int transactionsCount = transactions.size();
+
+        TotalTransactionsDto totalTransactionsDto = new TotalTransactionsDto(transactionsCount);
+
+        // If no transactions are found, return a 404 Not Found status
+        if (transactions.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Return the total transactions count with a 200 OK status
+        return ResponseEntity.ok(totalTransactionsDto);
+    }
+
+
+
 
 
 }

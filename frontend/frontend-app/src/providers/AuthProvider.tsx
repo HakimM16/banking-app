@@ -5,6 +5,7 @@ import React, { createContext, useState, useEffect, useContext, ReactNode } from
 import {User, LoginFormInputs, RegisterFormInputs, CustomiseAddressFormInputs, UpdateUserFormInputs} from '@/types';
 import {api} from "@/services/api"; // Import types
 
+// Define the shape of the authentication context
 interface AuthContextType {
     currentUser: User | null;
     register: (registerData: RegisterFormInputs) => Promise<{ success: boolean; id?: number; message?: string }>;
@@ -19,14 +20,19 @@ interface AuthContextType {
     loading: boolean;
 }
 
+// Create the authentication context
 export const AuthContext = createContext<AuthContextType | null>(null);
 
+// AuthProvider component to wrap the app and provide authentication state and actions
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+    // State for the current user
     const [currentUser, setCurrentUser] = useState<User | null>(null);
+    // State for loading status
     const [loading, setLoading] = useState(true);
+    // State for authentication status
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    // Initialize auth state from localStorage
+    // Initialize auth state from localStorage on mount
     useEffect(() => {
         const initAuth = () => {
             try {
@@ -47,6 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         initAuth();
     }, []);
 
+    // Register a new user
     const register = async (registerData: RegisterFormInputs): Promise<{ success: boolean; id?: number; message?: string;  }> => {
         console.log('Register function called with data:', registerData);
         try {
@@ -66,6 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    // Log in a user
     const login = async (loginData: LoginFormInputs): Promise<{ success: boolean; message?: string; user?: User }> => {
         console.log('Login function called');
         try {
@@ -94,6 +102,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    // Retrieve a user by ID
     const getUser = async (id: number | null): Promise<User | null> => {
         console.log('Get user function called with ID:', id);
         try {
@@ -118,6 +127,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    // Update a user's profile
     const updateUser = async (id: number | null, userData: UpdateUserFormInputs): Promise<{ success: boolean; message?: string }> => {
         console.log('Update user function called with ID:', id, 'and data:', userData);
         try {
@@ -141,6 +151,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    // Create a new address for a user
     const createAddress = async (addressData: CustomiseAddressFormInputs, id: number | null): Promise<{ success: boolean; message?: string }> => {
         console.log('Create address function called with data:', addressData);
         try {
@@ -166,6 +177,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    // Retrieve a user's address by ID
     const getAddress = async (id: number | null): Promise<{ success: boolean; address?: CustomiseAddressFormInputs; message?: string }> => {
         console.log('Get address function called with ID:', id);
         try {
@@ -189,6 +201,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    // Update a user's address
     const updateAddress = async (id: number | null, addressData: CustomiseAddressFormInputs): Promise<{ success: boolean; message?: string }> => {
         console.log('Update address function called with ID:', id, 'and data:', addressData);
         try {
@@ -212,8 +225,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
-
-
+    // Log out the current user
     const logout = () => {
         setCurrentUser(null);
         setIsAuthenticated(false);
@@ -228,6 +240,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
+// Custom hook to use the AuthContext
 export const useAuth = () => {
     const context = useContext(AuthContext);
     if (!context) {
@@ -235,4 +248,3 @@ export const useAuth = () => {
     }
     return context;
 };
-

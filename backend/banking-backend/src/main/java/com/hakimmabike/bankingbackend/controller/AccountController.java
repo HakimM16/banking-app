@@ -253,4 +253,34 @@ public class AccountController {
         return ResponseEntity.ok(balance); // Return the account balance with a 200 OK status
     }
 
+    // Get total balance for a user
+    @GetMapping("/{userId}/total-balance")
+    public ResponseEntity<?> getTotalBalance(@PathVariable Long userId) {
+        // Check if user ID is valid
+        if (!userRepository.existsById(userId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User with ID " + userId + " does not exist.");
+        }
+
+        // Get the total balance for the user
+        TotalBalanceDto totalBalance = accountService.getTotalBalance(userId);
+        if (totalBalance == null) {
+            return ResponseEntity.notFound().build(); // Return 404 Not Found if no accounts found
+        }
+        return ResponseEntity.ok(totalBalance); // Return the total balance with a 200 OK status
+    }
+
+    // Get number of active accounts for a user
+    @GetMapping("/{userId}/active-accounts")
+    public ResponseEntity<?> getActiveAccountsCount(@PathVariable Long userId) {
+        // Check if user ID is valid
+        if (!userRepository.existsById(userId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User with ID " + userId + " does not exist.");
+        }
+
+        ActiveAccountsDto activeAccountsCount = accountService.getActiveAccountsCount(userId);
+        return ResponseEntity.ok(activeAccountsCount); // Return the count with a 200 OK status
+    }
+
 }
