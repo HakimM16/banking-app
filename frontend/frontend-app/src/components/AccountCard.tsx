@@ -24,7 +24,8 @@ const AccountCard: React.FC<AccountCardProps> = ({ account }) => {
                 <div>
                     {/* Account type label */}
                     <p className="font-medium">
-                        {account.accountType.charAt(0) + account.accountType.slice(1).toLowerCase()}
+                        {account.accountType === 'CREDIT' ?
+                        'ISA' : account.accountType.charAt(0) + account.accountType.slice(1).toLowerCase()}
                     </p>
                     {/* Masked account number */}
                     <p className="text-sm text-gray-600">

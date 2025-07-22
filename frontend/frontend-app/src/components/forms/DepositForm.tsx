@@ -73,7 +73,10 @@ const DepositForm: React.FC = () => {
                         <option value="">Select an account</option>
                         {accounts.map(acc => (
                             <option key={acc.id} value={acc.accountNumber}>
-                                {acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} ({acc.accountNumber}) - £{acc.balance.toLocaleString()}
+                                {acc.accountType === 'CREDIT'
+                                    ? `ISA (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
+                                    : `${acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
+                                }
                             </option>
                         ))}
                     </select>
