@@ -15,13 +15,16 @@ const DepositForm: React.FC = () => {
     const { makeDeposit } = useTransactions();
     const { addAlert } = useAlerts();
 
+    const categoryNames = ["Google", "Salary", "Freelance Work", "Dividends", "Investment Return", "Bonus", "Stock sale", "Gift", "Cashback", "Scholarship"];
 
     const [depositForm, setDepositForm] = useState<DepositFormInputs>({
         accountNumber: '',
         amount: new Decimal(0),
         description: '',
-        categoryName: 'Google'
+        categoryName: ''
     });
+
+
 
     const id = localStorage.getItem('id');
 
@@ -43,7 +46,7 @@ const DepositForm: React.FC = () => {
             const result = await makeDeposit(userId, depositData);
             if (result.success) {
                 addAlert('Deposit completed successfully!', 'success');
-                setDepositForm({ accountNumber: '', amount: new Decimal(0), description: '', categoryName: 'Google' });
+                setDepositForm({ accountNumber: '', amount: new Decimal(0), description: '', categoryName: '' });
                 window.location.reload();
 
             } else {
@@ -99,6 +102,23 @@ const DepositForm: React.FC = () => {
                         min="0.01"
                         required
                     />
+                </div>
+
+                <div>
+                    <label htmlFor="depositCategory" className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                    <select
+                        id="depositCategory"
+                        value={depositForm.categoryName}
+                        onChange={(e) => setDepositForm({...depositForm, categoryName: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                    >
+                        {categoryNames.map(category => (
+                            <option key={category} value={category}>
+                                {category}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
                 <div>

@@ -15,11 +15,13 @@ const WithdrawalForm: React.FC = () => {
     const { makeWithdrawal } = useTransactions();
     const { addAlert } = useAlerts();
 
+    const categoryNames = ["Tesco", "Rent", "Amazon", "Dining Out", "Charity", "Coffee Shop", "Public Transport", "Clothing", "Ride Sharing", "Subscription Services"];
+
     const [withdrawalForm, setWithdrawalForm] = useState<WithdrawFormInputs>({
         accountNumber: '',
         amount: new Decimal(0),
         description: '',
-        categoryName: 'Tesco'
+        categoryName: ''
     });
 
     const id = localStorage.getItem('id');
@@ -42,7 +44,7 @@ const WithdrawalForm: React.FC = () => {
             const result = await makeWithdrawal(userId, withdrawData);
             if (result.success) {
                 addAlert('Withdrawal completed successfully!', 'success');
-                setWithdrawalForm({ accountNumber: '', amount: new Decimal(0), description: '', categoryName: 'Tesco' });
+                setWithdrawalForm({ accountNumber: '', amount: new Decimal(0), description: '', categoryName: '' });
                 window.location.reload();
 
             } else {
@@ -99,6 +101,23 @@ const WithdrawalForm: React.FC = () => {
                         min="0.01"
                         required
                     />
+                </div>
+
+                <div>
+                    <label htmlFor="withdrawalCategory" className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                    <select
+                        id="withdrawalCategory"
+                        value={withdrawalForm.categoryName}
+                        onChange={(e) => setWithdrawalForm({...withdrawalForm, categoryName: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                    >
+                        {categoryNames.map(category => (
+                            <option key={category} value={category}>
+                                {category}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
                 <div>

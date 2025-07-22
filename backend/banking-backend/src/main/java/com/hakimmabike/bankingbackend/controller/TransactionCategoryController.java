@@ -2,6 +2,7 @@ package com.hakimmabike.bankingbackend.controller;
 
 import com.hakimmabike.bankingbackend.dto.CreateTransactionCategoryRequest;
 import com.hakimmabike.bankingbackend.dto.TransactionCategoryDto;
+import com.hakimmabike.bankingbackend.enums.CategoryType;
 import com.hakimmabike.bankingbackend.enums.TransactionType;
 import com.hakimmabike.bankingbackend.repository.TransactionCategoryRepository;
 import com.hakimmabike.bankingbackend.services.TransactionService;
@@ -48,8 +49,9 @@ public class TransactionCategoryController {
             return ResponseEntity.status(409).body("Category already exists");
         }
 
-        if (!TransactionType.isValidCategoryType(request.getCategoryType())) {
-            return ResponseEntity.badRequest().body("Category type is invalid");
+        if (!CategoryType.isValidCategoryType(request.getCategoryType())) {
+
+            return ResponseEntity.badRequest().body("Category type is invalid: " + request.getCategoryType());
         }
 
         TransactionCategoryDto createdCategory = transactionService.createTransactionCategory(request);
