@@ -80,6 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 // Store user data and token in localStorage
                 localStorage.setItem('id', response.id.toString());
                 localStorage.setItem('currentUser', JSON.stringify(response.email));
+                localStorage.setItem('name', response.name);
 
                 console.log('Auth state updated - isAuthenticated should be true');
                 return { success: true, user: response.email };

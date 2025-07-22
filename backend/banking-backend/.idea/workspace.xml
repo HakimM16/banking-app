@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Added category names with range of options in DepositForm and WithdrawalForm" />
+    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Added category names with range of options in DepositForm and WithdrawalForm">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/JwtResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/JwtResponse.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -182,7 +185,7 @@
       <workItem from="1752946393737" duration="8088000" />
       <workItem from="1753031989972" duration="5957000" />
       <workItem from="1753078496551" duration="25537000" />
-      <workItem from="1753163567335" duration="12864000" />
+      <workItem from="1753163567335" duration="13660000" />
     </task>
     <task id="LOCAL-00018" summary="Sorted out the error where it returned BAD_REQUEST, after the new user is created">
       <option name="closed" value="true" />

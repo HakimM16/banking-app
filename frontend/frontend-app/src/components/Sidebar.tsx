@@ -14,6 +14,9 @@ const Sidebar: React.FC = () => {
     const { currentUser, logout } = useAuth();
     const token = localStorage.getItem('token');
 
+    // get user's name
+    const name = localStorage.getItem('name');
+
     // check if token is valid
     const getTokenExpiration = (token: string) => {
         if (!token) return null;
@@ -56,7 +59,7 @@ const Sidebar: React.FC = () => {
                     <LogoForSidebar />
                     <div>
                         <h2 className="text-xl font-bold">Vesta</h2>
-                        <p className="text-sm text-gray-300">Welcome, user</p>
+                        <p className="text-sm text-gray-300">Welcome, {name || "User"}</p>
                     </div>
                 </div>
             </div>

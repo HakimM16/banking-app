@@ -27,6 +27,9 @@ export default function DashboardPage() {
     const id: string = localStorage.getItem('id') || '';
     const userId = parseInt(id, 10);
 
+    // get user's name
+    const name = localStorage.getItem('name');
+
     const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
 
     // Fetch transactions from the API when the component mounts or when dependencies change
@@ -52,7 +55,7 @@ export default function DashboardPage() {
         <div className="p-6">
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-gray-50 mb-2">Dashboard</h1>
-                <p className="text-gray-200">Welcome back, {currentUser?.firstName}!</p>
+                <p className="text-gray-200">Welcome back, {name || "User"}!</p>
             </div>
 
             <DashboardSummary userId={currentUser.id} />

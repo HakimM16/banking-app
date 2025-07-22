@@ -93,7 +93,7 @@ public class AuthController {
         response.addCookie(cookie);
 
         // If the user exists and the password matches, return a 200 OK status
-        return ResponseEntity.ok(new JwtResponse(user.getId(),user.getEmail(),accessToken.toString()));
+        return ResponseEntity.ok(new JwtResponse(user.getId(), user.getFirstName(), user.getEmail(),accessToken.toString()));
     }
 
     @PostMapping("/refresh")
@@ -109,7 +109,7 @@ public class AuthController {
         var accessToken = jwtService.generateAccessToken(user); // Generate a new access token for the user
 
         // Return the new access token in the response
-        return ResponseEntity.ok(new JwtResponse(user.getId(),user.getEmail(),accessToken.toString()));
+        return ResponseEntity.ok(new JwtResponse(user.getId(),user.getFirstName(), user.getEmail(),accessToken.toString()));
     }
 
     @GetMapping("/me")
