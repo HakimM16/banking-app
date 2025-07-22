@@ -1,7 +1,7 @@
 // src/app/(dashboard)/page.tsx
 'use client';
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import DashboardSummary from '@/components/DashboardSummary'; // Still imported, but handles data fetching internally now
 import TransactionItem from '@/components/TransactionItem';
 import AccountCard from '@/components/AccountCard';
@@ -10,12 +10,37 @@ import { useAuth } from '@/providers/AuthProvider';
 import { useAccounts } from '@/providers/AccountProvider';
 import { useTransactions } from '@/providers/TransactionProvider';
 import { useRouter } from 'next/navigation';
+import axios from "axios";
+import {Transaction} from "@/types";
 
 export default function DashboardPage() {
     const { currentUser } = useAuth();
     const { accounts } = useAccounts();
-    const { getFilteredTransactions } = useTransactions();
+    const { getTransactions } = useTransactions();
+    const [transactionFilter, setTransactionFilter] = useState('all');
     const router = useRouter();
+
+    const token = localStorage.getItem('authToken');
+    // Set the default Authorization header for all future axios requests
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    const id: string = localStorage.getItem('id') || '';
+    const userId = parseInt(id, 10);
+
+    const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
+
+    // Fetch transactions from the API when the component mounts or when dependencies change
+    useEffect(() => {
+        const fetchTransactions = async () => {
+            const result = await getTransactions(userId);
+            if (result.success && result.transactions) {
+                setAllTransactions(result.transactions);
+            } else {
+                setAllTransactions([]);
+            }
+        };
+        fetchTransactions();
+    }, [transactionFilter, userId, getTransactions]);
 
    // const recentTransactions = getFilteredTransactions('all', '').slice(0, 5);
 
@@ -75,16 +100,16 @@ export default function DashboardPage() {
             </div>
 
             <div className="mt-8 bg-white p-6 rounded-xl shadow-md">
-                {/*<h3 className="text-lg font-semibold mb-4">Recent Transactions</h3>*/}
-                {/*<div className="space-y-3">*/}
-                {/*    {recentTransactions.length > 0 ? (*/}
-                {/*        recentTransactions.map((transaction) => (*/}
-                {/*            <TransactionItem key={transaction.id} transaction={transaction} accounts={accounts} />*/}
-                {/*        ))*/}
-                {/*    ) : (*/}
-                {/*        <p className="text-gray-500">No recent transactions.</p>*/}
-                {/*    )}*/}
-                {/*</div>*/}
+                <h3 className="text-lg font-semibold mb-4">Recent Transactions</h3>
+                <div className="space-y-3">
+                    {allTransactions.length > 0 ? (
+                        [...allTransactions].reverse().slice(0, 5).map((transaction) => (
+                            <TransactionItem key={transaction.id} transaction={transaction} accounts={accounts} transactions={allTransactions} />
+                        ))
+                    ) : (
+                        <p className="text-gray-500">No recent transactions.</p>
+                    )}
+                </div>
             </div>
         </div>
     );
