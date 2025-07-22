@@ -62,6 +62,7 @@ public class TransactionService {
         }
 
         transaction.setDescription(request.getDescription());
+        transaction.setAccountNumber(account.getAccountNumber());
         transaction.setStatus(TransactionStatus.COMPLETED);
         transaction.setTransactionDate(LocalDateTime.now());
         transaction.setTransactionNumber(generateTransactionNumber());
@@ -131,6 +132,7 @@ public class TransactionService {
         // Make a withdrawal transaction
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
+        transaction.setAccountNumber(account.getAccountNumber());
         transaction.setTransactionType(String.valueOf(TransactionType.WITHDRAWAL));
         transaction.setAmount(request.getAmount());
         transaction.setDescription(request.getDescription());
@@ -204,7 +206,7 @@ public class TransactionService {
     }
 
     // Get account transactions
-    public List<TransactionDto> getAllTransactions(Long accountId, GetTransactionsRequest request) {
+    public List<TransactionDto> getAllTransactionsByAccountId(Long accountId, GetTransactionsRequest request) {
         //Check if account exists
         Account account = accountRepository.findByAccountNumber(request.getAccountNumber())
                 .orElseThrow(() -> new EntityNotFoundException("Account not found with number: " + request.getAccountNumber()));
@@ -227,13 +229,40 @@ public class TransactionService {
                 .toList();
     }
 
+    public List<TransactionDto> getAllTransactions(Long userId) {
+        // Get all accounts for the user
+        List<Account> accounts = accountRepository.findByUserId(userId);
+
+        if (accounts.isEmpty()) {
+            throw new EntityNotFoundException("No accounts found for user with ID: " + userId);
+        }
+
+        // Get all transactions for the user's accounts
+        List<Transaction> transactions = transactionRepository.findByAccountIn(accounts);
+
+        // Check if transactions list is empty
+        if (transactions.isEmpty()) {
+            throw new EntityNotFoundException("No transactions found for user with ID: " + userId);
+        }
+        // Map transactions to DTOs
+        return transactions.stream()
+                .map(transactionMapper::toDto)
+                .toList();
+    }
+
     private void createTransferTransactions(Transfer transfer, BigDecimal fromBalance, BigDecimal toBalance) {
+        String transferCode = generateFourCharString();
+
         Transaction card1 = new Transaction();
         card1.setAccount(transfer.getSenderAccount());
+        card1.setAccountNumber(transfer.getSenderAccount().getAccountNumber());
         card1.setTransactionType(String.valueOf(TransactionType.TRANSFER));
         card1.setAmount(transfer.getAmount());
         card1.setDescription("Transfer to " + transfer.getReceiverAccount().getAccountNumber());
         card1.setStatus(TransactionStatus.COMPLETED);
+        card1.setCode(transferCode);
+        card1.setSender(true);
+        card1.setReceiver(false);
         card1.setTransactionDate(LocalDateTime.now());
         card1.setTransactionNumber(generateTransactionNumber());
         card1.setBalanceAfterTransaction(fromBalance.doubleValue());
@@ -241,10 +270,14 @@ public class TransactionService {
 
         Transaction card2 = new Transaction();
         card2.setAccount(transfer.getSenderAccount());
+        card2.setAccountNumber(transfer.getReceiverAccount().getAccountNumber());
         card2.setTransactionType(String.valueOf(TransactionType.TRANSFER));
         card2.setAmount(transfer.getAmount());
         card2.setDescription("Transfer from " + transfer.getReceiverAccount().getAccountNumber());
         card2.setStatus(TransactionStatus.COMPLETED);
+        card2.setCode(transferCode);
+        card2.setReceiver(true);
+        card2.setSender(false);
         card2.setTransactionDate(LocalDateTime.now());
         card2.setTransactionNumber(generateTransactionNumber());
         card2.setBalanceAfterTransaction(toBalance.doubleValue());
@@ -267,4 +300,14 @@ public class TransactionService {
                 .orElseThrow(() -> new EntityNotFoundException("Account not found with number: " + accountNumber));
         return account.getStatus() == AccountStatus.CLOSED;
     }
+
+    public String generateFourCharString() {
+            String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            StringBuilder sb = new StringBuilder(4);
+            Random random = new Random();
+            for (int i = 0; i < 4; i++) {
+                sb.append(chars.charAt(random.nextInt(chars.length())));
+            }
+            return sb.toString();
+        }
 }

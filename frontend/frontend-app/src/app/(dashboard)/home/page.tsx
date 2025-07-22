@@ -17,7 +17,7 @@ export default function DashboardPage() {
     const { getFilteredTransactions } = useTransactions();
     const router = useRouter();
 
-    const recentTransactions = getFilteredTransactions('all', '').slice(0, 5);
+   // const recentTransactions = getFilteredTransactions('all', '').slice(0, 5);
 
     if (!currentUser) {
         return <p className="text-gray-50">Loading user data...</p>;
@@ -75,16 +75,16 @@ export default function DashboardPage() {
             </div>
 
             <div className="mt-8 bg-white p-6 rounded-xl shadow-md">
-                <h3 className="text-lg font-semibold mb-4">Recent Transactions</h3>
-                <div className="space-y-3">
-                    {recentTransactions.length > 0 ? (
-                        recentTransactions.map((transaction) => (
-                            <TransactionItem key={transaction.id} transaction={transaction} accounts={accounts} />
-                        ))
-                    ) : (
-                        <p className="text-gray-500">No recent transactions.</p>
-                    )}
-                </div>
+                {/*<h3 className="text-lg font-semibold mb-4">Recent Transactions</h3>*/}
+                {/*<div className="space-y-3">*/}
+                {/*    {recentTransactions.length > 0 ? (*/}
+                {/*        recentTransactions.map((transaction) => (*/}
+                {/*            <TransactionItem key={transaction.id} transaction={transaction} accounts={accounts} />*/}
+                {/*        ))*/}
+                {/*    ) : (*/}
+                {/*        <p className="text-gray-500">No recent transactions.</p>*/}
+                {/*    )}*/}
+                {/*</div>*/}
             </div>
         </div>
     );

@@ -4,14 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Added id and email to JwtResponse and change access token expiration to 5 minutes.">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_14_07_2025_18_38_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_14_07_2025_18_38__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_14_07_2025_22_27_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_14_07_2025_22_27__Changes_.xml" beforeDir="false" />
+    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Added category names with range of options in DepositForm and WithdrawalForm">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionCategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionCategoryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/enums/TransactionType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/enums/TransactionType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/TransactionDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/TransactionDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/entity/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/entity/Transaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/mappers/TransactionMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/mappers/TransactionMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/repository/AccountRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/repository/TransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/repository/TransactionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/TransactionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/AccountMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/AccountMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransactionMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransactionMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransferMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransferMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserAddressMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserAddressMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserEntityMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserEntityMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/TransactionProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/TransactionProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/services/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/services/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/types/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/types/index.d.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,15 +199,7 @@
       <workItem from="1752946393737" duration="8088000" />
       <workItem from="1753031989972" duration="5957000" />
       <workItem from="1753078496551" duration="25537000" />
-      <workItem from="1753163567335" duration="2744000" />
-    </task>
-    <task id="LOCAL-00017" summary="Configured security settings.&#10;Built the login API.&#10;Added AuthenticationManager">
-      <option name="closed" value="true" />
-      <created>1752045400993</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1752045400993</updated>
+      <workItem from="1753163567335" duration="12341000" />
     </task>
     <task id="LOCAL-00018" summary="Sorted out the error where it returned BAD_REQUEST, after the new user is created">
       <option name="closed" value="true" />
@@ -584,7 +585,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752950806400</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="Added category names with range of options in DepositForm and WithdrawalForm">
+      <option name="closed" value="true" />
+      <created>1753169265840</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1753169265841</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -602,7 +611,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Sorted out the mapping issue to the database and made it give a 200 response" />
     <MESSAGE value="Changed the address for making a new address to create_address.&#10;Added responses such as not found and bad request to createUserAddress" />
     <MESSAGE value="Sorted out the mapping issue for updateUserAddress" />
     <MESSAGE value="Sorted out the mapping issue for updateUserAddress.&#10;Added responses such as not found to updateUserAddress.&#10;Solved the issue where it returned 401 for empty address, instead of 400" />
@@ -627,6 +635,7 @@
     <MESSAGE value="Made changes to code for Typescript interfaces" />
     <MESSAGE value="Made a change to UserSecurityRules" />
     <MESSAGE value="Added id and email to JwtResponse and change access token expiration to 5 minutes." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added id and email to JwtResponse and change access token expiration to 5 minutes." />
+    <MESSAGE value="Added category names with range of options in DepositForm and WithdrawalForm" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added category names with range of options in DepositForm and WithdrawalForm" />
   </component>
 </project>

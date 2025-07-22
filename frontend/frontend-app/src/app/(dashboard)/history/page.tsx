@@ -1,66 +1,113 @@
 // src/app/(dashboard)/history/page.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, History } from 'lucide-react';
 import { useTransactions } from '@/providers/TransactionProvider';
 import { useAccounts } from '@/providers/AccountProvider';
 import TransactionItem from '@/components/TransactionItem';
+import { Transaction} from '@/types';
+import axios from "axios";
 
 export default function TransactionHistoryPage() {
-    const { transactions, getFilteredTransactions } = useTransactions();
+    const { getTransactions } = useTransactions();
     const { accounts } = useAccounts();
 
     const [transactionFilter, setTransactionFilter] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
 
-    const filteredTransactions = getFilteredTransactions(transactionFilter, searchTerm);
+    const token = localStorage.getItem('authToken');
+    // Set the default Authorization header for all future axios requests
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-    return (
-        <div className="p-6">
-            <h1 className="text-3xl font-bold text-gray-50 mb-8 flex items-center gap-3">
-                <History size={32} /> Transaction History
-            </h1>
+    const id: string = localStorage.getItem('id') || '';
+    const userId = parseInt(id, 10);
 
-            <div className="bg-white p-6 rounded-xl shadow-md mb-6 flex flex-col md:flex-row gap-4">
-                <div className="flex-1 relative">
-                    <input
-                        type="text"
-                        placeholder="Search by description or amount..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 pl-10"
-                    />
-                    <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                </div>
+    const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
+    const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
 
-                <div className="flex items-center gap-2">
-                    <label htmlFor="filter" className="text-gray-700">Filter by Type:</label>
-                    <select
-                        id="filter"
-                        value={transactionFilter}
-                        onChange={(e) => setTransactionFilter(e.target.value)}
-                        className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="all">All</option>
-                        <option value="transfer">Transfer</option>
-                        <option value="deposit">Deposit</option>
-                        <option value="withdrawal">Withdrawal</option>
-                    </select>
-                </div>
-            </div>
+// Fetch transactions from the API when the component mounts or when dependencies change
+useEffect(() => {
+    const fetchTransactions = async () => {
+        const result = await getTransactions(userId);
+        if (result.success && result.transactions) {
+            setAllTransactions(result.transactions);
+        } else {
+            setAllTransactions([]);
+        }
+    };
+    fetchTransactions();
+}, [transactionFilter, userId, getTransactions]);
 
-            <div className="bg-white p-6 rounded-xl shadow-md">
-                {filteredTransactions.length > 0 ? (
-                    <div className="space-y-4">
-                        {filteredTransactions.map((transaction) => (
-                            <TransactionItem key={transaction.id} transaction={transaction} accounts={accounts} />
-                        ))}
-                    </div>
-                ) : (
-                    <p className="text-gray-500 text-center py-8">No transactions found matching your criteria.</p>
-                )}
+// Filter transactions based on type and search term
+useEffect(() => {
+    let filtered = [...allTransactions];
+
+    // Filter by transaction type
+    if (transactionFilter === 'TRANSFER') {
+        filtered = filtered.filter(transaction => transaction.transactionType === 'TRANSFER');
+    } else if (transactionFilter === 'DEPOSIT') {
+        filtered = filtered.filter(transaction => transaction.transactionType === 'DEPOSIT');
+    } else if (transactionFilter === 'WITHDRAWAL') {
+        filtered = filtered.filter(transaction => transaction.transactionType === 'WITHDRAWAL');
+    }
+
+    // Filter by search term (description or amount)
+    if (searchTerm) {
+        const lowerSearchTerm = searchTerm.toLowerCase();
+        filtered = filtered.filter(transaction =>
+            transaction.description.toLowerCase().includes(lowerSearchTerm) ||
+            transaction.amount.toString().includes(lowerSearchTerm)
+        );
+    }
+
+    setFilteredTransactions(filtered);
+}, [allTransactions, transactionFilter, searchTerm]);
+
+return (
+    <div className="p-6">
+        {/* Page Title */}
+        <h1 className="text-3xl font-bold text-gray-50 mb-8 flex items-center gap-3">
+            <History size={32} /> Transaction History
+        </h1>
+
+        {/* Filter Controls */}
+        <div className="bg-white p-6 rounded-xl shadow-md mb-6 flex flex-col md:flex-row gap-4">
+            <div className="flex items-center gap-2">
+                <label htmlFor="filter" className="text-gray-700">Filter by Type:</label>
+                <select
+                    id="filter"
+                    value={transactionFilter}
+                    onChange={(e) => setTransactionFilter(e.target.value)}
+                    className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                    <option value="all">All</option>
+                    <option value="TRANSFER">Transfer</option>
+                    <option value="DEPOSIT">Deposit</option>
+                    <option value="WITHDRAWAL">Withdrawal</option>
+                </select>
             </div>
         </div>
-    );
+
+        {/* Transaction List */}
+        <div className="bg-white p-6 rounded-xl shadow-md">
+            {filteredTransactions.length > 0 ? (
+                <div className="space-y-4">
+                    {/* Render each transaction item */}
+                    {[...filteredTransactions].reverse().map((transaction: Transaction) => (
+                        <TransactionItem
+                            key={transaction.id}
+                            transaction={transaction}
+                            accounts={accounts}
+                            transactions={allTransactions} // Pass all transactions for finding matches
+                        />
+                    ))}
+                </div>
+            ) : (
+                // Show message if no transactions found
+                <p className="text-gray-500 text-center py-8">No transactions found matching your criteria.</p>
+            )}
+        </div>
+    </div>
+);
 }

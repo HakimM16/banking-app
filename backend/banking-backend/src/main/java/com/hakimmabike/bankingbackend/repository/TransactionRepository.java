@@ -24,7 +24,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     // Find transactions by account
     List<Transaction> findByAccount(Account account);
 
-    // Find transa
+    // Find transactions by accounts
+    List<Transaction> findByAccountIn(List<Account> accounts);
 
     // Find transactions by account and transaction type
     List<Transaction> findByAccountAndTransactionType(Account account, TransactionType type);

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-07-18T15:08:57+0100",
+    date = "2025-07-22T12:14:25+0100",
     comments = "version: 1.6.1, compiler: javac, environment: Java 24.0.1 (Oracle Corporation)"
 )
 @Component
@@ -28,6 +28,10 @@ public class TransactionMapperImpl implements TransactionMapper {
         BigDecimal amount = null;
         BigDecimal balanceAfterTransaction = null;
         String description = null;
+        String code = null;
+        Boolean sender = null;
+        Boolean receiver = null;
+        String accountNumber = null;
 
         id = transaction.getId();
         transactionNumber = transaction.getTransactionNumber();
@@ -37,10 +41,14 @@ public class TransactionMapperImpl implements TransactionMapper {
             balanceAfterTransaction = BigDecimal.valueOf( transaction.getBalanceAfterTransaction() );
         }
         description = transaction.getDescription();
+        code = transaction.getCode();
+        sender = transaction.getSender();
+        receiver = transaction.getReceiver();
+        accountNumber = transaction.getAccountNumber();
 
-        String categoryName = null;
+        String categoryName = transaction.getTransactionCategory() != null ? transaction.getTransactionCategory().getName() : null;
 
-        TransactionDto transactionDto = new TransactionDto( id, transactionNumber, transactionType, amount, balanceAfterTransaction, categoryName, description );
+        TransactionDto transactionDto = new TransactionDto( id, transactionNumber, transactionType, amount, balanceAfterTransaction, categoryName, description, code, sender, receiver, accountNumber );
 
         return transactionDto;
     }
@@ -61,6 +69,10 @@ public class TransactionMapperImpl implements TransactionMapper {
             transaction.balanceAfterTransaction( transactionDto.getBalanceAfterTransaction().doubleValue() );
         }
         transaction.description( transactionDto.getDescription() );
+        transaction.code( transactionDto.getCode() );
+        transaction.sender( transactionDto.getSender() );
+        transaction.receiver( transactionDto.getReceiver() );
+        transaction.accountNumber( transactionDto.getAccountNumber() );
 
         return transaction.build();
     }

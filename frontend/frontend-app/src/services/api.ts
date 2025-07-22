@@ -135,11 +135,9 @@ export const api = {
         return response.data;
     },
 
-    getTransactions: async (userId: number, accountId: number, data: GetTransactionsRequest) => {
-            const response = await axios.get<Transaction[]>(`${API_BASE_URL}/transactions/${userId}/account/${accountId}`, {
-                params: data
-            });
-            return response.data
+    getTransactions: async (userId: number) => {
+            const response = await axios.get<Transaction[]>(`${API_BASE_URL}/transactions/${userId}/account`);
+            return response.data;
     },
 
     // TRANSACTION CATEGORIES

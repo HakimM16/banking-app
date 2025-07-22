@@ -4,7 +4,6 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { useAuth } from './AuthProvider';
 import { getUserTransactions } from '@/lib/data';
-import { useAccounts } from './AccountProvider';
 import { Transaction, TransferFormInputs, DepositFormInputs, WithdrawFormInputs } from '@/types'; // Import types
 import Decimal from 'decimal.js';
 import {api} from "@/services/api";
@@ -15,14 +14,13 @@ interface TransactionContextType {
     makeDeposit: (userId: number, request: DepositFormInputs) => Promise<{ success: boolean; message?: string }>;
     makeWithdrawal: (userId: number, request: WithdrawFormInputs) => Promise<{ success: boolean; message?: string }>;
     makeTransfer: (userId: number, request: TransferFormInputs) => Promise<{ success: boolean; message?: string }>;
-    getFilteredTransactions: (filter: string, searchTerm: string) => Transaction[];
+    getTransactions: (userId: number) => Promise<{ success: boolean; transactions?: Transaction[]; message?: string }>;
 }
 
 export const TransactionContext = createContext<TransactionContextType | null>(null);
 
 export const TransactionProvider = ({ children }: { children: ReactNode }) => {
     const { currentUser } = useAuth();
-    const { accounts } = useAccounts();
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [loadingTransactions, setLoadingTransactions] = useState(true);
 
@@ -65,37 +63,6 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             return { success: false, message: 'Failed to process deposit.' };
         }
 
-        /*const account = accounts.find(acc => acc.id === request.account);
-        if (!account) return { success: false, message: 'Account not found.' };
-
-        const { success: balanceUpdateSuccess, updatedUser, message: balanceUpdateMessage } = await updateAccountBalances(
-            userId,
-            null,
-            request.account,
-            amount,
-            'deposit'
-        );
-
-        if (!balanceUpdateSuccess) {
-            return { success: false, message: balanceUpdateMessage };
-        }
-
-        const newTransactionData: Omit<Transaction, 'id' | 'date' | 'status'> = {
-            userId,
-            fromAccount: null,
-            toAccount: request.account,
-            amount,
-            type: 'deposit',
-            description: request.description || 'Cash deposit',
-        };
-
-        const { success: txnSuccess, transaction, message: txnMessage } = await addTransaction(newTransactionData);
-
-        if (txnSuccess && transaction && updatedUser) {
-            setTransactions(prev => [...prev, transaction]);
-            updateUserInContext(updatedUser);
-        }
-        return { success: txnSuccess, message: txnMessage };*/
     }
 
     const makeWithdrawal = async (userId: number, request: WithdrawFormInputs): Promise<{ success: boolean; message?: string }> => {
@@ -147,21 +114,19 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
-    const getFilteredTransactions = (filter: string, searchTerm: string): Transaction[] => {
-        let filtered = transactions.filter(t => t.userId === currentUser?.id);
-
-        if (filter !== 'all') {
-            filtered = filtered.filter(t => t.type === filter);
+    const getTransactions = async (userId: number): Promise<{ success: boolean; transactions?: Transaction[]; message?: string }> => {
+        try {
+            const transactions = await api.getTransactions(userId);
+            if (transactions) {
+                return { success: true, transactions };
+            } else {
+                return { success: false, message: 'Failed to fetch transactions.' };
+            }
+        } catch (error) {
+            console.error('Error fetching transactions:', error);
+            return { success: false, message: 'Failed to fetch transactions.' };
         }
-
-        if (searchTerm) {
-            filtered = filtered.filter(t =>
-                t.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                t.amount.toString().includes(searchTerm)
-            );
-        }
-        return filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    };
+    }
 
 
     return (
@@ -171,7 +136,7 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             makeDeposit,
             makeWithdrawal,
             makeTransfer,
-            getFilteredTransactions
+            getTransactions,
         }}>
             {children}
         </TransactionContext.Provider>

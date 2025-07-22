@@ -37,6 +37,18 @@ public class Transaction {
     @Column(nullable = false, name = "description")
     private String description;
 
+    @Column(nullable = false, name = "code")
+    private String code = "NULL";
+
+    @Column(nullable = false, name = "sender")
+    private Boolean sender = false;
+
+    @Column(nullable = false , name = "reciever")
+    private Boolean receiver = false;
+
+    @Column(name = "account_number", nullable = false)
+    private String accountNumber;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TransactionStatus status;

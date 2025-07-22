@@ -40,10 +40,14 @@ export interface Transaction {
     id: number;
     transactionNumber: string;
     transactionType: string;
+    accountNumber: string;
     amount: Decimal;
     balanceAfter: Decimal;
     categoryName: string;
     description: string;
+    code: string;
+    sender: boolean;
+    receiver: boolean;
 }
 
 // TransferDto
