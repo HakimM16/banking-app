@@ -109,7 +109,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     };
 
     // Get account balance
-    const getAccountBalance = async (userId: number, accountId: string): Promise<{ success: boolean; balance: Decimal; message: string }> => {
+    const getAccountBalance = async (userId: number, accountId: number): Promise<{ success: boolean; balance: Decimal; message: string }> => {
         try {
             const response = await api.getAccountBalance(userId, accountId);
             if (!response) {
