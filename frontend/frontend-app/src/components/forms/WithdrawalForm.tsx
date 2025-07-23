@@ -13,11 +13,13 @@ import axios from "axios"; // Import type
 // WithdrawalForm component allows users to submit a withdrawal transaction
 const WithdrawalForm: React.FC = () => {
     // Get accounts from context/provider
-    const { accounts } = useAccounts();
+    const { accounts, getAccountBalance } = useAccounts();
     // Get withdrawal function from transactions context/provider
     const { makeWithdrawal } = useTransactions();
     // Get alert function from custom hook
     const { addAlert } = useAlerts();
+    const [ isBalanceLess, setIsBalanceLess ] = useState(false);
+    const [fromId, setFromId] = useState<number | null>(null);
 
     // List of withdrawal categories
     const categoryNames = [
@@ -44,6 +46,8 @@ const WithdrawalForm: React.FC = () => {
         // Set default Authorization header for axios
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
+
+
         // check if description is empty and set it to 'No comment' if true
         if (withdrawalForm.description.trim() === '') {
             withdrawalForm.description = 'General withdrawal';
@@ -56,6 +60,17 @@ const WithdrawalForm: React.FC = () => {
 
         if (id) {
             const userId = parseInt(id, 10);
+
+            // check if fromAccount balance is less than amount
+            if (fromId) {
+                const fromAccount = await getAccountBalance(userId, fromId);
+                if (fromAccount.success && new Decimal(fromAccount.balance).lessThan(withdrawalForm.amount)) {
+                    setIsBalanceLess(true);
+                    return;
+                } else {
+                    setIsBalanceLess(false);
+                }
+            }
 
             // Prepare withdrawal data
             const withdrawData = {
@@ -90,7 +105,11 @@ const WithdrawalForm: React.FC = () => {
                     <select
                         id="withdrawalAccount"
                         value={withdrawalForm.accountNumber}
-                        onChange={(e) => setWithdrawalForm({ ...withdrawalForm, accountNumber: e.target.value })}
+                        onChange={(e) => {
+                            setWithdrawalForm({...withdrawalForm, accountNumber: e.target.value});
+                            const selectedAccount = accounts.find(acc => acc.accountNumber === e.target.value);
+                            setFromId(selectedAccount ? selectedAccount.id : null);
+                        }}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
                     >
@@ -180,6 +199,13 @@ const WithdrawalForm: React.FC = () => {
                     Process Withdrawal
                 </button>
             </form>
+
+            {/* Error message for insufficient balance */}
+            {isBalanceLess && (
+                <p className="text-red-600 mt-2 ">
+                    Insufficient balance in the selected account.
+                </p>
+            )}
         </div>
     );
 };

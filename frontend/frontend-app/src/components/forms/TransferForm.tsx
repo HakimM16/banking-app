@@ -185,7 +185,7 @@ const TransferForm: React.FC = () => {
 
             {/* Error message for insufficient balance */}
             {isBalanceLess && (
-                <p className="text-red-600 mt-2">
+                <p className="text-red-600 mt-2 ">
                     Insufficient balance in the selected account.
                 </p>
             )}
