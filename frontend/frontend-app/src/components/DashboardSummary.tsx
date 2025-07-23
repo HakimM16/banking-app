@@ -64,9 +64,6 @@ const DashboardSummary: React.FC<{}> = () => {
 
     }, [getTotalBalance, getActiveAccounts, getTransactionsCount, id]);
 
-    // Debug: log active accounts to console
-    console.log("Active Accounts:", activeAccounts?.number);
-
     // Render summary cards
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

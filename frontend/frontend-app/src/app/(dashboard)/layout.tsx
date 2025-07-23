@@ -8,7 +8,7 @@ import { useAlerts } from '@/hooks/useAlerts';
 import Alert from '@/components/ui/Alert';
 import Sidebar from '@/components/Sidebar';
 import { useRouter } from 'next/navigation';
-import { useEffect, ReactNode } from 'react';
+import { useEffect, ReactNode, useState } from 'react';
 
 // Centralized AlertProvider for the (dashboard) layout
 const AlertProvider = ({ children }: { children: ReactNode }) => {
@@ -24,24 +24,32 @@ const AlertProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-    const { isAuthenticated, loading, currentUser } = useAuth();
+    const { isAuthenticated, loading, currentUser, isTokenValid } = useAuth();
     const router = useRouter();
-
-    console.log('Dashboard Layout - isAuthenticated:', isAuthenticated, 'loading:', loading, 'currentUser:', currentUser);
+    const [showSessionExpired, setShowSessionExpired] = useState(false);
+    const [timer, setTimer] = useState(0);
 
     useEffect(() => {
-        console.log('Dashboard useEffect - isAuthenticated:', isAuthenticated, 'loading:', loading);
-        if (!loading && !isAuthenticated) {
-            console.log('Redirecting to login');
-            router.replace('/login');
-        }
-    }, [isAuthenticated, loading, router]);
+        const interval = setInterval(() => {
+            const isTokenStillValid = isTokenValid();
+            console.log('Checking if token is still valid:', isTokenStillValid, ' Time:', timer, 's');
+            if (!isTokenStillValid) {
+                console.log('Redirecting to login');
+                setShowSessionExpired(true);
+                setTimeout(() => {
+                    router.replace('/login');
+                }, 1500); // Show message for 1.5 seconds before redirect
+            }
+            setTimer(prevTimer => prevTimer + 1);
+        }, 1000); // Runs every 1 second
 
-    if (loading) {
-        console.log('Dashboard showing loading screen');
+        return () => clearInterval(interval); // Cleanup interval on unmount
+    }, [isAuthenticated, loading, router, isTokenValid, timer]);
+
+    if (showSessionExpired) {
         return (
             <div className="flex h-screen items-center justify-center bg-indigo-900">
-                <div className="text-white text-xl">Checking authentication...</div>
+                <div className="text-white text-xl">Session expired, You have to re-login</div>
             </div>
         );
     }
@@ -50,12 +58,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         console.log('Dashboard showing not authenticated screen');
         return (
             <div className="flex h-screen items-center justify-center bg-indigo-900">
-                <div className="text-white text-xl">Not authenticated, redirecting...</div>
+                <div className="text-white text-xl">Session expired, You have to re-login</div>
             </div>
         );
     }
-
-    console.log('Dashboard showing authenticated content');
     return (
         <AccountProvider>
             <TransactionProvider>
@@ -71,4 +77,3 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         </AccountProvider>
     );
 }
-

@@ -18,6 +18,7 @@ interface AuthContextType {
     logout: () => void;
     isAuthenticated: boolean;
     loading: boolean;
+    isTokenValid: () => boolean;
 }
 
 // Create the authentication context
@@ -37,6 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const initAuth = () => {
             try {
                 const storedUser = localStorage.getItem('currentUser');
+                const token = isTokenValid();
                 if (storedUser) {
                     const user = JSON.parse(storedUser);
                     setCurrentUser(user);
@@ -52,6 +54,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         initAuth();
     }, []);
+
+    // Check if the authorization token in localStorage is valid (not expired)
+    const isTokenValid = (): boolean => {
+        const token = localStorage.getItem('authToken');
+        if (!token) return false;
+
+        try {
+            // Assuming JWT: decode payload to check exp
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            if (!payload.exp) return false;
+            // exp is in seconds since epoch
+            return Date.now() < payload.exp * 1000;
+        } catch {
+            return false;
+        }
+    };
 
     // Register a new user
     const register = async (registerData: RegisterFormInputs): Promise<{ success: boolean; id?: number; message?: string;  }> => {
@@ -234,7 +252,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // Always provide the context, don't block the entire app with loading screen
     return (
-        <AuthContext.Provider value={{ currentUser, register, login, getUser, createAddress, getAddress, updateAddress,  logout, updateUser, isAuthenticated, loading }}>
+        <AuthContext.Provider value={{ currentUser, register, login, getUser, createAddress, getAddress, updateAddress,  logout, updateUser, isAuthenticated, loading, isTokenValid }}>
             {children}
         </AuthContext.Provider>
     );

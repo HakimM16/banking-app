@@ -88,7 +88,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     const getTotalBalance = async (userId: number): Promise<{ success: boolean; balance: Decimal; message: string }> => {
         try {
             const response = await api.getBalance(userId);
-            console.log(response)
+            // console.log(response)
             if (!response) {
                 console.error('Failed to fetch balance');
                 return { success: false, balance: new Decimal(0), message: 'Failed to fetch balance.' };
@@ -109,7 +109,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     const getActiveAccounts = async (userId: number): Promise<{ success: boolean; number: Number; message: string }> => {
         try {
             const accounts = await api.getActiveAccounts(userId);
-            console.log("Active accounts response:", accounts);
+            // console.log("Active accounts response:", accounts);
             if (!accounts) {
                 console.error('Failed to fetch active accounts');
                 return { success: false, number: 0, message: 'Failed to fetch active accounts.' };

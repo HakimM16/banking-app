@@ -37,14 +37,6 @@ const Sidebar: React.FC = () => {
         return timeLeft > 0 ? Math.ceil(timeLeft / 1000) : 0; // Return time left in seconds
     }
 
-    const isValidToken = (token: string) => {
-        // @ts-ignore
-        if (token && timeRemaining(token) < 0) {
-            // alert user that the token is expired
-            alert('Your session has expired. Please log in again.');
-            logout();
-        }
-    };
 
     const handleLogout = () => {
         logout();

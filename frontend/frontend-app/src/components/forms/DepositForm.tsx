@@ -15,7 +15,7 @@ const DepositForm: React.FC = () => {
     const { makeDeposit } = useTransactions();
     const { addAlert } = useAlerts();
 
-    const categoryNames = ["Google", "Salary", "Freelance Work", "Dividends", "Investment Return", "Bonus", "Stock sale", "Gift", "Cashback", "Scholarship"];
+    const categoryNames = ["General Deposit", "Google", "Salary", "Freelance Work", "Dividends", "Investment Return", "Bonus", "Stock sale", "Gift", "Cashback", "Scholarship"];
 
     const [depositForm, setDepositForm] = useState<DepositFormInputs>({
         accountNumber: '',
@@ -24,8 +24,6 @@ const DepositForm: React.FC = () => {
         categoryName: ''
     });
 
-
-
     const id = localStorage.getItem('id');
 
     const handleDeposit = async (e: React.FormEvent) => {
@@ -33,6 +31,16 @@ const DepositForm: React.FC = () => {
         const token = localStorage.getItem('authToken');
         // Set the default Authorization header for all future axios requests
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
+        // check if description is empty and set it to 'No comment' if true
+        if (depositForm.description.trim() === '') {
+            depositForm.description = 'general deposit';
+        }
+
+        // check if categoryName is empty and set it to 'General Deposit' if true
+        if (depositForm.categoryName.trim() === '') {
+            depositForm.categoryName = 'General Deposit';
+        }
 
         if (id) {
             const userId = parseInt(id, 10);
@@ -71,14 +79,16 @@ const DepositForm: React.FC = () => {
                         required
                     >
                         <option value="">Select an account</option>
-                        {accounts.map(acc => (
-                            <option key={acc.id} value={acc.accountNumber}>
-                                {acc.accountType === 'CREDIT'
-                                    ? `ISA (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
-                                    : `${acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
-                                }
-                            </option>
-                        ))}
+                        {accounts
+                            .filter(acc => acc.status === 'OPEN')
+                            .map(acc => (
+                                <option key={acc.id} value={acc.accountNumber}>
+                                    {acc.accountType === 'CREDIT'
+                                        ? `ISA (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
+                                        : `${acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
+                                    }
+                                </option>
+                            ))}
                     </select>
                 </div>
 
@@ -125,7 +135,7 @@ const DepositForm: React.FC = () => {
                 </div>
 
                 <div>
-                    <label htmlFor="depositDescription" className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <label htmlFor="depositDescription" className="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
                     <input
                         type="text"
                         id="depositDescription"

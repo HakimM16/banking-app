@@ -21,7 +21,7 @@ const WithdrawalForm: React.FC = () => {
 
     // List of withdrawal categories
     const categoryNames = [
-        "Tesco", "Rent", "Amazon", "Dining Out", "Charity", "Coffee Shop",
+        "General Withdrawal", "Tesco", "Rent", "Amazon", "Dining Out", "Charity", "Coffee Shop",
         "Public Transport", "Clothing", "Ride Sharing", "Subscription Services"
     ];
 
@@ -43,6 +43,16 @@ const WithdrawalForm: React.FC = () => {
         const token = localStorage.getItem('authToken');
         // Set default Authorization header for axios
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        // check if description is empty and set it to 'No comment' if true
+        if (withdrawalForm.description.trim() === '') {
+            withdrawalForm.description = 'General withdrawal';
+        }
+
+        // check if categoryName is empty and set it to 'General Withdrawal' if true
+        if (withdrawalForm.categoryName.trim() === '') {
+            withdrawalForm.categoryName = 'General Withdrawal';
+        }
 
         if (id) {
             const userId = parseInt(id, 10);
@@ -85,14 +95,16 @@ const WithdrawalForm: React.FC = () => {
                         required
                     >
                         <option value="">Select an account</option>
-                        {accounts.map(acc => (
-                            <option key={acc.id} value={acc.accountNumber}>
-                                {acc.accountType === 'CREDIT'
-                                    ? `ISA (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
-                                    : `${acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
-                                }
-                            </option>
-                        ))}
+                        {accounts
+                            .filter(acc => acc.status === 'OPEN')
+                            .map(acc => (
+                                <option key={acc.id} value={acc.accountNumber}>
+                                    {acc.accountType === 'CREDIT'
+                                        ? `ISA (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
+                                        : `${acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
+                                    }
+                                </option>
+                            ))}
                     </select>
                 </div>
 
@@ -147,7 +159,7 @@ const WithdrawalForm: React.FC = () => {
                 {/* Description input */}
                 <div>
                     <label htmlFor="withdrawalDescription" className="block text-sm font-medium text-gray-700 mb-2">
-                        Description
+                        Description (Optional)
                     </label>
                     <input
                         type="text"

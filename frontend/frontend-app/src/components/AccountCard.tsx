@@ -41,6 +41,11 @@ const AccountCard: React.FC<AccountCardProps> = ({ account }) => {
                 <p className={`text-sm ${account.status === 'OPEN' ? 'text-green-600' : 'text-red-600'}`}>
                     {account.status}
                 </p>
+                {parseFloat(account.balance) > 0 ? (
+                    <p className="text-sm text-gray-500">Unable to Deactivate</p>
+                ) : (
+                    <p className="text-sm text-gray-500">Ready to Deactivate</p>
+                )}
             </div>
         </div>
     );

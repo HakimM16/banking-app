@@ -35,6 +35,12 @@ const TransferForm: React.FC = () => {
         // Set the default Authorization header for all future axios requests
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
+        // check if description is empty and set it to 'No comment' if true
+        if (transferForm.description.trim() === '') {
+            transferForm.description = 'General Transfer';
+        }
+
+
         if (id) {
             const userId = parseInt(id, 10);
 
@@ -74,14 +80,16 @@ const TransferForm: React.FC = () => {
                         required
                     >
                         <option value="">Select an account</option>
-                        {accounts.map(acc => (
-                            <option key={acc.id} value={acc.accountNumber}>
-                                {acc.accountType === 'CREDIT'
-                                    ? `ISA (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
-                                    : `${acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
-                                }
-                            </option>
-                        ))}
+                        {accounts
+                            .filter(acc => acc.status === 'OPEN')
+                            .map(acc => (
+                                <option key={acc.id} value={acc.accountNumber}>
+                                    {acc.accountType === 'CREDIT'
+                                        ? `ISA (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
+                                        : `${acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
+                                    }
+                                </option>
+                            ))}
                     </select>
                 </div>
 
@@ -96,14 +104,16 @@ const TransferForm: React.FC = () => {
                         required
                     >
                         <option value="">Select an account</option>
-                        {accounts.map(acc => (
-                            <option key={acc.id} value={acc.accountNumber}>
-                                {acc.accountType === 'CREDIT'
-                                    ? `ISA (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
-                                    : `${acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
-                                }
-                            </option>
-                        ))}
+                        {accounts
+                            .filter(acc => acc.status === 'OPEN')
+                            .map(acc => (
+                                <option key={acc.id} value={acc.accountNumber}>
+                                    {acc.accountType === 'CREDIT'
+                                        ? `ISA (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
+                                        : `${acc.accountType.charAt(0).toUpperCase() + acc.accountType.slice(1)} (${acc.accountNumber}) - £${acc.balance.toLocaleString()}`
+                                    }
+                                </option>
+                            ))}
                     </select>
                 </div>
 
@@ -135,7 +145,7 @@ const TransferForm: React.FC = () => {
 
                 {/* Description input */}
                 <div>
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
                     <input
                         type="text"
                         id="description"
