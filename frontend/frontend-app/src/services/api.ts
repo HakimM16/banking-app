@@ -14,7 +14,11 @@ import {
     DepositFormInputs,
     WithdrawFormInputs,
     TransferFormInputs,
-    GetTransactionsRequest, CreateTransactionCategoryFormInputs, AccountCount, TransactionCount
+    GetTransactionsRequest,
+    CreateTransactionCategoryFormInputs,
+    AccountCount,
+    TransactionCount,
+    Email
 } from '@/types';
 import axios, {AxiosResponse} from 'axios';
 import {Decimal} from "decimal.js"; // Or just use native fetch
@@ -78,6 +82,11 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
         // Get user's address
         getUserAddress: async (userId: number) => {
             const response = await axios.get<Address>(`${API_BASE_URL}/user/${userId}/address`);
+            return response.data;
+        },
+
+        emailExists: async (email: string) => {
+            const response = await axios.get<Boolean>(`${API_BASE_URL}/user/email_exists/${email}`);
             return response.data;
         },
 

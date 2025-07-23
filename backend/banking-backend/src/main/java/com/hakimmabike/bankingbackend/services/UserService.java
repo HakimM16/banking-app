@@ -154,6 +154,10 @@ public class UserService {
         return mapToUserAddressDto(updatedAddress);
     }
 
+    public boolean emailExists(EmailDto email) {
+        return userRepository.existsByEmail(email.getEmail());
+    }
+
     private UserAddress mapToUserAddress(CustomiseAddressRequest request) {
         return UserAddress.builder()
                 .street(request.getStreet())

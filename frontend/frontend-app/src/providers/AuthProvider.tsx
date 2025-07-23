@@ -2,16 +2,25 @@
 'use client';
 
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
-import {User, LoginFormInputs, RegisterFormInputs, CustomiseAddressFormInputs, UpdateUserFormInputs} from '@/types';
-import {api} from "@/services/api"; // Import types
+import {
+    User,
+    LoginFormInputs,
+    RegisterFormInputs,
+    CustomiseAddressFormInputs,
+    UpdateUserFormInputs,
+    Email
+} from '@/types';
+import {api} from "@/services/api";
+import axios from "axios"; // Import types
 
 // Define the shape of the authentication context
 interface AuthContextType {
-    currentUser: User | null;
+    currentUser: string | null;
     register: (registerData: RegisterFormInputs) => Promise<{ success: boolean; id?: number; message?: string }>;
     login: (loginData: LoginFormInputs) => Promise<{ success: boolean; message?: string; user?: User }>;
     getUser: (id: number | null) => Promise<User | null>;
     updateUser: (id: number | null, userData: UpdateUserFormInputs) => Promise<{ success: boolean; message?: string }>;
+    emailExists: (email: Email) => Promise<{ exists: boolean; message?: string }>;
     createAddress: (addressData: CustomiseAddressFormInputs, id: number | null) => Promise<{ success: boolean; message?: string }>;
     getAddress: (id: number | null) => Promise<{ success: boolean; address?: CustomiseAddressFormInputs; message?: string }>;
     updateAddress: (id: number | null, addressData: CustomiseAddressFormInputs) => Promise<{ success: boolean; message?: string }>;
@@ -27,7 +36,7 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 // AuthProvider component to wrap the app and provide authentication state and actions
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // State for the current user
-    const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [currentUser, setCurrentUser] = useState<string | null>(null);
     // State for loading status
     const [loading, setLoading] = useState(true);
     // State for authentication status
@@ -40,9 +49,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 const storedUser = localStorage.getItem('currentUser');
                 const token = isTokenValid();
                 if (storedUser) {
-                    const user = JSON.parse(storedUser);
-                    setCurrentUser(user);
-                    setIsAuthenticated(true);
+                    try {
+                        // Try to parse as JSON first
+                        const user = JSON.parse(storedUser);
+                        setCurrentUser(user);
+                        setIsAuthenticated(true);
+                    } catch {
+                        // If it's not JSON, treat it as a plain string
+                        setCurrentUser(storedUser);
+                        setIsAuthenticated(true);
+                    }
                 }
             } catch (error) {
                 console.error("Failed to parse stored user:", error);
@@ -169,6 +185,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    const emailExists = async (email: string): Promise<{ exists: boolean; message?: string }> => {
+        console.log('Email exists function called with email:', email);
+        const token = localStorage.getItem('authToken');
+        // Set default Authorization header for axios
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        try {
+            const response = await api.emailExists(email);
+            console.log('API response:', response);
+
+            if (response) {
+                console.log('Email exists');
+                return { exists: true };
+            } else {
+                console.log('Email does not exist');
+                return { exists: false };
+            }
+        } catch (error) {
+            console.error('Email existence check error:', error);
+            return { exists: false, message: 'Error checking email existence' };
+        }
+    }
+
     // Create a new address for a user
     const createAddress = async (addressData: CustomiseAddressFormInputs, id: number | null): Promise<{ success: boolean; message?: string }> => {
         console.log('Create address function called with data:', addressData);
@@ -252,7 +291,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // Always provide the context, don't block the entire app with loading screen
     return (
-        <AuthContext.Provider value={{ currentUser, register, login, getUser, createAddress, getAddress, updateAddress,  logout, updateUser, isAuthenticated, loading, isTokenValid }}>
+        <AuthContext.Provider value={{ currentUser, register, login, getUser, emailExists, createAddress, getAddress, updateAddress,  logout, updateUser, isAuthenticated, loading, isTokenValid }}>
             {children}
         </AuthContext.Provider>
     );

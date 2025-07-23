@@ -96,6 +96,11 @@ export interface Balance {
     balance: Decimal;
 }
 
+// EmailDto
+export interface Email {
+    email: string;
+}
+
 // RegisterUserRequest
 export interface RegisterFormInputs {
     firstName: string;

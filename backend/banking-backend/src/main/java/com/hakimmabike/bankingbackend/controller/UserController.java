@@ -197,5 +197,13 @@ public class UserController {
                 : ResponseEntity.notFound().build();
     }
 
+    // Check if email exists
+    @GetMapping("/email_exists/{email}")
+    public Boolean emailExists(@PathVariable String email) {
+        // Check if the email is in correct format
+
+        boolean exists = userService.emailExists(new EmailDto(email));
+        return exists;
+    }
 
 }

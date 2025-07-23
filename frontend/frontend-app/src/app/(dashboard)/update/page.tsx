@@ -5,15 +5,18 @@ import React, { useState, useEffect } from 'react';
 import { User, Settings } from 'lucide-react';
 import { useAuth } from '@/providers/AuthProvider';
 import { useAlerts } from '@/hooks/useAlerts';
-import {CustomiseAddressFormInputs, ProfileFormInputs, UpdateUserFormInputs} from '@/types';
+import {CustomiseAddressFormInputs, Email, ProfileFormInputs, UpdateUserFormInputs} from '@/types';
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
 export default function ProfilePage() {
     const router = useRouter();
-    const {currentUser, updateUser, updateAddress} = useAuth();
+    const {currentUser, updateUser, updateAddress, emailExists} = useAuth();
     const {addAlert} = useAlerts();
     const [id, setId] = useState<string | null>(null);
+    const [emailPresent, setEmailPresent] = useState<boolean>(false);
+
+    const [emailForm, setEmailForm] = useState<string>();
 
     const [updateUserForm, setUpdateUserForm] = useState<UpdateUserFormInputs>({
         firstName: '',
@@ -39,30 +42,47 @@ export default function ProfilePage() {
 
     const handleProfileUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
+        const token = localStorage.getItem('authToken');
+        // Set default Authorization header for axios
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        const currentUserEmail = localStorage.getItem('currentUser');
+
 
         if (typeof window !== 'undefined') {
             const token = localStorage.getItem('authToken');
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         }
 
-        if (id) {
-            const userId = parseInt(id, 10);
-            const user = await updateUser(userId, updateUserForm);
-            const address = await updateAddress(userId, addressForm);
-
-            if (user.success && address.success) {
-                addAlert('Profile updated successfully!', 'success');
-                // Update localStorage with new first name
-                localStorage.setItem('name', updateUserForm.firstName);
-
-                window.location.reload();
+        // Check if email already exists
+        if (updateUserForm.email && currentUserEmail && updateUserForm.email !== currentUserEmail) {
+            const emailCheck = await emailExists(updateUserForm.email);
+            if (emailCheck.exists) {
+                setEmailPresent(true);
+                return;
             } else {
-                addAlert(user.message || 'Failed to update profile.', 'error');
+                if (id) {
+                    const userId = parseInt(id, 10);
+                    const user = await updateUser(userId, updateUserForm);
+                    const address = await updateAddress(userId, addressForm);
+
+                    if (user.success && address.success) {
+                        addAlert('Profile updated successfully!', 'success');
+                        // Update localStorage with new first name
+                        localStorage.setItem('name', updateUserForm.firstName);
+
+                        window.location.reload();
+                    } else {
+                        addAlert(user.message || 'Failed to update profile.', 'error');
+                    }
+                } else {
+                    addAlert('User ID not found. Please log in again.', 'error');
+                    return;
+                }
             }
-        } else {
-            addAlert('User ID not found. Please log in again.', 'error');
-            return;
         }
+
+
     };
 
     if (!currentUser) {
@@ -118,7 +138,10 @@ export default function ProfilePage() {
                             type="email"
                             id="email"
                             value={updateUserForm.email}
-                            onChange={(e) => setUpdateUserForm({...updateUserForm, email: e.target.value})}
+                            onChange={(e) => {
+                                setUpdateUserForm({...updateUserForm, email: e.target.value});
+                                setEmailForm(e.target.value);
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                             placeholder="e.g. john@gmail.com"
@@ -213,6 +236,12 @@ export default function ProfilePage() {
                         Confirm Update
                     </button>
                 </form>
+
+                {emailPresent && (
+                    <p className="text-red-600 mt-2">
+                        Email already exists. Please use a different email address.
+                    </p>
+                )}
             </div>
         </div>
     );
