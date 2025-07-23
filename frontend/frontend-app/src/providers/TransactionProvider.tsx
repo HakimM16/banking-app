@@ -34,7 +34,7 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
 
         const amount = new Decimal(request.amount).toNumber();
         if (isNaN(amount) || amount <= 0) return { success: false, message: 'Amount must be a positive number.' };
-        if (amount > 50000) return { success: false, message: 'Deposit limit exceeded. Maximum amount is $50,000.' };
+        if (amount > 10000) return { success: false, message: 'Deposit limit exceeded. Maximum amount is £10,000.' };
 
         try {
             // Convert amount to Decimal
@@ -59,7 +59,7 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
 
         const amount = new Decimal(request.amount).toNumber();
         if (isNaN(amount) || amount <= 0) return { success: false, message: 'Amount must be a positive number.' };
-        if (amount > 5000) return { success: false, message: 'Withdrawal limit exceeded. Maximum amount is $5,000.' };
+        if (amount > 5000) return { success: false, message: 'Withdrawal limit exceeded. Maximum amount is £5,000.' };
 
         try {
             // Convert amount to Decimal

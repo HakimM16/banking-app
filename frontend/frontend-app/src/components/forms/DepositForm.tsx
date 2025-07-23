@@ -24,6 +24,9 @@ const DepositForm: React.FC = () => {
         categoryName: ''
     });
 
+    // Check if the amount is more than 10000
+    const [isAmountmore, setIsAmountMore] = useState(false);
+
     const id = localStorage.getItem('id');
 
     const handleDeposit = async (e: React.FormEvent) => {
@@ -104,6 +107,7 @@ const DepositForm: React.FC = () => {
                                 // Only create a new Decimal if the value is not empty
                                 const newAmount = inputValue === '' ? new Decimal(0) : new Decimal(inputValue);
                                 setDepositForm({...depositForm, amount: newAmount});
+                                setIsAmountMore(newAmount.greaterThan(10000));
                             } catch (error) {
                                 // If the value cannot be converted to a Decimal, keep the previous value
                                 console.error("Invalid decimal value:", error);
@@ -154,6 +158,14 @@ const DepositForm: React.FC = () => {
                     Process Deposit
                 </button>
             </form>
+
+            {/*Check if amouunt is more than 10000*/}
+            {isAmountmore && (
+                <p className="text-red-600 mt-2">
+                    Deposit limit exceeded. Maximum amount is £10,000.
+                </p>
+            )}
+
         </div>
     );
 };
