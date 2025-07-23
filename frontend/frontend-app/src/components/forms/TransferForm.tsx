@@ -105,7 +105,7 @@ const TransferForm: React.FC = () => {
                     >
                         <option value="">Select an account</option>
                         {accounts
-                            .filter(acc => acc.status === 'OPEN')
+                            .filter(acc => acc.status === 'OPEN' && acc.accountNumber !== transferForm.fromAccount)
                             .map(acc => (
                                 <option key={acc.id} value={acc.accountNumber}>
                                     {acc.accountType === 'CREDIT'
