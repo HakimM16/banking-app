@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Change the expiration to 10 minutes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/app/(dashboard)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/app/(dashboard)/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/DashboardSummary.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/DashboardSummary.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/forms/DepositForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/forms/DepositForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/forms/WithdrawalForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/forms/WithdrawalForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/AccountProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/AccountProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/AuthProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/AuthProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/TransactionProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/TransactionProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/app/(dashboard)/accounts/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/app/(dashboard)/accounts/page.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,7 +186,7 @@
       <workItem from="1753031989972" duration="5957000" />
       <workItem from="1753078496551" duration="25537000" />
       <workItem from="1753163567335" duration="21420000" />
-      <workItem from="1753252756737" duration="2439000" />
+      <workItem from="1753252756737" duration="3997000" />
     </task>
     <task id="LOCAL-00019" summary="Refactored the package service to services&#10;Added methods to generate JSON web tokens">
       <option name="closed" value="true" />

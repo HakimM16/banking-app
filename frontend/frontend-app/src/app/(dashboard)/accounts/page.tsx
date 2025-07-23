@@ -1,7 +1,7 @@
 // src/app/(dashboard)/accounts/page.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { useAccounts } from '@/providers/AccountProvider';
 import { useAuth } from '@/providers/AuthProvider';
@@ -19,7 +19,7 @@ export default function AccountsPage() {
     // Get alert handler from useAlerts hook
     const { addAlert } = useAlerts();
     // State for user id
-    const [id, setId] = React.useState<number | null>(null);
+    const [id, setId] = useState<string | null>(null);
 
     // State to control account creation modal
     const [isCreatingAccount, setIsCreatingAccount] = useState(false);
@@ -34,12 +34,12 @@ export default function AccountsPage() {
     });
 
     // Get id from localStorage if not in URL params
-    const storedId = localStorage.getItem('id');
-    React.useEffect(() => {
-        if (storedId) {
-            setId(parseInt(storedId, 10));
+    // Access localStorage only on client side
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setId(localStorage.getItem('id'));
         }
-    }, [storedId]);
+    }, []);
 
     // Handle account creation
     const handleCreateAccount = async () => {
@@ -47,7 +47,7 @@ export default function AccountsPage() {
         // Set the default Authorization header for all future axios requests
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
         if (id) {
-            const result = await createAccount(id, accountForm);
+            const result = await createAccount(parseInt(id, 10), accountForm);
             console.log(accountForm)
             // Show error alert if creation failed
             if (result.success) {
@@ -69,7 +69,7 @@ export default function AccountsPage() {
         }
 
         if (id) {
-            const result = await changeAccountStatus(id, accountId, accountStatus);
+            const result = await changeAccountStatus(parseInt(id, 10), accountId, accountStatus);
             if (result.success) {
                 addAlert('Account status updated successfully!', 'success');
             } else {
@@ -107,40 +107,46 @@ export default function AccountsPage() {
             </div>
 
             {/* Account creation modal */}
-            {isCreatingAccount && (
-                <div className="bg-white p-6 rounded-xl shadow-md mb-6">
-                    <h3 className="text-lg font-semibold mb-4">Create New Account</h3>
-                    <div className="flex flex-col md:flex-row items-start md:items-end gap-4">
-                        <div>
-                            <label htmlFor="accountType" className="block text-sm font-medium text-gray-700 mb-2">Account Type</label>
-                            <select
-                                id="accountType"
-                                value={accountForm.accountType}
-                                onChange={(e) => setAccountForm({...accountForm, accountType: e.target.value.toUpperCase()})}
-                                className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            {accounts.length < 3 ? (
+                isCreatingAccount && (
+                    <div className="bg-white p-6 rounded-xl shadow-md mb-6">
+                        <h3 className="text-lg font-semibold mb-4">Create New Account</h3>
+                        <div className="flex flex-col md:flex-row items-start md:items-end gap-4">
+                            <div>
+                                <label htmlFor="accountType" className="block text-sm font-medium text-gray-700 mb-2">Account Type</label>
+                                <select
+                                    id="accountType"
+                                    value={accountForm.accountType}
+                                    onChange={(e) => setAccountForm({...accountForm, accountType: e.target.value.toUpperCase()})}
+                                    className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                    <option value="DEBIT">Debit</option>
+                                    <option value="SAVINGS">Savings</option>
+                                    <option value="CREDIT">Credit</option>
+                                </select>
+                            </div>
+                            {/* Confirm create account button */}
+                            <button
+                                onClick={handleCreateAccount}
+                                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
                             >
-                                <option value="DEBIT">Debit</option>
-                                <option value="SAVINGS">Savings</option>
-                                <option value="CREDIT">Credit</option>
-                            </select>
+                                <Plus size={20} />
+                                Confirm Create
+                            </button>
+                            {/* Cancel account creation button */}
+                            <button
+                                onClick={() => setIsCreatingAccount(false)}
+                                className="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition-colors flex items-center gap-2"
+                            >
+                                <Minus size={20} />
+                                Cancel
+                            </button>
                         </div>
-                        {/* Confirm create account button */}
-                        <button
-                            onClick={handleCreateAccount}
-                            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
-                        >
-                            <Plus size={20} />
-                            Confirm Create
-                        </button>
-                        {/* Cancel account creation button */}
-                        <button
-                            onClick={() => setIsCreatingAccount(false)}
-                            className="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition-colors flex items-center gap-2"
-                        >
-                            <Minus size={20} />
-                            Cancel
-                        </button>
                     </div>
+                )
+            ) : (
+                <div className="bg-white p-6 rounded-xl shadow-md mb-6 flex justify-center items-center">
+                    <h3 className="text-lg font-semibold mb-4 text-center">Maximum Accounts Created</h3>
                 </div>
             )}
 
