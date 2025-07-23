@@ -1,7 +1,7 @@
 // src/components/Sidebar.tsx
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { User, CreditCard, ArrowUpDown, History, Settings, LogOut, Shield, TrendingUp } from 'lucide-react';
@@ -12,10 +12,16 @@ import {jwtDecode} from "jwt-decode";
 const Sidebar: React.FC = () => {
     const pathname = usePathname();
     const { currentUser, logout } = useAuth();
-    const token = localStorage.getItem('token');
+    const [token, setToken] = useState<string | null>(null);
+    const [name, setName] = useState<string | null>(null);
 
-    // get user's name
-    const name = localStorage.getItem('name');
+    // Access localStorage only on client side
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setToken(localStorage.getItem('token'));
+            setName(localStorage.getItem('name'));
+        }
+    }, []);
 
     // check if token is valid
     const getTokenExpiration = (token: string) => {
@@ -37,11 +43,12 @@ const Sidebar: React.FC = () => {
         return timeLeft > 0 ? Math.ceil(timeLeft / 1000) : 0; // Return time left in seconds
     }
 
-
     const handleLogout = () => {
         logout();
         // Clear localStorage
-        localStorage.clear();
+        if (typeof window !== 'undefined') {
+            localStorage.clear();
+        }
     };
 
     return (

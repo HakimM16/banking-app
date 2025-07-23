@@ -8,10 +8,12 @@ import { useAccounts } from '@/providers/AccountProvider';
 import TransactionItem from '@/components/TransactionItem';
 import { Transaction} from '@/types';
 import axios from "axios";
+import {useAuth} from "@/providers/AuthProvider";
 
 export default function TransactionHistoryPage() {
     const { getTransactions } = useTransactions();
     const { accounts } = useAccounts();
+    const { currentUser } = useAuth();
 
     const [transactionFilter, setTransactionFilter] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
@@ -26,43 +28,51 @@ export default function TransactionHistoryPage() {
     const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
     const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
 
-// Fetch transactions from the API when the component mounts or when dependencies change
-useEffect(() => {
-    const fetchTransactions = async () => {
-        const result = await getTransactions(userId);
-        if (result.success && result.transactions) {
-            setAllTransactions(result.transactions);
-        } else {
-            setAllTransactions([]);
+    // Fetch transactions from the API when the component mounts or when dependencies change
+    useEffect(() => {
+        const fetchTransactions = async () => {
+            const result = await getTransactions(userId);
+            if (result.success && result.transactions) {
+                setAllTransactions(result.transactions);
+            } else {
+                setAllTransactions([]);
+            }
+        };
+        fetchTransactions();
+    }, [transactionFilter, userId, getTransactions]);
+
+    // Filter transactions based on type and search term
+    useEffect(() => {
+        let filtered = [...allTransactions];
+
+        // Filter by transaction type
+        if (transactionFilter === 'TRANSFER') {
+            filtered = filtered.filter(transaction => transaction.transactionType === 'TRANSFER');
+        } else if (transactionFilter === 'DEPOSIT') {
+            filtered = filtered.filter(transaction => transaction.transactionType === 'DEPOSIT');
+        } else if (transactionFilter === 'WITHDRAWAL') {
+            filtered = filtered.filter(transaction => transaction.transactionType === 'WITHDRAWAL');
         }
-    };
-    fetchTransactions();
-}, [transactionFilter, userId, getTransactions]);
 
-// Filter transactions based on type and search term
-useEffect(() => {
-    let filtered = [...allTransactions];
+        // Filter by search term (description or amount)
+        if (searchTerm) {
+            const lowerSearchTerm = searchTerm.toLowerCase();
+            filtered = filtered.filter(transaction =>
+                transaction.description.toLowerCase().includes(lowerSearchTerm) ||
+                transaction.amount.toString().includes(lowerSearchTerm)
+            );
+        }
 
-    // Filter by transaction type
-    if (transactionFilter === 'TRANSFER') {
-        filtered = filtered.filter(transaction => transaction.transactionType === 'TRANSFER');
-    } else if (transactionFilter === 'DEPOSIT') {
-        filtered = filtered.filter(transaction => transaction.transactionType === 'DEPOSIT');
-    } else if (transactionFilter === 'WITHDRAWAL') {
-        filtered = filtered.filter(transaction => transaction.transactionType === 'WITHDRAWAL');
+        setFilteredTransactions(filtered);
+    }, [allTransactions, transactionFilter, searchTerm]);
+
+    if (!currentUser) {
+        return (
+            <div className="flex h-screen items-center justify-center bg-indigo-900">
+                <div className="text-white text-xl">Loading data</div>
+            </div>
+        )
     }
-
-    // Filter by search term (description or amount)
-    if (searchTerm) {
-        const lowerSearchTerm = searchTerm.toLowerCase();
-        filtered = filtered.filter(transaction =>
-            transaction.description.toLowerCase().includes(lowerSearchTerm) ||
-            transaction.amount.toString().includes(lowerSearchTerm)
-        );
-    }
-
-    setFilteredTransactions(filtered);
-}, [allTransactions, transactionFilter, searchTerm]);
 
 return (
     <div className="p-6">

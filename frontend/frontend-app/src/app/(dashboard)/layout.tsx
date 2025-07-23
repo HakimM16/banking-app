@@ -54,14 +54,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         );
     }
 
-    if (!isAuthenticated) {
-        console.log('Dashboard showing not authenticated screen');
-        return (
-            <div className="flex h-screen items-center justify-center bg-indigo-900">
-                <div className="text-white text-xl">Session expired, You have to re-login</div>
-            </div>
-        );
-    }
+
     return (
         <AccountProvider>
             <TransactionProvider>

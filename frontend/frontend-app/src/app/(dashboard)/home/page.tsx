@@ -11,6 +11,7 @@ import { useTransactions } from '@/providers/TransactionProvider';
 import { useRouter } from 'next/navigation';
 import axios from "axios";
 import {Transaction} from "@/types";
+import {useAuth} from "@/providers/AuthProvider";
 
 // DashboardPage component displays the main dashboard for the user
 export default function DashboardPage() {
@@ -22,6 +23,8 @@ export default function DashboardPage() {
     const [transactionFilter, setTransactionFilter] = useState('all');
     // Next.js router for navigation
     const router = useRouter();
+    // Get current user from localStorage
+    const { currentUser }  = useAuth();
 
     // Retrieve auth token from localStorage
     const token = localStorage.getItem('authToken');
@@ -50,6 +53,14 @@ export default function DashboardPage() {
         };
         fetchTransactions();
     }, [transactionFilter, userId, getTransactions]);
+
+    if (!currentUser) {
+        return (
+            <div className="flex h-screen items-center justify-center bg-indigo-900">
+                <div className="text-white text-xl">Loading data</div>
+            </div>
+        )
+    }
 
     return (
         <div className="p-6">

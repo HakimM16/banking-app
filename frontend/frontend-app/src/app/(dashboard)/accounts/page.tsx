@@ -80,7 +80,11 @@ export default function AccountsPage() {
 
     // Show loading if user data is not available
     if (!currentUser) {
-        return <p>Loading user data...</p>;
+        return (
+            <div className="flex h-screen items-center justify-center bg-indigo-900">
+                <div className="text-white text-xl">Loading data</div>
+            </div>
+        )
     }
 
     // Main render

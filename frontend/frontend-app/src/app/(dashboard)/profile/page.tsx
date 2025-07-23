@@ -5,7 +5,8 @@ import React, { useState, useEffect } from 'react';
 import { User, Settings } from 'lucide-react';
 import { useAuth } from '@/providers/AuthProvider';
 import { useAlerts } from '@/hooks/useAlerts';
-import { ProfileFormInputs } from '@/types'; // Import type
+import { ProfileFormInputs } from '@/types';
+import axios from "axios"; // Import type
 
 export default function ProfilePage() {
     const { currentUser, getAddress, getUser } = useAuth();
@@ -31,11 +32,12 @@ export default function ProfilePage() {
             setId(parseInt(storedId, 10));
         }
     }, [storedId]);
-   // Remove these lines
-    // const user = getUser(id);
-    // const address = getAddress(id);
 
-    // Replace with this useEffect
+    const token = localStorage.getItem('authToken');
+    // Set default Authorization header for axios
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+
     useEffect(() => {
         if (id !== null && !profileForm.firstName) {
             console.log("Fetching user and address data");
@@ -66,8 +68,13 @@ export default function ProfilePage() {
             fetchInfo();
         }
     }, [id, getUser, getAddress, profileForm.firstName]);
+
     if (!currentUser) {
-        return <p>Loading user data...</p>;
+        return (
+            <div className="flex h-screen items-center justify-center bg-indigo-900">
+                <div className="text-white text-xl">Loading data</div>
+            </div>
+        )
     }
 
     return (

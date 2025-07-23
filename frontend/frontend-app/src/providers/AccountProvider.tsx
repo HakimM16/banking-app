@@ -26,12 +26,14 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     const [id, setId] = React.useState<number | null>(null);
 
     // Retrieve user id from localStorage
-    const storedId = localStorage.getItem('id');
     React.useEffect(() => {
-        if (storedId) {
-            setId(parseInt(storedId, 10));
+        if (typeof window !== 'undefined') {
+            const storedId = localStorage.getItem('id');
+            if (storedId) {
+                setId(parseInt(storedId, 10));
+            }
         }
-    }, [storedId]);
+    }, []);
 
     // Fetch accounts when the component mounts or when id changes
     useEffect(() => {

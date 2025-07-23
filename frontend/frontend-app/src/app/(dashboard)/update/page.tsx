@@ -1,19 +1,19 @@
-// src/app/(dashboard)/profile/page.tsx
+// src/app/(dashboard)/update/page.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import { User, Settings } from 'lucide-react';
 import { useAuth } from '@/providers/AuthProvider';
 import { useAlerts } from '@/hooks/useAlerts';
-import { updateUserData } from '@/lib/data';
 import {CustomiseAddressFormInputs, ProfileFormInputs, UpdateUserFormInputs} from '@/types';
 import { useRouter } from "next/navigation";
-import axios from "axios"; // Import type
+import axios from "axios";
 
 export default function ProfilePage() {
-    const router = useRouter(); // Initialize the router hook
+    const router = useRouter();
     const {currentUser, updateUser, updateAddress} = useAuth();
     const {addAlert} = useAlerts();
+    const [id, setId] = useState<string | null>(null);
 
     const [updateUserForm, setUpdateUserForm] = useState<UpdateUserFormInputs>({
         firstName: '',
@@ -30,23 +30,28 @@ export default function ProfilePage() {
         country: ''
     });
 
-    const id = localStorage.getItem('id');
+    // Access localStorage only on client side
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setId(localStorage.getItem('id'));
+        }
+    }, []);
 
     const handleProfileUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const token = localStorage.getItem('authToken');
-        // Set the default Authorization header for all future axios requests
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        if (typeof window !== 'undefined') {
+            const token = localStorage.getItem('authToken');
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        }
+
         if (id) {
             const userId = parseInt(id, 10);
-            // Prepare the data to be sent
             const user = await updateUser(userId, updateUserForm);
             const address = await updateAddress(userId, addressForm);
 
             if (user.success && address.success) {
                 addAlert('Profile updated successfully!', 'success');
-                // Optionally, you can redirect or refresh the page
                 await router.push('/profile');
             } else {
                 addAlert(user.message || 'Failed to update profile.', 'error');
@@ -55,12 +60,14 @@ export default function ProfilePage() {
             addAlert('User ID not found. Please log in again.', 'error');
             return;
         }
-
-
     };
 
     if (!currentUser) {
-        return <p>Loading user data...</p>;
+        return (
+            <div className="flex h-screen items-center justify-center bg-indigo-900">
+                <div className="text-white text-xl">Loading data</div>
+            </div>
+        )
     }
 
     return (
@@ -130,11 +137,11 @@ export default function ProfilePage() {
                     </div>
 
                     <div>
-                        <label htmlFor="address"
+                        <label htmlFor="street"
                                className="block text-sm font-medium text-gray-700 mb-2">Street</label>
                         <input
                             type="text"
-                            id="address"
+                            id="street"
                             value={addressForm.street}
                             onChange={(e) => setAddressForm({...addressForm, street: e.target.value})}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -143,11 +150,11 @@ export default function ProfilePage() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="address"
+                        <label htmlFor="city"
                                className="block text-sm font-medium text-gray-700 mb-2">City</label>
                         <input
                             type="text"
-                            id="address"
+                            id="city"
                             value={addressForm.city}
                             onChange={(e) => setAddressForm({...addressForm, city: e.target.value})}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -156,11 +163,11 @@ export default function ProfilePage() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="address"
+                        <label htmlFor="county"
                                className="block text-sm font-medium text-gray-700 mb-2">County</label>
                         <input
                             type="text"
-                            id="address"
+                            id="county"
                             value={addressForm.county}
                             onChange={(e) => setAddressForm({...addressForm, county: e.target.value})}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -169,11 +176,11 @@ export default function ProfilePage() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="address"
+                        <label htmlFor="postCode"
                                className="block text-sm font-medium text-gray-700 mb-2">PostCode</label>
                         <input
                             type="text"
-                            id="address"
+                            id="postCode"
                             value={addressForm.postCode}
                             onChange={(e) => setAddressForm({...addressForm, postCode: e.target.value})}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -182,11 +189,11 @@ export default function ProfilePage() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="address"
+                        <label htmlFor="country"
                                className="block text-sm font-medium text-gray-700 mb-2">Country</label>
                         <input
                             type="text"
-                            id="address"
+                            id="country"
                             value={addressForm.country}
                             onChange={(e) => setAddressForm({...addressForm, country: e.target.value})}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
