@@ -147,7 +147,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
         // Get total count of transactions for a user
         getTransactionsCount: async (userId: number) => {
-            const response = await axios.get<{TransactionCount}>(`${API_BASE_URL}/transactions/${userId}/total`);
+            const response = await axios.get<TransactionCount>(`${API_BASE_URL}/transactions/${userId}/total`);
             return response.data;
         },
 

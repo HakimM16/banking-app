@@ -11,6 +11,8 @@ interface AccountCardProps {
 
 // AccountCard component displays account details in a card layout
 const AccountCard: React.FC<AccountCardProps> = ({ account }) => {
+    // @ts-ignore
+    // @ts-ignore
     return (
         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
             {/* Left section: Icon and account info */}

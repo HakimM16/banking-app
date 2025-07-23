@@ -52,7 +52,10 @@ export default function ProfilePage() {
 
             if (user.success && address.success) {
                 addAlert('Profile updated successfully!', 'success');
-                await router.push('/profile');
+                // Update localStorage with new first name
+                localStorage.setItem('name', updateUserForm.firstName);
+
+                window.location.reload();
             } else {
                 addAlert(user.message || 'Failed to update profile.', 'error');
             }
