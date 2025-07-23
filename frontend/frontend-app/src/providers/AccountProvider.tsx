@@ -11,6 +11,7 @@ interface AccountContextType {
     getAccounts: (userId: number) => Promise<Account[]>;
     getActiveAccounts: (userId: number) => Promise<{ success: boolean; number: Number; message: string }>;
     getTotalBalance: (userId: number) => Promise<{ success: boolean; balance: Decimal; message: string }>;
+    getAccountBalance: (userId: number, accountId: number) => Promise<{ success: boolean; balance: Decimal; message: string }>;
     changeAccountStatus: (userId: number, accountId: number, request: UpdateAccountStatusFormInputs) => Promise<{ success: boolean; message?: string }>;
     loadingAccounts: boolean;
     createAccount: (id: number, account: CreateAccountFormInputs) => Promise<{ success: boolean; message?: string }>;
@@ -107,6 +108,21 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    // Get account balance
+    const getAccountBalance = async (userId: number, accountId: string): Promise<{ success: boolean; balance: Decimal; message: string }> => {
+        try {
+            const response = await api.getAccountBalance(userId, accountId);
+            if (!response) {
+                console.error('Failed to fetch account balance');
+                return { success: false, balance: new Decimal(0), message: 'Failed to fetch account balance.' };
+            }
+            return { success: true, balance: response.balance, message: 'Account balance fetched successfully.' };
+        } catch (error) {
+            console.error('Error fetching account balance:', error);
+            return { success: false, balance: new Decimal(0), message: 'Error fetching account balance.' };
+        }
+    }
+
     // Fetch the number of active accounts for a user
     const getActiveAccounts = async (userId: number): Promise<{ success: boolean; number: Number; message: string }> => {
         try {
@@ -157,7 +173,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
 
     // Provide the context value to children components
     return (
-        <AccountContext.Provider value={{ accounts, loadingAccounts, createAccount, getTotalBalance, changeAccountStatus, getAccounts, getActiveAccounts }}>
+        <AccountContext.Provider value={{ accounts, loadingAccounts, createAccount, getTotalBalance, getAccountBalance, changeAccountStatus, getAccounts, getActiveAccounts }}>
             {children}
         </AccountContext.Provider>
     );

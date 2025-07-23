@@ -149,6 +149,12 @@ export interface DeleteAccountRequest {
     reason: string;
 }
 
+// Balance
+export interface accountBalance {
+    accountNumber: string;
+    balance: Decimal; // Use Decimal for precise financial calculations
+}
+
 // DepositRequest
 export interface DepositFormInputs {
     accountNumber: string;

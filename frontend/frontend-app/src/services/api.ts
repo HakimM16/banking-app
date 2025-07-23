@@ -101,6 +101,12 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
             return response.data;
         },
 
+        // Get balance for account
+        getAccountBalance: async (userId: number, accountId: number) => {
+            const response = await axios.get<Decimal>(`${API_BASE_URL}/accounts/${userId}/${accountId}/balance`);
+            return response.data;
+        },
+
         // Create a new account for a user
         createAccount: async (userId: number, data: CreateAccountFormInputs) => {
             const response = await axios.post<Account>(`${API_BASE_URL}/accounts/${userId}`, data);

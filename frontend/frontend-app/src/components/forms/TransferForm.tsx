@@ -13,9 +13,11 @@ import axios from "axios"; // Import type
 // TransferForm component allows users to transfer money between their accounts
 const TransferForm: React.FC = () => {
     // Get accounts, transfer function, and alert function from context/providers
-    const { accounts } = useAccounts();
+    const { accounts, getAccountBalance } = useAccounts();
     const { makeTransfer } = useTransactions();
     const { addAlert } = useAlerts();
+    const [ isBalanceLess, setIsBalanceLess ] = useState(false);
+    const [fromId, setFromId] = useState<number | null>(null);
 
     // State for form inputs
     const [transferForm, setTransferForm] = useState<TransferFormInputs>({
@@ -44,16 +46,27 @@ const TransferForm: React.FC = () => {
         if (id) {
             const userId = parseInt(id, 10);
 
+            // check if fromAccount balance is less than amount
+            if (fromId) {
+                const fromAccount = await getAccountBalance(userId, fromId);
+                if (fromAccount.success && new Decimal(fromAccount.balance).lessThan(transferForm.amount)) {
+                    setIsBalanceLess(true);
+                    return;
+                } else {
+                    setIsBalanceLess(false);
+                }
+            }
+
             // Prepare transfer data
             const transferData = {
                 ...transferForm,
                 amount: transferForm.amount
             };
 
+
             // Call makeTransfer and handle result
             const result = await makeTransfer(userId, transferData);
             if (result.success) {
-                addAlert('Transfer completed successfully!', 'success');
                 // Reset form after successful transfer
                 setTransferForm({ fromAccount: '', toAccount: '', amount: new Decimal(0), description: '' });
                 window.location.reload();
@@ -75,7 +88,11 @@ const TransferForm: React.FC = () => {
                     <select
                         id="fromAccount"
                         value={transferForm.fromAccount}
-                        onChange={(e) => setTransferForm({...transferForm, fromAccount: e.target.value})}
+                        onChange={(e) => {
+                            setTransferForm({ ...transferForm, fromAccount: e.target.value });
+                            const selectedAccount = accounts.find(acc => acc.accountNumber === e.target.value);
+                            setFromId(selectedAccount ? selectedAccount.id : null);
+                        }}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
                     >
@@ -165,6 +182,13 @@ const TransferForm: React.FC = () => {
                     Process Transfer
                 </button>
             </form>
+
+            {/* Error message for insufficient balance */}
+            {isBalanceLess && (
+                <p className="text-red-600 mt-2">
+                    Insufficient balance in the selected account.
+                </p>
+            )}
         </div>
     );
 };
