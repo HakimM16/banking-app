@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Added category names with range of options in DepositForm and WithdrawalForm" />
+    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Change the expiration to 10 minutes">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -183,14 +185,6 @@
       <workItem from="1753031989972" duration="5957000" />
       <workItem from="1753078496551" duration="25537000" />
       <workItem from="1753163567335" duration="21420000" />
-    </task>
-    <task id="LOCAL-00018" summary="Sorted out the error where it returned BAD_REQUEST, after the new user is created">
-      <option name="closed" value="true" />
-      <created>1752046925853</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1752046925854</updated>
     </task>
     <task id="LOCAL-00019" summary="Refactored the package service to services&#10;Added methods to generate JSON web tokens">
       <option name="closed" value="true" />
@@ -576,7 +570,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753169265841</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="Change the expiration to 10 minutes">
+      <option name="closed" value="true" />
+      <created>1753205170465</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1753205170465</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -594,7 +596,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Changed the address for making a new address to create_address.&#10;Added responses such as not found and bad request to createUserAddress" />
     <MESSAGE value="Sorted out the mapping issue for updateUserAddress" />
     <MESSAGE value="Sorted out the mapping issue for updateUserAddress.&#10;Added responses such as not found to updateUserAddress.&#10;Solved the issue where it returned 401 for empty address, instead of 400" />
     <MESSAGE value="Removed userAddressMapper in userService.&#10;Added responses such as not found in getUserAddress" />
@@ -619,6 +620,7 @@
     <MESSAGE value="Made a change to UserSecurityRules" />
     <MESSAGE value="Added id and email to JwtResponse and change access token expiration to 5 minutes." />
     <MESSAGE value="Added category names with range of options in DepositForm and WithdrawalForm" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added category names with range of options in DepositForm and WithdrawalForm" />
+    <MESSAGE value="Change the expiration to 10 minutes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Change the expiration to 10 minutes" />
   </component>
 </project>
