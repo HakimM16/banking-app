@@ -15,6 +15,9 @@ export default function ProfilePage() {
     const {addAlert} = useAlerts();
     const [id, setId] = useState<string | null>(null);
     const [emailPresent, setEmailPresent] = useState<boolean>(false);
+    const [validEmail, setValidEmail] = useState<boolean>(true);
+    const [validPhone, setValidPhone] = useState<boolean>(true);
+    const [validPostcode, setValidPostcode] = useState<boolean>(true);
 
     const [emailForm, setEmailForm] = useState<string>();
 
@@ -162,11 +165,18 @@ export default function ProfilePage() {
                             onChange={(e) => {
                                 setUpdateUserForm({...updateUserForm, email: e.target.value});
                                 setEmailForm(e.target.value);
+                                setValidEmail(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value));
                             }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                             placeholder="e.g. john@gmail.com"
                         />
+                        {!validEmail && (
+                            <p className="text-red-600 mt-2">
+                                Please enter a valid email address.
+                            </p>
+                        )}
+
                     </div>
 
                     <div>
@@ -176,16 +186,24 @@ export default function ProfilePage() {
                             type="tel"
                             id="phone"
                             value={updateUserForm.phoneNumber}
-                            onChange={(e) => setUpdateUserForm({...updateUserForm, phoneNumber: e.target.value})}
+                            onChange={(e) => {
+                                setUpdateUserForm({...updateUserForm, phoneNumber: e.target.value});
+                                setValidPhone(/^\d{11,15}$/.test(e.target.value)); // Adjust regex as needed
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
-                            placeholder="e.g. 01234 567890"
+                            placeholder="e.g. 01234567890"
                         />
+                        {!validPhone && (
+                            <p className="text-red-600 mt-2">
+                                Please enter a valid phone number (10-15 digits).
+                            </p>
+                        )}
                     </div>
 
                     <div>
                         <label htmlFor="street"
-                               className="block text-sm font-medium text-gray-700 mb-2">Street</label>
+                               className="block text-sm font-medium text-gray-700 mb-2">Street Address</label>
                         <input
                             type="text"
                             id="street"
@@ -229,11 +247,19 @@ export default function ProfilePage() {
                             type="text"
                             id="postCode"
                             value={addressForm.postCode}
-                            onChange={(e) => setAddressForm({...addressForm, postCode: e.target.value})}
+                            onChange={(e) => {
+                                setAddressForm({...addressForm, postCode: e.target.value});
+                                setValidPostcode(/^[A-Z0-9]{5,7}$/.test(e.target.value)); // UK postcode regex
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                             placeholder="e.g LU40XX"
                         />
+                        {!validPostcode && (
+                            <p className="text-red-600 mt-2">
+                                Please enter a valid UK postcode.
+                            </p>
+                        )}
                     </div>
                     <div>
                         <label htmlFor="country"

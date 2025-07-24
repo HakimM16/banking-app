@@ -20,7 +20,7 @@ interface AuthContextType {
     login: (loginData: LoginFormInputs) => Promise<{ success: boolean; message?: string; user?: User }>;
     getUser: (id: number | null) => Promise<User | null>;
     updateUser: (id: number | null, userData: UpdateUserFormInputs) => Promise<{ success: boolean; message?: string }>;
-    emailExists: (email: Email) => Promise<{ exists: boolean; message?: string }>;
+    emailExists: (email: string) => Promise<{ exists: boolean; message?: string }>;
     createAddress: (addressData: CustomiseAddressFormInputs, id: number | null) => Promise<{ success: boolean; message?: string }>;
     getAddress: (id: number | null) => Promise<{ success: boolean; address?: CustomiseAddressFormInputs; message?: string }>;
     updateAddress: (id: number | null, addressData: CustomiseAddressFormInputs) => Promise<{ success: boolean; message?: string }>;

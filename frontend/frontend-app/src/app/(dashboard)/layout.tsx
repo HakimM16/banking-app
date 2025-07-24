@@ -47,6 +47,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     }, [isAuthenticated, loading, router, isTokenValid, timer]);
 
     if (showSessionExpired) {
+        localStorage.clear();
         return (
             <div className="flex h-screen items-center justify-center bg-indigo-900">
                 <div className="text-white text-xl">Session expired, You have to re-login</div>
