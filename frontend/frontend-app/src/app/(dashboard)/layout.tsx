@@ -31,8 +31,23 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     const [timer, setTimer] = useState(0);
     const [backendStatus, setBackendStatus] = useState(true);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const screenWidth: number = window.innerWidth;
-    const isMobile = screenWidth < 768; // Adjust breakpoint as needed
+    const [isMobile, setIsMobile] = useState(false);
+
+    // Handle screen size detection
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        // Set initial value
+        handleResize();
+
+        // Add event listener for window resize
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup event listener
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -52,7 +67,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     }, [isAuthenticated, loading, router, isTokenValid, timer]);
 
     useEffect(() => {
-        // Check backend status every 2 seconds
+        // Check backend status every 10 seconds
         const interval = setInterval(() => {
             fetch('http://localhost:8080/actuator/health', {
                 method: 'GET',
@@ -81,8 +96,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
     if (backendStatus === false) {
         return (
-            <div className="flex h-screen items-center justify-center bg-indigo-900">
-                <div className="text-white text-xl"><div className="text-white text-xl">500: Backend service is unavailable. Please try again in a few moments.</div></div>
+            <div className="flex h-screen items-center justify-center bg-indigo-900 px-4">
+                <div className="text-white text-center">
+                    <div className="text-xl md:text-2xl">500: Backend service is unavailable.</div>
+                    <div className="text-sm md:text-base mt-2">Please try again in a few moments.</div>
+                </div>
             </div>
         );
     }
@@ -90,41 +108,46 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     if (showSessionExpired) {
         localStorage.clear();
         return (
-            <div className="flex h-screen items-center justify-center bg-indigo-900">
-                <div className="text-white text-xl">Session expired, You have to re-login</div>
+            <div className="flex h-screen items-center justify-center bg-indigo-900 px-4">
+                <div className="text-white text-xl md:text-2xl text-center">Session expired, You have to re-login</div>
             </div>
         );
     }
-
 
     return (
         <AccountProvider>
             <TransactionProvider>
                 <AlertProvider>
-                    { isMobile ? (
-                        <div className="relative h-screen bg-indigo-900">
-                            {/* Mobile hamburger menu - keeping it visible at all times */}
+                    {isMobile ? (
+                        <div className="relative h-screen bg-indigo-900 mobile-container">
+                            {/* Mobile hamburger menu */}
                             <button
-                                className="fixed top-0 right-0 z-50 text-white p-4 m-2 rounded-md md:hidden"
+                                className="fixed top-4 right-4 z-50 text-white p-3 rounded-md mobile-menu-button bg-indigo-800 shadow-lg"
                                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                                 aria-label="Toggle menu"
                             >
-                                <div id="toggleButton"
-                                     className="toggle relative w-10 h-10 cursor-pointer flex flex-col items-center justify-center gap-2.5 transition-all duration-500">
-                                    <div className="bars w-full h-1 bg-stone-50 rounded"></div>
-                                    <div className="bars w-full h-1 bg-stone-50 rounded transition-all duration-500"
-                                         id="bar2"></div>
-                                    <div className="bars w-full h-1 bg-stone-50 rounded"></div>
+                                <div className={`toggle relative w-8 h-8 cursor-pointer flex flex-col items-center justify-center gap-1 transition-all duration-300 ${mobileMenuOpen ? 'active' : ''}`}>
+                                    <div className={`bars w-full h-1 bg-white rounded transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></div>
+                                    <div className={`bars w-5 h-1 bg-white rounded transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`}></div>
+                                    <div className={`bars w-full h-1 bg-white rounded transition-all duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></div>
                                 </div>
                             </button>
 
-                            {/* Fullscreen Sidebar */}
-                            <div
-                                className={`fixed top-0 left-0 w-screen h-screen z-40 ${mobileMenuOpen ? 'block' : 'hidden md:block md:w-auto md:h-full'}`}>
-                                <Sidebar/>
+                            {/* Mobile overlay */}
+                            {mobileMenuOpen && (
+                                <div
+                                    className="fixed inset-0 z-30 mobile-overlay"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                />
+                            )}
+
+                            {/* Mobile Sidebar */}
+                            <div className={`fixed top-0 left-0 w-80 h-full z-40 mobile-sidebar ${mobileMenuOpen ? 'open' : ''}`}>
+                                <Sidebar />
                             </div>
 
-                            <main className={`w-full h-full overflow-y-auto ${mobileMenuOpen ? 'hidden md:block md:ml-64' : 'block'} pt-5`}>
+                            {/* Main content */}
+                            <main className="w-full h-full overflow-y-auto mobile-main px-4">
                                 {children}
                             </main>
                         </div>
@@ -136,7 +159,6 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                             </main>
                         </div>
                     )}
-
                 </AlertProvider>
             </TransactionProvider>
         </AccountProvider>
