@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import { Eye, EyeOff, Shield } from 'lucide-react';
 import { useAlerts } from '@/hooks/useAlerts';
 import { useRouter } from 'next/navigation';
-import { registerNewUser } from '@/lib/data';
 import { RegisterFormInputs } from '@/types'; // Import type
 import LogoForForms from '@/components/ui/LogoForForms';
 import {useAuth} from "@/providers/AuthProvider"; // Import your LogoForForms component
@@ -19,7 +18,9 @@ const RegisterForm: React.FC = () => {
         password: '',
         role: 'USER'
     });
-
+    const [validEmail, setValidEmail] = useState<boolean>(true);
+    const [validPhone, setValidPhone] = useState<boolean>(true);
+    const [validPassword, setValidPassword] = useState<boolean>(true);
     const [showPassword, setShowPassword] = useState(false);
     const [isValidated, setIsValidated] = useState(true); // This state is used to show an invalid message if the form is not validated
     const { addAlert } = useAlerts();
@@ -88,11 +89,19 @@ const RegisterForm: React.FC = () => {
                         <input
                             type="email"
                             value={registerForm.email}
-                            onChange={(e) => setRegisterForm({...registerForm, email: e.target.value})}
+                            onChange={(e) => {
+                                setRegisterForm({...registerForm, email: e.target.value});
+                                setValidEmail(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value));
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Email address"
                             required
                         />
+                        {!validEmail && (
+                            <p className="text-red-600 mt-2">
+                                Please enter a valid email address.
+                            </p>
+                        )}
                     </div>
 
                     <div>
@@ -100,10 +109,18 @@ const RegisterForm: React.FC = () => {
                         <input
                             type="tel"
                             value={registerForm.phoneNumber}
-                            onChange={(e) => setRegisterForm({...registerForm, phoneNumber: e.target.value})}
+                            onChange={(e) => {
+                                setRegisterForm({...registerForm, phoneNumber: e.target.value});
+                                setValidPhone(/^\d{11,15}$/.test(e.target.value));
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Phone number"
                         />
+                        {!validPhone && (
+                            <p className="text-red-600 mt-2">
+                                Please enter a valid phone number (11-15 digits).
+                            </p>
+                        )}
                     </div>
 
                     <div>
@@ -112,7 +129,10 @@ const RegisterForm: React.FC = () => {
                             <input
                                 type={showPassword ? "text" : "password"}
                                 value={registerForm.password}
-                                onChange={(e) => setRegisterForm({...registerForm, password: e.target.value})}
+                                onChange={(e) => {
+                                    setRegisterForm({...registerForm, password: e.target.value});
+                                    setValidPassword(/^(?=.*\d).{6,}$/.test(e.target.value)); // At least 6 characters and at least one digit
+                                }}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Create password"
                                 required
@@ -125,6 +145,11 @@ const RegisterForm: React.FC = () => {
                                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                             </button>
                         </div>
+                        {!validPassword && (
+                            <p className="text-red-600 mt-2">
+                                Password must be at least 6 characters long and contain at least one digit.
+                            </p>
+                        )}
                     </div>
 
                     <button

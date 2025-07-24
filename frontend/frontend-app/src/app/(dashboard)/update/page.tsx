@@ -196,7 +196,7 @@ export default function ProfilePage() {
                         />
                         {!validPhone && (
                             <p className="text-red-600 mt-2">
-                                Please enter a valid phone number (10-15 digits).
+                                Please enter a valid phone number (11-15 digits).
                             </p>
                         )}
                     </div>
