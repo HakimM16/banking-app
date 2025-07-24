@@ -75,7 +75,7 @@ export default function TransactionHistoryPage() {
     }
 
 return (
-    <div className="p-6">
+    <div className="pt-12 px-6 pb-6">
         {/* Page Title */}
         <h1 className="text-3xl font-bold text-gray-50 mb-8 flex items-center gap-3">
             <History size={32} /> Transaction History

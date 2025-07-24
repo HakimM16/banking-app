@@ -89,7 +89,7 @@ export default function AccountsPage() {
 
     // Main render
     return (
-        <div className="p-6">
+        <div className="pt-13 px-7 pb-7">
             {/* Header section */}
             <div className="flex items-center justify-between mb-8">
                 <div>

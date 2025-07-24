@@ -206,6 +206,7 @@ const WithdrawalForm: React.FC = () => {
                     Insufficient balance in the selected account.
                 </p>
             )}
+
         </div>
     );
 };
