@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 public class AuthSecurityRules implements SecurityRules{
     @Override
     public void configure(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry registry) {
-        registry.requestMatchers(
+        registry
+                .requestMatchers(
                         // Authetication
                         "/api/auth/register",
                         "/api/auth/login",
                         "/api/auth/refresh"
-                ).permitAll()
-                .requestMatchers("/api/auth/me").hasRole(Role.ADMIN.name());
+                ).permitAll();
     }
 }

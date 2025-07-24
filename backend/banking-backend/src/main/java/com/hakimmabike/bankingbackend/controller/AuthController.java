@@ -112,24 +112,6 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(user.getId(),user.getFirstName(), user.getEmail(),accessToken.toString()));
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<?> me() {
-        // Get the current authentication from the SecurityContext
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        // Retrieve the email of the authenticated user from the SecurityContext
-        var userId = (Long) authentication.getPrincipal();
-
-        var user = userRepository.findById(userId).orElse(null);
-
-        if (user == null) {
-            return ResponseEntity.notFound().build(); // Return 404 Not Found if user does not exist
-        }
-
-        var userDto = userEntityMapper.toDto(user); // Convert user entity to DTO
-
-        return ResponseEntity.ok(userDto); // Return 200 OK with user details
-    }
-
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Void> handleBadCredentialsException() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
