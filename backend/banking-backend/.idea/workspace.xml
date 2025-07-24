@@ -5,15 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Change the expiration to 10 minutes">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/EmailDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/AuthProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/AuthProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/services/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/services/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/types/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/types/index.d.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,7 +185,7 @@
       <workItem from="1753031989972" duration="5957000" />
       <workItem from="1753078496551" duration="25537000" />
       <workItem from="1753163567335" duration="21420000" />
-      <workItem from="1753252756737" duration="13488000" />
+      <workItem from="1753252756737" duration="13974000" />
     </task>
     <task id="LOCAL-00019" summary="Refactored the package service to services&#10;Added methods to generate JSON web tokens">
       <option name="closed" value="true" />

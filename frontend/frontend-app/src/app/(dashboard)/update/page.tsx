@@ -70,6 +70,7 @@ export default function ProfilePage() {
                         addAlert('Profile updated successfully!', 'success');
                         // Update localStorage with new first name
                         localStorage.setItem('name', updateUserForm.firstName);
+                        localStorage.setItem('currentUser', updateUserForm.email);
 
                         window.location.reload();
                     } else {
@@ -80,6 +81,26 @@ export default function ProfilePage() {
                     return;
                 }
             }
+        } else {
+            if (id) {
+                const userId = parseInt(id, 10);
+                const user = await updateUser(userId, updateUserForm);
+                const address = await updateAddress(userId, addressForm);
+
+                if (user.success && address.success) {
+                    addAlert('Profile updated successfully!', 'success');
+                    // Update localStorage with new first name
+                    localStorage.setItem('name', updateUserForm.firstName);
+                    localStorage.setItem('currentUser', updateUserForm.email);
+
+                    window.location.reload();
+                } else {
+                    addAlert(user.message || 'Failed to update profile.', 'error');
+                }
+            } else {
+                    addAlert('User ID not found. Please log in again.', 'error');
+                    return;
+                }
         }
 
 

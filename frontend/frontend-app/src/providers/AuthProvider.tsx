@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 if (storedUser) {
                     try {
                         // Try to parse as JSON first
-                        const user = JSON.parse(storedUser);
+                        const user = storedUser;
                         setCurrentUser(user);
                         setIsAuthenticated(true);
                     } catch {
@@ -121,7 +121,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
                 // Store user data and token in localStorage
                 localStorage.setItem('id', response.id.toString());
-                localStorage.setItem('currentUser', JSON.stringify(response.email));
+                localStorage.setItem('currentUser', response.email.toString());
                 localStorage.setItem('name', response.name);
 
                 console.log('Auth state updated - isAuthenticated should be true');
