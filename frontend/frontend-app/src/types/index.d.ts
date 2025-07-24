@@ -208,3 +208,4 @@ export interface WithdrawFormInputs {
     description: string;
     categoryName: string; // Optional, if you want to categorize withdrawals
 }
+

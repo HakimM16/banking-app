@@ -18,6 +18,43 @@ export default function ProfilePage() {
     const [validEmail, setValidEmail] = useState<boolean>(true);
     const [validPhone, setValidPhone] = useState<boolean>(true);
     const [validPostcode, setValidPostcode] = useState<boolean>(true);
+    const [validCountry, setValidCountry] = useState<boolean>(true);
+
+    // Valid countries
+    const countries: string[] = [
+        "United Kingdom",
+        "United States",
+        "Canada",
+        "Australia",
+        "Germany",
+        "France",
+        "Italy",
+        "Spain",
+        "Netherlands",
+        "Sweden",
+        "Norway",
+        "Denmark",
+        "Ireland",
+        "Switzerland",
+        "Belgium",
+        "New Zealand",
+        "Japan",
+        "China",
+        "India",
+        "South Africa",
+        "Brazil",
+        "Mexico",
+        "Singapore",
+        "South Korea",
+        "Portugal",
+        "Thailand",
+        "Turkey",
+        "Indonesia",
+        "United Arab Emirates",
+        "Morocco",
+        "Egypt",
+        "Saudi Arabia",
+    ];
 
     const [emailForm, setEmailForm] = useState<string>();
 
@@ -268,12 +305,20 @@ export default function ProfilePage() {
                             type="text"
                             id="country"
                             value={addressForm.country}
-                            onChange={(e) => setAddressForm({...addressForm, country: e.target.value})}
+                            onChange={(e) => {
+                                setAddressForm({...addressForm, country: e.target.value});
+                                setValidCountry(countries.includes(e.target.value)); // Check if country is valid
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                             placeholder="e.g. United Kingdom"
                         />
                     </div>
+                    {!validCountry && (
+                        <p className="text-red-600 mt-2">
+                            Please enter a valid country.
+                        </p>
+                    )}
 
                     <button
                         type="submit"
@@ -282,6 +327,11 @@ export default function ProfilePage() {
                         <Settings size={20}/>
                         Confirm Update
                     </button>
+                    <div className="text-center mt-2">
+                        <button type="button" onClick={() => window.open('/countries', '_blank')} className="text-indigo-600 hover:text-blue-800 text-sm cursor-pointer" >
+                            View available countries
+                        </button>
+                    </div>
                 </form>
 
                 {emailPresent && (

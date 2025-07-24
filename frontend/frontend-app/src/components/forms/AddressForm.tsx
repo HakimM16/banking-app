@@ -24,6 +24,44 @@ const AddressForm: React.FC<AddressFormProps> = ({ id }) => {
     const [isValidated, setIsValidated] = useState(true); // This state is used to show an invalid message if the form is not validated
     const router = useRouter();
     const { createAddress} = useAuth();
+    const [validPostcode, setValidPostcode] = useState<boolean>(true);
+    const [validCountry, setValidCountry] = useState<boolean>(true);
+
+    // Valid countries
+    const countries: string[] = [
+        "United Kingdom",
+        "United States",
+        "Canada",
+        "Australia",
+        "Germany",
+        "France",
+        "Italy",
+        "Spain",
+        "Netherlands",
+        "Sweden",
+        "Norway",
+        "Denmark",
+        "Ireland",
+        "Switzerland",
+        "Belgium",
+        "New Zealand",
+        "Japan",
+        "China",
+        "India",
+        "South Africa",
+        "Brazil",
+        "Mexico",
+        "Singapore",
+        "South Korea",
+        "Portugal",
+        "Thailand",
+        "Turkey",
+        "Indonesia",
+        "United Arab Emirates",
+        "Morocco",
+        "Egypt",
+        "Saudi Arabia",
+    ];
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -89,10 +127,18 @@ const AddressForm: React.FC<AddressFormProps> = ({ id }) => {
                         <input
                             type="text"
                             value={addressForm.postCode}
-                            onChange={(e) => setAddressForm({...addressForm, postCode: e.target.value})}
+                            onChange={(e) => {
+                                setAddressForm({...addressForm, postCode: e.target.value});
+                                setValidPostcode(/^[A-Z0-9]{5,7}$/.test(e.target.value)); // UK postcode regex
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="e.g LU40XX"
                         />
+                        {!validPostcode && (
+                            <p className="text-red-600 mt-2">
+                                Please enter a valid UK postcode.
+                            </p>
+                        )}
                     </div>
 
                     <div>
@@ -100,11 +146,19 @@ const AddressForm: React.FC<AddressFormProps> = ({ id }) => {
                         <input
                             type="text"
                             value={addressForm.country}
-                            onChange={(e) => setAddressForm({...addressForm, country: e.target.value})}
+                            onChange={(e) => {
+                                setAddressForm({...addressForm, country: e.target.value});
+                                setValidCountry(countries.includes(e.target.value)); // Check if country is valid
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="e.g. United Kingdom"
                         />
                     </div>
+                    {!validCountry && (
+                        <p className="text-red-600 mt-2">
+                            Please enter a valid country.
+                        </p>
+                    )}
 
                     <button
                         type="submit"
@@ -121,6 +175,11 @@ const AddressForm: React.FC<AddressFormProps> = ({ id }) => {
                             className="text-indigo-600 hover:text-blue-800 text-sm cursor-pointer"
                         >
                             Already have an account? Login here
+                        </button>
+                    </div>
+                    <div className="text-center mt-2">
+                        <button type="button" onClick={() => window.open('/countries', '_blank')} className="text-indigo-600 hover:text-blue-800 text-sm cursor-pointer" >
+                            View available countries
                         </button>
                     </div>
                     {!isValidated ?

@@ -1,6 +1,6 @@
 // src/app/(auth)/register/page.tsx
 'use client';
-import RegisterForm from '@/components/forms/RegisterForm';
+
 import { useAlerts } from '@/hooks/useAlerts';
 import Alert from '@/components/ui/Alert';
 import React, { ReactNode } from 'react';
