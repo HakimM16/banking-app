@@ -28,6 +28,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     const router = useRouter();
     const [showSessionExpired, setShowSessionExpired] = useState(false);
     const [timer, setTimer] = useState(0);
+    const [backendStatus, setBackendStatus] = useState(true);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -45,6 +46,42 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
         return () => clearInterval(interval); // Cleanup interval on unmount
     }, [isAuthenticated, loading, router, isTokenValid, timer]);
+
+    useEffect(() => {
+        // Check backend status every 2 seconds
+        const interval = setInterval(() => {
+            fetch('http://localhost:8080/actuator/health', {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error(`HTTP ${response.status}`);
+                })
+                .then(data => {
+                    setBackendStatus(data.status === 'UP' || data.status === 'ok');
+                })
+                .catch(error => {
+                    console.error('Error checking backend status:', error);
+                    setBackendStatus(false);
+                });
+        }, 10000);
+
+        return () => clearInterval(interval); // Cleanup interval on unmount
+    }, []);
+
+    if (backendStatus === false) {
+        return (
+            <div className="flex h-screen items-center justify-center bg-indigo-900">
+                <div className="text-white text-xl"><div className="text-white text-xl">500: Backend service is unavailable. Please try again in a few moments.</div></div>
+            </div>
+        );
+    }
 
     if (showSessionExpired) {
         localStorage.clear();
