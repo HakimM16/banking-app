@@ -67,19 +67,22 @@ export default function AccountsPage() {
     };
 
     // Handle toggling account status (OPEN/CLOSED)
+    // Handle toggling account status (OPEN/CLOSED)
     const handleToggleStatus = async (accountId: number) => {
         const token = localStorage.getItem('authToken');
         // Set the default Authorization header for all future axios requests
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-        // Toggle status in local state
-        if (accountStatus.status === 'OPEN') {
-            setAccountStatus({ status: 'CLOSED' });
-        } else {
-            setAccountStatus({ status: 'OPEN' });
-        }
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        // Find the current account to get its current status
+        const currentAccount = accounts.find(account => account.id === accountId);
+        if (!currentAccount) return;
+
+        // Determine new status based on current status
+        const newStatus = currentAccount.status === 'OPEN' ? 'CLOSED' : 'OPEN';
+        const statusUpdate = { status: newStatus };
 
         if (id) {
-            const result = await changeAccountStatus(parseInt(id, 10), accountId, accountStatus);
+            const result = await changeAccountStatus(parseInt(id, 10), accountId, statusUpdate);
             if (result.success) {
                 addAlert('Account status updated successfully!', 'success');
             } else {
@@ -132,7 +135,7 @@ export default function AccountsPage() {
                                 >
                                     <option value="DEBIT">Debit</option>
                                     <option value="SAVINGS">Savings</option>
-                                    <option value="CREDIT">Credit</option>
+                                    <option value="CREDIT">ISA</option>
                                 </select>
                             </div>
                             {/* Confirm create account button */}

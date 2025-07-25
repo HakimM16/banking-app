@@ -158,6 +158,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
 
         try {
             const updatedAccount = await api.updateAccountStatus(userId, accountId, request);
+            console.log("Updated account:", updatedAccount);
             if (!updatedAccount) {
                 return { success: false, message: 'Failed to update account.' };
             }
