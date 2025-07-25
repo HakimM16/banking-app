@@ -31,30 +31,36 @@ Here is a video that demonstrates how to navigate the app.
 
 ## ✨ Features
 
-### User Management
+### 👤 User Management
 - Secure user registration and login
 - Authentication with encrypted passwords
 - Profile management with personal and contact details
 - Session handling with timeout/auto logout
 
-### Account Management
+### 🧾 Account Management
 - Create and manage different account types (Debit, Savings, ISA)
 - View account details and current balances
 - Handle account status (Open, Closed)
 
-### Transaction System
+### 💸 Transaction System
 - Internal money transfers between user accounts
 - Deposit and withdrawal functionality
 - Searchable and filterable transaction history
 - Transaction validation and configurable limits
 
-### Security
+### 🪪 Security
 - Secure login system with encrypted credentials
 - JWT authentication
 - Spring Security integration
 - User sessions lasting 10 minutes
 
-## 
+## 📱Mobile Phone Navigation
+Here are the instructions for navigating through the app on a mobile screen:
+- Click the button in the top right corner to make the sidebar appear from the left. The current page will become blurred.
+
+- Click on the desired page from the sidebar. The blurred current page will switch to the selected page, which will also be blurred.
+
+- Click the button in the top right corner again to close the sidebar and unblur the current page.
 
 ## 📁 Project Structure
 
@@ -206,6 +212,9 @@ The frontend runs on `http://localhost:3000` and provides:
 - Account dashboard
 - Transaction forms and history
 - User profile management
+
+## 🤝Contribution
+Contributions are welcome! If you'd like to enhance this project or report issues, please submit a pull request or open an issue.
 
 ## 📞 Contact
 
