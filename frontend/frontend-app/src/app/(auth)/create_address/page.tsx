@@ -1,24 +1,9 @@
 // src/app/(auth)/register/page.tsx
 'use client';
 
-import { useAlerts } from '@/hooks/useAlerts';
-import Alert from '@/components/ui/Alert';
 import React, { ReactNode } from 'react';
 import AddressForm from "@/components/forms/AddressForm";
 import { useSearchParams } from 'next/navigation';
-
-// A simple AlertProvider for demonstration within a page
-const PageAlertProvider = ({ children }: { children: ReactNode }) => {
-    const { alerts } = useAlerts();
-    return (
-        <>
-            {children}
-            {alerts.map((alert) => (
-                <Alert key={alert.id} alert={alert} />
-            ))}
-        </>
-    );
-};
 
 export default function RegisterPage() {
     // This page is for registering a new user and completing their address
@@ -44,8 +29,6 @@ export default function RegisterPage() {
     }, [idFromParams]);
 
     return (
-        <PageAlertProvider>
-            <AddressForm id={id}/>
-        </PageAlertProvider>
+        <AddressForm id={id}/>
     );
 }

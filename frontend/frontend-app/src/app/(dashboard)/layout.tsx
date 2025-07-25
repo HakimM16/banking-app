@@ -5,24 +5,9 @@ import '@/styles/menu.css';
 import { useAuth } from '@/providers/AuthProvider';
 import { AccountProvider } from '@/providers/AccountProvider';
 import { TransactionProvider } from '@/providers/TransactionProvider';
-import { useAlerts } from '@/hooks/useAlerts';
-import Alert from '@/components/ui/Alert';
 import Sidebar from '@/components/Sidebar';
 import { useRouter } from 'next/navigation';
 import { useEffect, ReactNode, useState } from 'react';
-
-// Centralized AlertProvider for the (dashboard) layout
-const AlertProvider = ({ children }: { children: ReactNode }) => {
-    const { alerts } = useAlerts();
-    return (
-        <>
-            {children}
-            {alerts.map((alert) => (
-                <Alert key={alert.id} alert={alert} />
-            ))}
-        </>
-    );
-};
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
     const { isAuthenticated, loading, currentUser, isTokenValid } = useAuth();
@@ -117,49 +102,47 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     return (
         <AccountProvider>
             <TransactionProvider>
-                <AlertProvider>
-                    {isMobile ? (
-                        <div className="relative h-screen bg-indigo-900 mobile-container">
-                            {/* Mobile hamburger menu */}
-                            <button
-                                className="fixed top-4 right-4 z-50 text-white p-3 rounded-md mobile-menu-button bg-indigo-800 shadow-lg"
-                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                                aria-label="Toggle menu"
-                            >
-                                <div className={`toggle relative w-8 h-8 cursor-pointer flex flex-col items-center justify-center gap-1 transition-all duration-300 ${mobileMenuOpen ? 'active' : ''}`}>
-                                    <div className={`bars w-full h-1 bg-white rounded transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></div>
-                                    <div className={`bars w-5 h-1 bg-white rounded transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`}></div>
-                                    <div className={`bars w-full h-1 bg-white rounded transition-all duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></div>
-                                </div>
-                            </button>
-
-                            {/* Mobile overlay */}
-                            {mobileMenuOpen && (
-                                <div
-                                    className="fixed inset-0 z-30 mobile-overlay"
-                                    onClick={() => setMobileMenuOpen(false)}
-                                />
-                            )}
-
-                            {/* Mobile Sidebar */}
-                            <div className={`fixed top-0 left-0 w-80 h-full z-40 mobile-sidebar ${mobileMenuOpen ? 'open' : ''}`}>
-                                <Sidebar />
+                {isMobile ? (
+                    <div className="relative h-screen bg-indigo-900 mobile-container">
+                        {/* Mobile hamburger menu */}
+                        <button
+                            className="fixed top-4 right-4 z-50 text-white p-3 rounded-md mobile-menu-button bg-indigo-800 shadow-lg"
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            aria-label="Toggle menu"
+                        >
+                            <div className={`toggle relative w-8 h-8 cursor-pointer flex flex-col items-center justify-center gap-1 transition-all duration-300 ${mobileMenuOpen ? 'active' : ''}`}>
+                                <div className={`bars w-full h-1 bg-white rounded transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></div>
+                                <div className={`bars w-5 h-1 bg-white rounded transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`}></div>
+                                <div className={`bars w-full h-1 bg-white rounded transition-all duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></div>
                             </div>
+                        </button>
 
-                            {/* Main content */}
-                            <main className="w-full h-full overflow-y-auto mobile-main px-4">
-                                {children}
-                            </main>
-                        </div>
-                    ) : (
-                        <div className="flex h-screen bg-indigo-900">
+                        {/* Mobile overlay */}
+                        {mobileMenuOpen && (
+                            <div
+                                className="fixed inset-0 z-30 mobile-overlay"
+                                onClick={() => setMobileMenuOpen(false)}
+                            />
+                        )}
+
+                        {/* Mobile Sidebar */}
+                        <div className={`fixed top-0 left-0 w-80 h-full z-40 mobile-sidebar ${mobileMenuOpen ? 'open' : ''}`}>
                             <Sidebar />
-                            <main className="flex-1 overflow-y-auto">
-                                {children}
-                            </main>
                         </div>
-                    )}
-                </AlertProvider>
+
+                        {/* Main content */}
+                        <main className="w-full h-full overflow-y-auto mobile-main px-4">
+                            {children}
+                        </main>
+                    </div>
+                ) : (
+                    <div className="flex h-screen bg-indigo-900">
+                        <Sidebar />
+                        <main className="flex-1 overflow-y-auto">
+                            {children}
+                        </main>
+                    </div>
+                )}
             </TransactionProvider>
         </AccountProvider>
     );
