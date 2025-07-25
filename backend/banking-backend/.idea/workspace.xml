@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Moved the Dtos into separate folders">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/AccountService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/TransactionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/AccountController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/AccountController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/TransactionController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/TransactionController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/AccountService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/AccountService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/TransactionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/TransactionService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/TransactionProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/TransactionProvider.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Moved the Dtos into separate folders" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -198,7 +187,7 @@
       <workItem from="1753333707465" duration="12686000" />
       <workItem from="1753425879516" duration="6000" />
       <workItem from="1753428992302" duration="5310000" />
-      <workItem from="1753439274390" duration="4884000" />
+      <workItem from="1753439274390" duration="5445000" />
     </task>
     <task id="LOCAL-00025" summary="Replaced email with userId for JWT payload">
       <option name="closed" value="true" />

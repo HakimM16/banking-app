@@ -21,6 +21,8 @@ export default function AccountsPage() {
     // State for user id
     const [id, setId] = useState<string | null>(null);
 
+    const [existing, setExisting] = useState<boolean>(false);
+
     // State to control account creation modal
     const [isCreatingAccount, setIsCreatingAccount] = useState(false);
     // State for account creation form
@@ -43,6 +45,14 @@ export default function AccountsPage() {
 
     // Handle account creation
     const handleCreateAccount = async () => {
+        // Check if there is an existing account of the same type
+        const existingAccount = accounts.find(account => account.accountType === accountForm.accountType);
+        if (existingAccount) {
+            setExisting(true);
+            return;
+        }
+
+
         const token = localStorage.getItem('authToken');
         // Set the default Authorization header for all future axios requests
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
@@ -142,6 +152,12 @@ export default function AccountsPage() {
                                 Cancel
                             </button>
                         </div>
+                        {/* Show existing account warning if applicable */}
+                        {existing && (
+                            <p className="text-red-500 mt-4">
+                                An account of this type already exists. Please choose a different type.
+                            </p>
+                        )}
                     </div>
                 )
             ) : (

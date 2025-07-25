@@ -97,6 +97,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
                 return { success: false, balance: new Decimal(0), message: 'Failed to fetch balance.' };
             }
             // Return the balance from the response
+            // @ts-ignore
             return {
                 success: true,
                 balance: response.balance, // Convert Decimal to string
@@ -116,6 +117,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
                 console.error('Failed to fetch account balance');
                 return { success: false, balance: new Decimal(0), message: 'Failed to fetch account balance.' };
             }
+            // @ts-ignore
             return { success: true, balance: response.balance, message: 'Account balance fetched successfully.' };
         } catch (error) {
             console.error('Error fetching account balance:', error);
