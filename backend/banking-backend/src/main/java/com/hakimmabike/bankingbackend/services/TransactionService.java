@@ -1,6 +1,8 @@
 package com.hakimmabike.bankingbackend.services;
 
-import com.hakimmabike.bankingbackend.dto.*;
+import com.hakimmabike.bankingbackend.dto.transaction.*;
+import com.hakimmabike.bankingbackend.dto.transactionCategory.CreateTransactionCategoryRequest;
+import com.hakimmabike.bankingbackend.dto.transactionCategory.TransactionCategoryDto;
 import com.hakimmabike.bankingbackend.entity.Account;
 import com.hakimmabike.bankingbackend.entity.Transaction;
 import com.hakimmabike.bankingbackend.entity.TransactionCategory;

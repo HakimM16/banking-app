@@ -1,7 +1,7 @@
 package com.hakimmabike.bankingbackend.mappers;
 
-import com.hakimmabike.bankingbackend.dto.CustomiseAddressRequest;
-import com.hakimmabike.bankingbackend.dto.UserAddressDto;
+import com.hakimmabike.bankingbackend.dto.user.CustomiseAddressRequest;
+import com.hakimmabike.bankingbackend.dto.user.UserAddressDto;
 import com.hakimmabike.bankingbackend.entity.UserAddress;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

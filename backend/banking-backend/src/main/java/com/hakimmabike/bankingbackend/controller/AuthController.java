@@ -1,11 +1,9 @@
 package com.hakimmabike.bankingbackend.controller;
 
 import com.hakimmabike.bankingbackend.config.JwtConfig;
-import com.hakimmabike.bankingbackend.dto.JwtResponse;
-import com.hakimmabike.bankingbackend.dto.LoginUserRequest;
-import com.hakimmabike.bankingbackend.dto.RegisterUserRequest;
-import com.hakimmabike.bankingbackend.dto.UserDto;
-import com.hakimmabike.bankingbackend.mappers.UserEntityMapper;
+import com.hakimmabike.bankingbackend.dto.auth.JwtResponse;
+import com.hakimmabike.bankingbackend.dto.auth.LoginUserRequest;
+import com.hakimmabike.bankingbackend.dto.auth.RegisterUserRequest;
 import com.hakimmabike.bankingbackend.repository.UserRepository;
 import com.hakimmabike.bankingbackend.services.JwtService;
 import com.hakimmabike.bankingbackend.services.UserService;
@@ -18,8 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 

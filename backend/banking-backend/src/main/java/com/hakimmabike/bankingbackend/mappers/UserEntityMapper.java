@@ -1,8 +1,8 @@
 package com.hakimmabike.bankingbackend.mappers;
 
-import com.hakimmabike.bankingbackend.dto.RegisterUserRequest;
-import com.hakimmabike.bankingbackend.dto.UpdateUserRequest;
-import com.hakimmabike.bankingbackend.dto.UserDto;
+import com.hakimmabike.bankingbackend.dto.auth.RegisterUserRequest;
+import com.hakimmabike.bankingbackend.dto.user.UpdateUserRequest;
+import com.hakimmabike.bankingbackend.dto.user.UserDto;
 import com.hakimmabike.bankingbackend.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

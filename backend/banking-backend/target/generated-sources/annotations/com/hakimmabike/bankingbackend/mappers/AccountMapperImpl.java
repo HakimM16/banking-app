@@ -1,6 +1,6 @@
 package com.hakimmabike.bankingbackend.mappers;
 
-import com.hakimmabike.bankingbackend.dto.AccountDto;
+import com.hakimmabike.bankingbackend.dto.account.AccountDto;
 import com.hakimmabike.bankingbackend.entity.Account;
 import com.hakimmabike.bankingbackend.enums.AccountStatus;
 import com.hakimmabike.bankingbackend.enums.AccountType;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-07-25T10:51:01+0100",
+    date = "2025-07-25T11:26:20+0100",
     comments = "version: 1.6.1, compiler: javac, environment: Java 24.0.1 (Oracle Corporation)"
 )
 @Component

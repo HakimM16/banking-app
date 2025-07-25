@@ -1,17 +1,15 @@
 package com.hakimmabike.bankingbackend.services;
 
-import com.hakimmabike.bankingbackend.dto.*;
+import com.hakimmabike.bankingbackend.dto.account.*;
 import com.hakimmabike.bankingbackend.entity.Account;
 import com.hakimmabike.bankingbackend.entity.User;
 import com.hakimmabike.bankingbackend.enums.AccountStatus;
 import com.hakimmabike.bankingbackend.enums.AccountType;
-import com.hakimmabike.bankingbackend.exception.ExistingBalanceException;
 import com.hakimmabike.bankingbackend.exception.InvalidObjectException;
 import com.hakimmabike.bankingbackend.exception.ObjectExistsException;
 import com.hakimmabike.bankingbackend.mappers.AccountMapper;
 import com.hakimmabike.bankingbackend.repository.*;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

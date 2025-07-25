@@ -1,6 +1,6 @@
 package com.hakimmabike.bankingbackend.controller;
 
-import com.hakimmabike.bankingbackend.dto.*;
+import com.hakimmabike.bankingbackend.dto.account.*;
 import com.hakimmabike.bankingbackend.enums.AccountStatus;
 import com.hakimmabike.bankingbackend.enums.AccountType;
 import com.hakimmabike.bankingbackend.repository.AccountRepository;
@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.math.BigDecimal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController

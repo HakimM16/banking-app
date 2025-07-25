@@ -1,14 +1,14 @@
 package com.hakimmabike.bankingbackend.mappers;
 
-import com.hakimmabike.bankingbackend.dto.CustomiseAddressRequest;
-import com.hakimmabike.bankingbackend.dto.UserAddressDto;
+import com.hakimmabike.bankingbackend.dto.user.CustomiseAddressRequest;
+import com.hakimmabike.bankingbackend.dto.user.UserAddressDto;
 import com.hakimmabike.bankingbackend.entity.UserAddress;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-07-24T08:26:45+0100",
+    date = "2025-07-25T11:26:20+0100",
     comments = "version: 1.6.1, compiler: javac, environment: Java 24.0.1 (Oracle Corporation)"
 )
 @Component

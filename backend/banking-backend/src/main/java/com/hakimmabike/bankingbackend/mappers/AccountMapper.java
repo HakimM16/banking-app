@@ -1,6 +1,6 @@
 package com.hakimmabike.bankingbackend.mappers;
 
-import com.hakimmabike.bankingbackend.dto.AccountDto;
+import com.hakimmabike.bankingbackend.dto.account.AccountDto;
 import com.hakimmabike.bankingbackend.entity.Account;
 import org.mapstruct.Mapper;
 

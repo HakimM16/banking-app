@@ -1,6 +1,7 @@
 package com.hakimmabike.bankingbackend.services;
 
-import com.hakimmabike.bankingbackend.dto.*;
+import com.hakimmabike.bankingbackend.dto.auth.RegisterUserRequest;
+import com.hakimmabike.bankingbackend.dto.user.*;
 import com.hakimmabike.bankingbackend.entity.User;
 import com.hakimmabike.bankingbackend.enums.Role;
 import com.hakimmabike.bankingbackend.exception.ExistingObjectException;

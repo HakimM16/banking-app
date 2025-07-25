@@ -1,6 +1,6 @@
 package com.hakimmabike.bankingbackend.controller;
 
-import com.hakimmabike.bankingbackend.dto.*;
+import com.hakimmabike.bankingbackend.dto.transaction.*;
 import com.hakimmabike.bankingbackend.services.AccountService;
 import com.hakimmabike.bankingbackend.services.TransactionService;
 import lombok.AllArgsConstructor;

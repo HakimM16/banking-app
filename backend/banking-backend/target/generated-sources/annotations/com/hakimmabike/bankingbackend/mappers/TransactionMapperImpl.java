@@ -1,7 +1,7 @@
 package com.hakimmabike.bankingbackend.mappers;
 
-import com.hakimmabike.bankingbackend.dto.TransactionCategoryDto;
-import com.hakimmabike.bankingbackend.dto.TransactionDto;
+import com.hakimmabike.bankingbackend.dto.transaction.TransactionDto;
+import com.hakimmabike.bankingbackend.dto.transactionCategory.TransactionCategoryDto;
 import com.hakimmabike.bankingbackend.entity.Transaction;
 import com.hakimmabike.bankingbackend.entity.TransactionCategory;
 import java.math.BigDecimal;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-07-24T08:26:45+0100",
+    date = "2025-07-25T11:26:20+0100",
     comments = "version: 1.6.1, compiler: javac, environment: Java 24.0.1 (Oracle Corporation)"
 )
 @Component

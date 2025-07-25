@@ -1,6 +1,8 @@
 package com.hakimmabike.bankingbackend.controller;
 
-import com.hakimmabike.bankingbackend.dto.*;
+import com.hakimmabike.bankingbackend.dto.user.CustomiseAddressRequest;
+import com.hakimmabike.bankingbackend.dto.user.EmailDto;
+import com.hakimmabike.bankingbackend.dto.user.UpdateUserRequest;
 import com.hakimmabike.bankingbackend.repository.UserRepository;
 import com.hakimmabike.bankingbackend.services.UserService;
 import jakarta.validation.Valid;

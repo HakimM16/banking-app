@@ -1,7 +1,6 @@
 package com.hakimmabike.bankingbackend.mappers;
 
-import com.hakimmabike.bankingbackend.dto.TransferDto;
-import com.hakimmabike.bankingbackend.entity.Account;
+import com.hakimmabike.bankingbackend.dto.transaction.TransferDto;
 import com.hakimmabike.bankingbackend.entity.Transfer;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

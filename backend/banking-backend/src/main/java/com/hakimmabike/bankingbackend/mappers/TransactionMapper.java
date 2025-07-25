@@ -1,7 +1,7 @@
 package com.hakimmabike.bankingbackend.mappers;
 
-import com.hakimmabike.bankingbackend.dto.TransactionCategoryDto;
-import com.hakimmabike.bankingbackend.dto.TransactionDto;
+import com.hakimmabike.bankingbackend.dto.transactionCategory.TransactionCategoryDto;
+import com.hakimmabike.bankingbackend.dto.transaction.TransactionDto;
 import com.hakimmabike.bankingbackend.entity.Transaction;
 import com.hakimmabike.bankingbackend.entity.TransactionCategory;
 import org.mapstruct.Mapper;
