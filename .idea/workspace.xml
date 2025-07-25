@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7edbb3ca-bb54-4dc6-b04b-e08c7027eccb" name="Changes" comment="Restructured the files into suitable folders" />
+    <list default="true" id="7edbb3ca-bb54-4dc6-b04b-e08c7027eccb" name="Changes" comment="Added the login page screenshot in README.md" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,12 +19,12 @@
     &quot;assignee&quot;: &quot;HakimM16&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/HakimM16/banking-app.git&quot;,
-    &quot;accountId&quot;: &quot;c6cd20ef-7b27-49f1-97b1-0718a51ab435&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/HakimM16/banking-app.git",
+    "accountId": "3c405b01-32b7-48ff-bb5f-7d07f06a874e"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -40,7 +40,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/hakim/OneDrive/Desktop/banking-app/server",
+    "last_opened_file_path": "C:/Users/hakim/OneDrive/Desktop/banking-app",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -57,8 +57,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26574.91" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26574.91" />
+        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-WS-251.25410.117" />
       </set>
     </attachedChunks>
   </component>
@@ -74,6 +73,7 @@
       <workItem from="1752514605478" duration="18000" />
       <workItem from="1752675906597" duration="117000" />
       <workItem from="1753456962357" duration="556000" />
+      <workItem from="1753478250157" duration="171000" />
     </task>
     <task id="LOCAL-00001" summary="Restructured the files into suitable folders">
       <option name="closed" value="true" />
@@ -83,7 +83,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753457493715</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added the login page screenshot in README.md">
+      <option name="closed" value="true" />
+      <created>1753478396992</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1753478396992</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -91,6 +99,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Restructured the files into suitable folders" />
-    <option name="LAST_COMMIT_MESSAGE" value="Restructured the files into suitable folders" />
+    <MESSAGE value="Added the login page screenshot in README.md" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added the login page screenshot in README.md" />
   </component>
 </project>

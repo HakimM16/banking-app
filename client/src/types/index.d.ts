@@ -50,29 +50,6 @@ export interface Transaction {
     receiver: boolean;
 }
 
-// TransferDto
-export interface Transfer {
-    id: number;
-    amount: Decimal;
-    description: string;
-    fromAccount: string;
-    toAccount: string;
-}
-
-// TransactionCategoryDto
-export interface transactionCategory {
-    id: number;
-    name: string;
-    description: string;
-    categoryType: string;
-    isSystemCategory: boolean;
-}
-
-// JwtResponse
-export interface JwtResponse {
-    accessToken: string;
-}
-
 // AccountDto
 export interface Account {
     id: number;
@@ -88,12 +65,6 @@ export interface AccountCount {
 
 export interface TransactionCount {
     transactionsCount: number;
-}
-
-// BalanceDto
-export interface Balance {
-    accountNumber: string;
-    balance: Decimal;
 }
 
 // EmailDto
@@ -147,19 +118,6 @@ export interface CustomiseAddressFormInputs {
     country: string;
 }
 
-// DeleteAccountRequest
-export interface DeleteAccountRequest {
-    accountNumber: string;
-    accountType: string;
-    reason: string;
-}
-
-// Balance
-export interface accountBalance {
-    accountNumber: string;
-    balance: Decimal; // Use Decimal for precise financial calculations
-}
-
 // DepositRequest
 export interface DepositFormInputs {
     accountNumber: string;
@@ -168,10 +126,6 @@ export interface DepositFormInputs {
     categoryName: string; // Optional, if you want to categorize deposits
 }
 
-// GetTransactionCategoryRequest
-export interface GetTransactionCategoryRequest {
-    name: string;
-}
 
 // GetTransactionsRequest
 export interface GetTransactionsRequest {
@@ -185,7 +139,7 @@ export interface UpdateAccountFormInputs {
 
 // UpdateAccountStatusRequest
 export interface UpdateAccountStatusFormInputs {
-    status: string; // e.g., 'active', 'inactive', 'closed'
+    status: string; // e.g., 'OPEN', 'CLOSED'
 }
 
 // UpdateStatusRequest
