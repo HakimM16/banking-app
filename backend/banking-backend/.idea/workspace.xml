@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Removed the following endpoints in AuthController: refresh" />
+    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Removed the following endpoints in AccountController: closeAccount, getAccount, updateAccountType&#10;Removed the following methods in AccountService: deleteAccount, getAccountById, updateAccountType">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/securityRules/AccountSecurityRules.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/securityRules/AccountSecurityRules.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/TransactionService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -186,15 +191,7 @@
       <workItem from="1753252756737" duration="13974000" />
       <workItem from="1753333707465" duration="12686000" />
       <workItem from="1753425879516" duration="6000" />
-      <workItem from="1753428992302" duration="1180000" />
-    </task>
-    <task id="LOCAL-00021" summary="Added methods to validate JSON web tokens">
-      <option name="closed" value="true" />
-      <created>1752053504666</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1752053504666</updated>
+      <workItem from="1753428992302" duration="1954000" />
     </task>
     <task id="LOCAL-00022" summary="Added a filter for logging in">
       <option name="closed" value="true" />
@@ -580,7 +577,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753434223213</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="Removed the following endpoints in AccountController: closeAccount, getAccount, updateAccountType&#10;Removed the following methods in AccountService: deleteAccount, getAccountById, updateAccountType">
+      <option name="closed" value="true" />
+      <created>1753434579924</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1753434579924</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -598,7 +603,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Removed userAddressMapper in userService.&#10;Added responses such as not found in getUserAddress" />
     <MESSAGE value="Changed the uri pathways from &quot;/{accountId}&quot; to &quot;/{userId}/{accountId}&quot;.&#10;Change balance type from string to bigDecimal in AccountDto." />
     <MESSAGE value="Added different http responses such as bad request in account controller" />
     <MESSAGE value="Made sure that the account to be updated is found by accountId and userId" />
@@ -623,6 +627,7 @@
     <MESSAGE value="Change the expiration to 10 minutes" />
     <MESSAGE value="Removed the following endpoints in UserController: changeUserStatus, deleteUser&#10;Removed the following methods in UserService: deleteUser, changeUserStatus" />
     <MESSAGE value="Removed the following endpoints in AuthController: refresh" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed the following endpoints in AuthController: refresh" />
+    <MESSAGE value="Removed the following endpoints in AccountController: closeAccount, getAccount, updateAccountType&#10;Removed the following methods in AccountService: deleteAccount, getAccountById, updateAccountType" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed the following endpoints in AccountController: closeAccount, getAccount, updateAccountType&#10;Removed the following methods in AccountService: deleteAccount, getAccountById, updateAccountType" />
   </component>
 </project>

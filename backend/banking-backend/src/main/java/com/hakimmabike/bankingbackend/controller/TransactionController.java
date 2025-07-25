@@ -26,7 +26,7 @@ public class TransactionController {
     private final AccountService accountService;
 
     // Deposit money into an account
-    @PostMapping("/{userId}/deposit")
+    @PostMapping("/{userId}/deposit")//
     public ResponseEntity<?> deposit(
             @PathVariable Long userId,
             @RequestBody DepositRequest request
@@ -72,7 +72,7 @@ public class TransactionController {
     }
 
     // Withdraw money from an account
-    @PostMapping("/{userId}/withdraw")
+    @PostMapping("/{userId}/withdraw")//
     public ResponseEntity<?> withdraw(@RequestBody WithdrawRequest request) {
         // Check if account number exists
         if (!accountService.accountExists(request.getAccountNumber())) {
@@ -122,7 +122,7 @@ public class TransactionController {
     }
 
     // Transfer money between accounts
-    @PostMapping("/{userId}/transfer")
+    @PostMapping("/{userId}/transfer")//
     public ResponseEntity<?> transfer(@RequestBody TransferRequest request) {
         // Check if source account number exists
         if (!transactionService.accountExists(request.getFromAccount())) {
@@ -171,34 +171,6 @@ public class TransactionController {
         TransferDto transfer = transactionService.transfer(request);
         // Return the transaction details with a 201 Created status
         return ResponseEntity.status(201).body(transfer);
-    }
-
-    // Get all transactions for an account
-    @GetMapping("/{userId}/account/{accountId}")
-    public ResponseEntity<?> getAllTransactionsByAccountId(
-            @PathVariable Long accountId,
-            @RequestBody GetTransactionsRequest request
-    ) {// check if account has no transactions
-        if (!transactionRepository.existsByAccountByAccountId(accountId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No transactions found for account with ID: " + accountId);
-        }
-
-        // Check if account number exists
-        if (!transactionService.accountExists(request.getAccountNumber())) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Account not found with account number: " + request.getAccountNumber());
-        }
-
-        // Fetch all transactions for the specified account ID
-        List<TransactionDto> transactions = transactionService.getAllTransactionsByAccountId(accountId, request);
-
-        // If no transactions are found, return a 404 Not Found status
-        if (transactions.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        // Return the list of transactions with a 200 OK status
-        return ResponseEntity.ok(transactions);
     }
 
     @GetMapping("/{userId}/account")

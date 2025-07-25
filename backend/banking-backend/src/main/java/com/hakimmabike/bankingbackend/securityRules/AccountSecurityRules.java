@@ -18,11 +18,8 @@ public class AccountSecurityRules implements SecurityRules {
                 "api/accounts/{userId}/{accountId}/balance"
                 ).permitAll()
                 // Allow users with the ADMIN or USER role to delete and get accounts
-                .requestMatchers(HttpMethod.DELETE, "api/accounts/{userId}/{accountId}").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
-                .requestMatchers(HttpMethod.GET, "api/accounts/{userId}/{accountId}").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
                 .requestMatchers(HttpMethod.GET, "api/accounts/{userId}/total-balance").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
                 // Allow users with the ADMIN role to change account status
-                .requestMatchers(HttpMethod.PATCH, "api/accounts/{userId}/{accountId}/status").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
-                .requestMatchers(HttpMethod.PATCH, "api/accounts/{userId}/{accountId}").hasRole(Role.ADMIN.name());
+                .requestMatchers(HttpMethod.PATCH, "api/accounts/{userId}/{accountId}/status").hasAnyRole(Role.ADMIN.name(), Role.USER.name());
     }
 }

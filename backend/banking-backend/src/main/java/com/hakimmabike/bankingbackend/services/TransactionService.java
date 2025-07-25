@@ -205,30 +205,6 @@ public class TransactionService {
         return transferMapper.toDto(savedTransfer, fromAccount.getAccountNumber(), toAccount.getAccountNumber());
     }
 
-    // Get account transactions
-    public List<TransactionDto> getAllTransactionsByAccountId(Long accountId, GetTransactionsRequest request) {
-        //Check if account exists
-        Account account = accountRepository.findByAccountNumber(request.getAccountNumber())
-                .orElseThrow(() -> new EntityNotFoundException("Account not found with number: " + request.getAccountNumber()));
-
-        // Check if account ID matches the request
-        if (!account.getId().equals(accountId)) {
-            throw new EntityNotFoundException("Account ID does not match the account number provided");
-        }
-
-        List<Transaction> transactions = transactionRepository.findByAccount(account);
-
-        // Check if list is empty
-        if (transactions.isEmpty()) {
-            throw new EntityNotFoundException("No transactions found for account number: " + request.getAccountNumber());
-        }
-
-        // Map transactions to DTOs
-        return transactions.stream()
-                .map(transactionMapper::toDto)
-                .toList();
-    }
-
     public List<TransactionDto> getAllTransactions(Long userId) {
         // Get all accounts for the user
         List<Account> accounts = accountRepository.findByUserId(userId);
