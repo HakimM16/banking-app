@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Change the expiration to 10 minutes">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/UserService.java" afterDir="false" />
-    </list>
+    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Removed the following endpoints in AuthController: refresh" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -190,23 +186,7 @@
       <workItem from="1753252756737" duration="13974000" />
       <workItem from="1753333707465" duration="12686000" />
       <workItem from="1753425879516" duration="6000" />
-      <workItem from="1753428992302" duration="880000" />
-    </task>
-    <task id="LOCAL-00019" summary="Refactored the package service to services&#10;Added methods to generate JSON web tokens">
-      <option name="closed" value="true" />
-      <created>1752047077320</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1752047077320</updated>
-    </task>
-    <task id="LOCAL-00020" summary="Created an encryption key that successfully logins the user, with a token">
-      <option name="closed" value="true" />
-      <created>1752047813227</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1752047813227</updated>
+      <workItem from="1753428992302" duration="1180000" />
     </task>
     <task id="LOCAL-00021" summary="Added methods to validate JSON web tokens">
       <option name="closed" value="true" />
@@ -584,7 +564,23 @@
       <option name="project" value="LOCAL" />
       <updated>1753205170465</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="Removed the following endpoints in UserController: changeUserStatus, deleteUser&#10;Removed the following methods in UserService: deleteUser, changeUserStatus">
+      <option name="closed" value="true" />
+      <created>1753434068774</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1753434068774</updated>
+    </task>
+    <task id="LOCAL-00069" summary="Removed the following endpoints in AuthController: refresh">
+      <option name="closed" value="true" />
+      <created>1753434223213</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1753434223213</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -602,8 +598,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Sorted out the mapping issue for updateUserAddress" />
-    <MESSAGE value="Sorted out the mapping issue for updateUserAddress.&#10;Added responses such as not found to updateUserAddress.&#10;Solved the issue where it returned 401 for empty address, instead of 400" />
     <MESSAGE value="Removed userAddressMapper in userService.&#10;Added responses such as not found in getUserAddress" />
     <MESSAGE value="Changed the uri pathways from &quot;/{accountId}&quot; to &quot;/{userId}/{accountId}&quot;.&#10;Change balance type from string to bigDecimal in AccountDto." />
     <MESSAGE value="Added different http responses such as bad request in account controller" />
@@ -627,6 +621,8 @@
     <MESSAGE value="Added id and email to JwtResponse and change access token expiration to 5 minutes." />
     <MESSAGE value="Added category names with range of options in DepositForm and WithdrawalForm" />
     <MESSAGE value="Change the expiration to 10 minutes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Change the expiration to 10 minutes" />
+    <MESSAGE value="Removed the following endpoints in UserController: changeUserStatus, deleteUser&#10;Removed the following methods in UserService: deleteUser, changeUserStatus" />
+    <MESSAGE value="Removed the following endpoints in AuthController: refresh" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed the following endpoints in AuthController: refresh" />
   </component>
 </project>

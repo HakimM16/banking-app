@@ -26,7 +26,7 @@ public class AccountController {
 
     // Create a new account
     @PostMapping("/{userId}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED)//
     public ResponseEntity<?> createAccount(
             @PathVariable Long userId,
             @RequestBody CreateAccountRequest request,
@@ -68,7 +68,7 @@ public class AccountController {
     }
 
     // Update account status
-    @PatchMapping("/{userId}/{accountId}/status")
+    @PatchMapping("/{userId}/{accountId}/status")//
     public ResponseEntity<?> updateAccountStatus(
             @PathVariable Long userId,
             @PathVariable Long accountId,
@@ -107,110 +107,8 @@ public class AccountController {
         return ResponseEntity.ok(updatedAccount); // Return the updated account mapped to a DTO with a 200 OK status
     }
 
-    // Delete an existing account
-    @DeleteMapping("/{userId}/{accountId}")
-    public ResponseEntity<?> closeAccount(@PathVariable Long accountId, @RequestBody DeleteAccountRequest request) {
-        // check if account ID is valid
-        if (!accountRepository.existsById(accountId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Account with ID " + accountId + " does not exist.");
-        }
-
-        //check if account number is valid
-        if (!accountRepository.existsByAccountNumber(request.getAccountNumber()) && !request.getAccountNumber().isBlank()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Account number " + request.getAccountNumber() + " is invalid.");
-        } else if (request.getAccountNumber().equals("") || request.getAccountNumber().isBlank()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Account number cannot be blank.");
-        }
-
-        // Check if account type is valid
-        if (!AccountType.isValidType(request.getAccountType()) && !request.getAccountType().isBlank()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Invalid account type: " + request.getAccountType());
-        } else if (request.getAccountType().equals("") || request.getAccountType().isBlank()) {
-            // check if account type or account Type is blank
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Account type cannot be blank.");
-        }
-
-        if (request.getReason() == null || request.getReason().isBlank()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Reason for account closure cannot be blank.");
-        }
-
-
-        // Check if the account has a balance
-        if (accountRepository.findById(accountId).orElseThrow().getBalance().compareTo(BigDecimal.ZERO) != 0) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("Cannot delete account with a non-zero balance. Please withdraw or transfer funds first.");
-        }
-
-        accountService.deleteAccount(accountId, request);
-        return ResponseEntity.ok().build();
-    }
-
-    // Get account by ID
-    @GetMapping("/{userId}/{accountId}")
-    public ResponseEntity<?> getAccount(@PathVariable Long userId,@PathVariable Long accountId) {
-        // Check if account ID is valid
-        if (!accountRepository.existsByIdAndUserId(accountId, userId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Account with ID " + accountId + " does not exist.");
-        }
-        AccountDto accountDto = accountService.getAccountById(accountId, userId);
-        if (accountDto == null) {
-            return ResponseEntity.notFound().build(); // Return 404 Not Found if the account does not exist
-        }
-        return ResponseEntity.ok(accountDto); // Return the account mapped to a DTO with a 200 OK status
-    }
-
-    // update type on existing account
-    @PatchMapping("/{userId}/{accountId}")
-    public ResponseEntity<?> updateAccountType(
-            @PathVariable Long userId,
-            @PathVariable Long accountId,
-            @RequestBody UpdateAccountRequest request
-    )   {
-        // Check if account ID is valid
-        if (!accountRepository.existsByIdAndUserId(accountId, userId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Account with ID " + accountId + " does not exist.");
-        }
-
-        // Check if account type is valid
-        if (request.getAccountType() == null || request.getAccountType().isBlank()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Account type cannot be blank.");
-        }
-
-        if (!AccountType.isValidType(request.getAccountType())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Invalid account type: " + request.getAccountType());
-        }
-
-        // Check if account is closed
-        if (accountRepository.findById(accountId).orElseThrow().getStatus() == AccountStatus.CLOSED) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Account with ID " + accountId + " is closed and cannot be updated.");
-        }
-
-        // check if there is already an account with the same type for the user
-        if (accountRepository.existsByUserAndAccountType(userRepository.findById(userId).orElseThrow(), AccountType.valueOf(request.getAccountType()))) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("User with ID " + userId + " already has an account of type " + request.getAccountType() + ".");
-        }
-
-        AccountDto updatedAccount = accountService.updateAccountType(userId, accountId, request);
-        if (updatedAccount == null) {
-            return ResponseEntity.notFound().build(); // Return 404 Not Found if the account does not exist
-        }
-        return ResponseEntity.ok(updatedAccount); // Return the updated account mapped to a DTO with a 200 OK status
-    }
-
     // Get all accounts for a user
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/{userId}")//
     public ResponseEntity<?> getAllAccountsByUserId(@PathVariable Long userId) {
         // Check if user ID is valid
         if (!userRepository.existsById(userId)) {
@@ -230,7 +128,7 @@ public class AccountController {
     }
 
     // Get account balance
-    @GetMapping("/{userId}/{accountId}/balance")
+    @GetMapping("/{userId}/{accountId}/balance")//
     public ResponseEntity<?> getBalance(
             @PathVariable Long userId,
             @PathVariable Long accountId
@@ -254,7 +152,7 @@ public class AccountController {
     }
 
     // Get total balance for a user
-    @GetMapping("/{userId}/total-balance")
+    @GetMapping("/{userId}/total-balance")//
     public ResponseEntity<?> getTotalBalance(@PathVariable Long userId) {
         // Check if user ID is valid
         if (!userRepository.existsById(userId)) {
@@ -271,7 +169,7 @@ public class AccountController {
     }
 
     // Get number of active accounts for a user
-    @GetMapping("/{userId}/active-accounts")
+    @GetMapping("/{userId}/active-accounts")//
     public ResponseEntity<?> getActiveAccountsCount(@PathVariable Long userId) {
         // Check if user ID is valid
         if (!userRepository.existsById(userId)) {
