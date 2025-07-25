@@ -96,22 +96,6 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(user.getId(), user.getFirstName(), user.getEmail(),accessToken.toString()));
     }
 
-    @PostMapping("/refresh")
-    public ResponseEntity<?> refresh(
-            @CookieValue(value = "refreshToken") String refreshToken
-    ) {
-        var jwt = jwtService.parseToken(refreshToken);
-        if (jwt == null || jwt.isExpired()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 Unauthorized if the token is invalid
-        }
-
-        var user = userRepository.findById(jwt.getUserId()).orElseThrow(); // Retrieve the user from the database using the user ID from the JWT
-        var accessToken = jwtService.generateAccessToken(user); // Generate a new access token for the user
-
-        // Return the new access token in the response
-        return ResponseEntity.ok(new JwtResponse(user.getId(),user.getFirstName(), user.getEmail(),accessToken.toString()));
-    }
-
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Void> handleBadCredentialsException() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

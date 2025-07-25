@@ -13,8 +13,7 @@ public class AuthSecurityRules implements SecurityRules{
                 .requestMatchers(
                         // Authetication
                         "/api/auth/register",
-                        "/api/auth/login",
-                        "/api/auth/refresh"
+                        "/api/auth/login"
                 ).permitAll();
     }
 }
