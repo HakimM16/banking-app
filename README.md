@@ -17,7 +17,7 @@ A secure and user-friendly banking system that allows customers to create and ma
 
 Feel free to visit the site here
 
-**Place Screenshot/gif here**
+![Login page](loginPage.png)
 
 Here is a video that demonstrates how to navigate the app.
 
