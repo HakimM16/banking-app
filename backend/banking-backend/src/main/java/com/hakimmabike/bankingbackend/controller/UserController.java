@@ -56,49 +56,6 @@ public class UserController {
                 : ResponseEntity.notFound().build();
     }
 
-    // Delete a user
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        // Check if the user exists
-        if (!userRepository.existsById(id))  {
-            return ResponseEntity.notFound().build();
-        }
-        try {
-            userService.deleteUser(id);
-            return ResponseEntity.ok("User deleted successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
-
-    // Change users' status
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<?> changeUserStatus(
-            @PathVariable Long id,
-            @RequestBody UpdateStatusRequest status) {
-        // Check if the user exists
-        if (!userRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-
-        // check if status is valid
-        if (!UserStatus.isValidStatus(status.getStatus()) && !status.getStatus().equals("")) {
-            return ResponseEntity.badRequest().body("Invalid status provided");
-        }
-
-        // check if request body is empty
-        if (status.getStatus().equals("")) {
-            return ResponseEntity.badRequest().body("Status cannot be blank");
-        }
-
-        try {
-            userService.changeUserStatus(id, status);
-            return ResponseEntity.ok("User status updated successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
-
     // Create a new user address
     @PostMapping("/{id}/create_address")
     public ResponseEntity<?> createUserAddress(

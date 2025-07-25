@@ -62,27 +62,6 @@ public class UserService {
         return userEntityMapper.toDto(existingUser);
     }
 
-    public void deleteUser(Long userId) {
-        // Find the user by ID
-        User existingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-        // Delete the user
-        userRepository.delete(existingUser);
-    }
-
-    public void changeUserStatus(Long userId, UpdateStatusRequest status) {
-        // Find the existing user
-        User existingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-        // Update the user's status
-        existingUser.setStatus(UserStatus.valueOf(status.getStatus()));
-
-        // Save the updated user
-        userRepository.save(existingUser);
-    }
-
     public UserDto getUserById(Long userId) {
         // Find the user by ID
         var user = userRepository.findById(userId)
