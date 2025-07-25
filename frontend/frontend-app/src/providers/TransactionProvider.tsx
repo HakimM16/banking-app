@@ -123,12 +123,12 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
     const getTransactionsCount = async (userId: number): Promise<{ success: boolean; count?: number; message?: string }> => {
         try {
             const response = await api.getTransactionsCount(userId);
-            // console.log("Response from getTransactionsCount:", response);
+            console.log("Response from getTransactionsCount:", response);
             if (response) {
                 // Note: Make sure the API returns the correct property name
                 return { success: true, count: response.transactionsCount };
             } else {
-                return { success: false, message: 'Failed to fetch transactions count.' };
+                return { success: false, count: 0 };
             }
         } catch (error) {
             console.error('Error fetching transactions count:', error);

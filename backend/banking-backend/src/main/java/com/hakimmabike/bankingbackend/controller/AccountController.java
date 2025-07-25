@@ -160,7 +160,7 @@ public class AccountController {
         // Get the total balance for the user
         TotalBalanceDto totalBalance = accountService.getTotalBalance(userId);
         if (totalBalance == null) {
-            return ResponseEntity.notFound().build(); // Return 404 Not Found if no accounts found
+            return ResponseEntity.ok("User with ID " + userId + " has no accounts or balance."); // Return a message if no accounts found
         }
         return ResponseEntity.ok(totalBalance); // Return the total balance with a 200 OK status
     }

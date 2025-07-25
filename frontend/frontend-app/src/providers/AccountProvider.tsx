@@ -76,7 +76,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
         try {
             const accounts = await api.getAccounts(userId);
             if (!accounts) {
-                console.error('Failed to fetch accounts');
+                console.log('Failed to fetch accounts');
                 return [];
             }
             setAccounts(accounts);

@@ -4,48 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Removed unused DTOs">
+    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Moved the Dtos into separate folders">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionCategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionCategoryController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/AccountDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/account/AccountDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/ActiveAccountsDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/account/ActiveAccountsDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/BalanceDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/account/BalanceDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/CreateAccountRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/account/CreateAccountRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/CreateTransactionCategoryRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/transactionCategory/CreateTransactionCategoryRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/CustomiseAddressRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/user/CustomiseAddressRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/DepositRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/transaction/DepositRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/EmailDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/user/EmailDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/GetTransactionCategoryRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/transactionCategory/GetTransactionCategoryRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/JwtResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/auth/JwtResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/LoginUserRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/auth/LoginUserRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/RegisterUserRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/auth/RegisterUserRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/TotalBalanceDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/account/TotalBalanceDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/TotalTransactionsDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/transaction/TotalTransactionsDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/TransactionCategoryDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/transactionCategory/TransactionCategoryDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/TransactionDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/transaction/TransactionDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/TransferDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/transaction/TransferDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/TransferRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/transaction/TransferRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/UpdateAccountStatusRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/account/UpdateAccountStatusRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/UpdateUserRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/user/UpdateUserRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/UserAddressDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/user/UserAddressDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/UserDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/user/UserDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/WithdrawRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/transaction/WithdrawRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/mappers/AccountMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/mappers/AccountMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/mappers/TransactionMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/mappers/TransactionMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/mappers/TransferMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/mappers/TransferMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/mappers/UserAddressMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/mappers/UserAddressMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/mappers/UserEntityMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/mappers/UserEntityMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/AccountService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/TransactionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/services/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/AccountMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/AccountMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransactionMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransactionMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransferMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/TransferMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserAddressMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserAddressMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserEntityMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/UserEntityMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/AccountController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/AccountController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/TransactionController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/TransactionController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/AccountService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/AccountService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/TransactionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/TransactionService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/TransactionProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/providers/TransactionProvider.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -228,15 +197,8 @@
       <workItem from="1753252756737" duration="13974000" />
       <workItem from="1753333707465" duration="12686000" />
       <workItem from="1753425879516" duration="6000" />
-      <workItem from="1753428992302" duration="5226000" />
-    </task>
-    <task id="LOCAL-00024" summary="Added method to get current user">
-      <option name="closed" value="true" />
-      <created>1752056883875</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1752056883875</updated>
+      <workItem from="1753428992302" duration="5310000" />
+      <workItem from="1753439274390" duration="4884000" />
     </task>
     <task id="LOCAL-00025" summary="Replaced email with userId for JWT payload">
       <option name="closed" value="true" />
@@ -622,7 +584,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753435879630</updated>
     </task>
-    <option name="localTasksCounter" value="73" />
+    <task id="LOCAL-00073" summary="Moved the Dtos into separate folders">
+      <option name="closed" value="true" />
+      <created>1753439220114</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1753439220115</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -640,7 +610,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Made sure that the account to be updated is found by accountId and userId" />
     <MESSAGE value="added http responses such as bad request to updateAccountStatus" />
     <MESSAGE value="Changed the method deleteAccount to work as it wasn't working due to:&#10;'getResultList()' or 'getSingleResult()' must be a 'select' query" />
     <MESSAGE value="Added the response 404 to getAccount" />
@@ -665,6 +634,7 @@
     <MESSAGE value="Removed the following endpoints in AccountController: closeAccount, getAccount, updateAccountType&#10;Removed the following methods in AccountService: deleteAccount, getAccountById, updateAccountType" />
     <MESSAGE value="Removed the following endpoints in TransactionController: getAllTransactionsByAccountId&#10;Removed the following methods in TransactionService: getAllTransactionsByAccountId" />
     <MESSAGE value="Removed unused DTOs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed unused DTOs" />
+    <MESSAGE value="Moved the Dtos into separate folders" />
+    <option name="LAST_COMMIT_MESSAGE" value="Moved the Dtos into separate folders" />
   </component>
 </project>

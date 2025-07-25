@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -74,6 +75,11 @@ public class AccountService {
     public List<AccountDto> getUserAccounts(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        // check if user has accounts
+        if (!accountRepository.existsByUser(user)) {
+            return Collections.emptyList();
+        }
         return accountRepository.findByUser(user)
                 .stream()
                 .map(accountMapper::toDto)
@@ -105,6 +111,11 @@ public class AccountService {
     public TotalBalanceDto getTotalBalance(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        // check if user has accounts
+        if (!accountRepository.existsByUser(user)) {
+            return new TotalBalanceDto(BigDecimal.ZERO);
+        }
 
         List<Account> accounts = accountRepository.findByUser(user);
         BigDecimal totalBalance = accounts.stream()

@@ -175,9 +175,9 @@ public class TransactionController {
         // Fetch all transactions for the specified user ID
         List<TransactionDto> transactions = transactionService.getAllTransactions(userId);
 
-        // If no transactions are found, return a 404 Not Found status
+        // If no transactions are found, return a 200 OK status with a message
         if (transactions.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(transactions); // Return 200 OK with a message if no transactions are found
         }
         // Return the list of transactions with a 200 OK status
         return ResponseEntity.ok(transactions);
@@ -194,9 +194,9 @@ public class TransactionController {
 
         TotalTransactionsDto totalTransactionsDto = new TotalTransactionsDto(transactionsCount);
 
-        // If no transactions are found, return a 404 Not Found status
+        // If no transactions are found, return a 200 OK status with zero
         if (transactions.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(BigDecimal.ZERO); // Return 200 OK with zero if no transactions are found
         }
 
         // Return the total transactions count with a 200 OK status

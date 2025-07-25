@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -212,7 +213,7 @@ public class TransactionService {
         List<Account> accounts = accountRepository.findByUserId(userId);
 
         if (accounts.isEmpty()) {
-            throw new EntityNotFoundException("No accounts found for user with ID: " + userId);
+            return Collections.emptyList();
         }
 
         // Get all transactions for the user's accounts
@@ -220,7 +221,7 @@ public class TransactionService {
 
         // Check if transactions list is empty
         if (transactions.isEmpty()) {
-            throw new EntityNotFoundException("No transactions found for user with ID: " + userId);
+            return Collections.emptyList();
         }
         // Map transactions to DTOs
         return transactions.stream()
