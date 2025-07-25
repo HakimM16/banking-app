@@ -4,15 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Removed the following endpoints in TransactionController: getAllTransactionsByAccountId&#10;Removed the following methods in TransactionService: getAllTransactionsByAccountId">
+    <list default="true" id="353177b6-078f-4e16-9523-a370233cafc2" name="Changes" comment="Removed unused DTOs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionCategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionCategoryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/TransactionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/DeleteAccountRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hakimmabike/bankingbackend/dto/UpdateStatusRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/AccountController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/AccountController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/AuthController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/TransactionCategoryController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/TransactionCategoryController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/TransactionController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/TransactionController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/dto/DeleteAccountRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/dto/GetTransactionsRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/dto/UpdateAccountRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/dto/UpdateStatusRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/mappers/AccountMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/mappers/AccountMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/mappers/AccountMapperImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/mappers/AccountMapperImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/securityRules/AccountSecurityRules.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/securityRules/AccountSecurityRules.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/securityRules/AuthSecurityRules.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/securityRules/AuthSecurityRules.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/securityRules/UserSecurityRules.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/AccountService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/AccountService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/TransactionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/TransactionService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/hakimmabike/bankingbackend/services/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/AccountMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/hakimmabike/bankingbackend/mappers/AccountMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/app/(dashboard)/update/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/app/(dashboard)/update/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/forms/AddressForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/forms/AddressForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/forms/RegisterForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend-app/src/components/forms/RegisterForm.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -195,15 +209,7 @@
       <workItem from="1753252756737" duration="13974000" />
       <workItem from="1753333707465" duration="12686000" />
       <workItem from="1753425879516" duration="6000" />
-      <workItem from="1753428992302" duration="2580000" />
-    </task>
-    <task id="LOCAL-00023" summary="Implemented a custom filter to validate JWTs">
-      <option name="closed" value="true" />
-      <created>1752056037903</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1752056037903</updated>
+      <workItem from="1753428992302" duration="4344000" />
     </task>
     <task id="LOCAL-00024" summary="Added method to get current user">
       <option name="closed" value="true" />
@@ -589,7 +595,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753435087106</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="Removed unused DTOs">
+      <option name="closed" value="true" />
+      <created>1753435879630</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1753435879630</updated>
+    </task>
+    <option name="localTasksCounter" value="73" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -607,7 +621,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added different http responses such as bad request in account controller" />
     <MESSAGE value="Made sure that the account to be updated is found by accountId and userId" />
     <MESSAGE value="added http responses such as bad request to updateAccountStatus" />
     <MESSAGE value="Changed the method deleteAccount to work as it wasn't working due to:&#10;'getResultList()' or 'getSingleResult()' must be a 'select' query" />
@@ -632,6 +645,7 @@
     <MESSAGE value="Removed the following endpoints in AuthController: refresh" />
     <MESSAGE value="Removed the following endpoints in AccountController: closeAccount, getAccount, updateAccountType&#10;Removed the following methods in AccountService: deleteAccount, getAccountById, updateAccountType" />
     <MESSAGE value="Removed the following endpoints in TransactionController: getAllTransactionsByAccountId&#10;Removed the following methods in TransactionService: getAllTransactionsByAccountId" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed the following endpoints in TransactionController: getAllTransactionsByAccountId&#10;Removed the following methods in TransactionService: getAllTransactionsByAccountId" />
+    <MESSAGE value="Removed unused DTOs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed unused DTOs" />
   </component>
 </project>

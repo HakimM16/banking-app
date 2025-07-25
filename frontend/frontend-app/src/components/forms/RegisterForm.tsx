@@ -22,6 +22,8 @@ const RegisterForm: React.FC = () => {
     const [validPhone, setValidPhone] = useState<boolean>(true);
     const [validPassword, setValidPassword] = useState<boolean>(true);
     const [showPassword, setShowPassword] = useState(false);
+    const [notCapitalized, setNotCapitalized] = useState(false);
+    const [notCaptials, setNotCaptials] = useState(true); // This state is used to show an invalid message if the letters after the first letter are not capitalized
     const [isValidated, setIsValidated] = useState(true); // This state is used to show an invalid message if the form is not validated
     const { addAlert } = useAlerts();
     const router = useRouter();
@@ -65,22 +67,40 @@ const RegisterForm: React.FC = () => {
                             <input
                                 type="text"
                                 value={registerForm.firstName}
-                                onChange={(e) => setRegisterForm({...registerForm, firstName: e.target.value})}
+                                onChange={(e) => {
+                                    setRegisterForm({...registerForm, firstName: e.target.value});
+                                    setNotCaptials(e.target.value.substring(1).match(/[A-Z]/) !== null);
+                                }}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="First name"
                                 required
                             />
+                            {/* Check if the first letter is capitalized and the rest are not*/}
+                            {notCaptials && registerForm.firstName.length > 0 && (
+                                <p className="text-red-600 mt-2">
+                                    The first letter must be capitalised, and the rest must not be.
+                                </p>
+                            )}
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
                             <input
                                 type="text"
                                 value={registerForm.lastName}
-                                onChange={(e) => setRegisterForm({...registerForm, lastName: e.target.value})}
+                                onChange={(e) => {
+                                    setRegisterForm({...registerForm, lastName: e.target.value});
+                                    setNotCaptials(e.target.value.substring(1).match(/[A-Z]/) !== null);
+                                }}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Last name"
                                 required
                             />
+                            {/*Check if the first letter is capitalized and the rest are not*/}
+                            {notCaptials && registerForm.lastName.length > 0 && (
+                                <p className="text-red-600 mt-2">
+                                    The first letter must be capitalised, and the rest must not be.
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -92,14 +112,20 @@ const RegisterForm: React.FC = () => {
                             onChange={(e) => {
                                 setRegisterForm({...registerForm, email: e.target.value});
                                 setValidEmail(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value));
+                                setNotCapitalized(/^[A-Z]/.test(e.target.value)); // Check if the first letter is capitalized
                             }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Email address"
                             required
                         />
-                        {!validEmail && (
+                        {!validEmail && registerForm.email.length > 0 && (
                             <p className="text-red-600 mt-2">
                                 Please enter a valid email address.
+                            </p>
+                        )}
+                        {notCapitalized && registerForm.email.length > 0 && (
+                            <p className="text-red-600 mt-2">
+                                Email must not start with a capital letter.
                             </p>
                         )}
                     </div>
@@ -116,7 +142,7 @@ const RegisterForm: React.FC = () => {
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Phone number"
                         />
-                        {!validPhone && (
+                        {!validPhone && registerForm.phoneNumber.length > 0 && (
                             <p className="text-red-600 mt-2">
                                 Please enter a valid phone number (11-15 digits).
                             </p>
@@ -145,7 +171,7 @@ const RegisterForm: React.FC = () => {
                                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                             </button>
                         </div>
-                        {!validPassword && (
+                        {!validPassword && registerForm.password && (
                             <p className="text-red-600 mt-2">
                                 Password must be at least 6 characters long and contain at least one digit.
                             </p>

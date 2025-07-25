@@ -19,6 +19,8 @@ export default function ProfilePage() {
     const [validPhone, setValidPhone] = useState<boolean>(true);
     const [validPostcode, setValidPostcode] = useState<boolean>(true);
     const [validCountry, setValidCountry] = useState<boolean>(true);
+    const [notCapitalized, setNotCapitalized] = useState(false);
+    const [notCaptials, setNotCaptials] = useState(true); // This state is used to show an invalid message if the letters after the first letter are not capitalized
 
     // Valid countries
     const countries: string[] = [
@@ -171,11 +173,20 @@ export default function ProfilePage() {
                                 type="text"
                                 id="firstName"
                                 value={updateUserForm.firstName}
-                                onChange={(e) => setUpdateUserForm({...updateUserForm, firstName: e.target.value})}
+                                onChange={(e) => {
+                                    setUpdateUserForm({...updateUserForm, firstName: e.target.value});
+                                    setNotCaptials(e.target.value.substring(1).match(/[A-Z]/) !== null);
+                                }}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 required
                                 placeholder="e.g. John"
                             />
+                            {/* Check if the first letter is capitalized and the rest are not*/}
+                            {notCaptials && updateUserForm.firstName.length > 0 && (
+                                <p className="text-red-600 mt-2">
+                                    The first letter must be capitalised, and the rest must not be.
+                                </p>
+                            )}
                         </div>
                         <div>
                             <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">Last
@@ -184,11 +195,20 @@ export default function ProfilePage() {
                                 type="text"
                                 id="lastName"
                                 value={updateUserForm.lastName}
-                                onChange={(e) => setUpdateUserForm({...updateUserForm, lastName: e.target.value})}
+                                onChange={(e) => {
+                                    setUpdateUserForm({...updateUserForm, lastName: e.target.value});
+                                    setNotCaptials(e.target.value.substring(1).match(/[A-Z]/) !== null);
+                                }}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 required
                                 placeholder="e.g. Doe"
                             />
+                            {/* Check if the first letter is capitalized and the rest are not*/}
+                            {notCaptials && updateUserForm.lastName.length > 0 && (
+                                <p className="text-red-600 mt-2">
+                                    The first letter must be capitalised, and the rest must not be.
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -203,14 +223,20 @@ export default function ProfilePage() {
                                 setUpdateUserForm({...updateUserForm, email: e.target.value});
                                 setEmailForm(e.target.value);
                                 setValidEmail(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value));
+                                setNotCapitalized(/^[A-Z]/.test(e.target.value)); // Check if the first letter is capitalized
                             }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                             placeholder="e.g. john@gmail.com"
                         />
-                        {!validEmail && (
+                        {!validEmail && updateUserForm.email.length > 0 && (
                             <p className="text-red-600 mt-2">
                                 Please enter a valid email address.
+                            </p>
+                        )}
+                        {notCapitalized && updateUserForm.email.length > 0 && (
+                            <p className="text-red-600 mt-2">
+                                Email must not start with a capital letter.
                             </p>
                         )}
 
@@ -231,7 +257,7 @@ export default function ProfilePage() {
                             required
                             placeholder="e.g. 01234567890"
                         />
-                        {!validPhone && (
+                        {!validPhone && updateUserForm.phoneNumber.length > 0 && (
                             <p className="text-red-600 mt-2">
                                 Please enter a valid phone number (11-15 digits).
                             </p>
@@ -258,11 +284,20 @@ export default function ProfilePage() {
                             type="text"
                             id="city"
                             value={addressForm.city}
-                            onChange={(e) => setAddressForm({...addressForm, city: e.target.value})}
+                            onChange={(e) => {
+                                setAddressForm({...addressForm, city: e.target.value});
+                                setNotCaptials(e.target.value.substring(1).match(/[A-Z]/) !== null);
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                             placeholder="e.g. London"
                         />
+                        {/* Check if the first letter is capitalized and the rest are not*/}
+                        {notCaptials && addressForm.city.length > 0 && (
+                            <p className="text-red-600 mt-2">
+                                The first letter must be capitalised, and the rest must not be.
+                            </p>
+                        )}
                     </div>
                     <div>
                         <label htmlFor="county"
@@ -271,11 +306,20 @@ export default function ProfilePage() {
                             type="text"
                             id="county"
                             value={addressForm.county}
-                            onChange={(e) => setAddressForm({...addressForm, county: e.target.value})}
+                            onChange={(e) => {
+                                setAddressForm({...addressForm, county: e.target.value});
+                                setNotCaptials(e.target.value.substring(1).match(/[A-Z]/) !== null);
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                             placeholder="e.g. Hertfordshire"
                         />
+                        {/* Check if the first letter is capitalized and the rest are not*/}
+                        {notCaptials && addressForm.county.length > 0 && (
+                            <p className="text-red-600 mt-2">
+                                The first letter must be capitalised, and the rest must not be.
+                            </p>
+                        )}
                     </div>
                     <div>
                         <label htmlFor="postCode"
@@ -286,13 +330,13 @@ export default function ProfilePage() {
                             value={addressForm.postCode}
                             onChange={(e) => {
                                 setAddressForm({...addressForm, postCode: e.target.value});
-                                setValidPostcode(/^[A-Z0-9]{5,7}$/.test(e.target.value)); // UK postcode regex
+                                setValidPostcode(/^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]{5,7}$/.test(e.target.value)); // UK postcode regex - only uppercase letters and numbers, 5-7 characters, must contain both // UK postcode regex
                             }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                             placeholder="e.g LU40XX"
                         />
-                        {!validPostcode && (
+                        {!validPostcode && addressForm.postCode.length > 0 && (
                             <p className="text-red-600 mt-2">
                                 Please enter a valid UK postcode.
                             </p>
@@ -314,7 +358,7 @@ export default function ProfilePage() {
                             placeholder="e.g. United Kingdom"
                         />
                     </div>
-                    {!validCountry && (
+                    {!validCountry && addressForm.country.length > 0 && (
                         <p className="text-red-600 mt-2">
                             Please enter a valid country.
                         </p>

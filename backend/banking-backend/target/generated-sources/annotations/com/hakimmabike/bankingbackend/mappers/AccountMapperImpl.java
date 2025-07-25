@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-07-24T08:26:45+0100",
+    date = "2025-07-25T10:51:01+0100",
     comments = "version: 1.6.1, compiler: javac, environment: Java 24.0.1 (Oracle Corporation)"
 )
 @Component
@@ -62,21 +62,5 @@ public class AccountMapperImpl implements AccountMapper {
         }
 
         return account.build();
-    }
-
-    @Override
-    public Account update(Account account, UpdateAccountRequest request) {
-        if ( request == null ) {
-            return account;
-        }
-
-        if ( request.getAccountType() != null ) {
-            account.setAccountType( Enum.valueOf( AccountType.class, request.getAccountType() ) );
-        }
-        else {
-            account.setAccountType( null );
-        }
-
-        return account;
     }
 }

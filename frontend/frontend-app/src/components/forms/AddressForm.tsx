@@ -26,6 +26,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ id }) => {
     const { createAddress} = useAuth();
     const [validPostcode, setValidPostcode] = useState<boolean>(true);
     const [validCountry, setValidCountry] = useState<boolean>(true);
+    const [notCaptials, setNotCaptials] = useState(true); // This state is used to show an invalid message if the letters after the first letter are not capitalized
 
     // Valid countries
     const countries: string[] = [
@@ -90,7 +91,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ id }) => {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Street and Number</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Street Address</label>
                         <input
                             type="text"
                             value={addressForm.street}
@@ -105,10 +106,19 @@ const AddressForm: React.FC<AddressFormProps> = ({ id }) => {
                         <input
                             type="text"
                             value={addressForm.city}
-                            onChange={(e) => setAddressForm({...addressForm, city: e.target.value})}
+                            onChange={(e) => {
+                                setAddressForm({...addressForm, city: e.target.value});
+                                setNotCaptials(e.target.value.substring(1).match(/[A-Z]/) !== null);
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="e.g. London"
                         />
+                        {/* Check if the first letter is capitalized and the rest are not*/}
+                        {notCaptials && addressForm.city.length > 0 && (
+                            <p className="text-red-600 mt-2">
+                                The first letter must be capitalised, and the rest must not be.
+                            </p>
+                        )}
                     </div>
 
                     <div>
@@ -116,10 +126,19 @@ const AddressForm: React.FC<AddressFormProps> = ({ id }) => {
                         <input
                             type="text"
                             value={addressForm.county}
-                            onChange={(e) => setAddressForm({...addressForm, county: e.target.value})}
+                            onChange={(e) => {
+                                setAddressForm({...addressForm, county: e.target.value});
+                                setNotCaptials(e.target.value.substring(1).match(/[A-Z]/) !== null);
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="e.g. Hertfordshire"
                         />
+                        {/* Check if the first letter is capitalized and the rest are not*/}
+                        {notCaptials && addressForm.county.length > 0 && (
+                            <p className="text-red-600 mt-2">
+                                The first letter must be capitalised, and the rest must not be.
+                            </p>
+                        )}
                     </div>
 
                     <div>
@@ -129,12 +148,12 @@ const AddressForm: React.FC<AddressFormProps> = ({ id }) => {
                             value={addressForm.postCode}
                             onChange={(e) => {
                                 setAddressForm({...addressForm, postCode: e.target.value});
-                                setValidPostcode(/^[A-Z0-9]{5,7}$/.test(e.target.value)); // UK postcode regex
+                                setValidPostcode(/^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]{5,7}$/.test(e.target.value)); // UK postcode regex - only uppercase letters and numbers, 5-7 characters, must contain both // UK postcode regex
                             }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="e.g LU40XX"
                         />
-                        {!validPostcode && (
+                        {!validPostcode && addressForm.postCode.length > 0 && (
                             <p className="text-red-600 mt-2">
                                 Please enter a valid UK postcode.
                             </p>
