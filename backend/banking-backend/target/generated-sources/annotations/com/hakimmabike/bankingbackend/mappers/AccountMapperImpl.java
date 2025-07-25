@@ -1,7 +1,6 @@
 package com.hakimmabike.bankingbackend.mappers;
 
 import com.hakimmabike.bankingbackend.dto.AccountDto;
-import com.hakimmabike.bankingbackend.dto.UpdateAccountRequest;
 import com.hakimmabike.bankingbackend.entity.Account;
 import com.hakimmabike.bankingbackend.enums.AccountStatus;
 import com.hakimmabike.bankingbackend.enums.AccountType;

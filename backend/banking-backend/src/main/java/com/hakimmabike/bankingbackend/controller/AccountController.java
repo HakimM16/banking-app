@@ -6,7 +6,6 @@ import com.hakimmabike.bankingbackend.enums.AccountType;
 import com.hakimmabike.bankingbackend.repository.AccountRepository;
 import com.hakimmabike.bankingbackend.repository.UserRepository;
 import com.hakimmabike.bankingbackend.services.AccountService;
-import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

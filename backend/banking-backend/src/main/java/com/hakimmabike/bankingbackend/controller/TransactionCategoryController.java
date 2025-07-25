@@ -3,7 +3,6 @@ package com.hakimmabike.bankingbackend.controller;
 import com.hakimmabike.bankingbackend.dto.CreateTransactionCategoryRequest;
 import com.hakimmabike.bankingbackend.dto.TransactionCategoryDto;
 import com.hakimmabike.bankingbackend.enums.CategoryType;
-import com.hakimmabike.bankingbackend.enums.TransactionType;
 import com.hakimmabike.bankingbackend.repository.TransactionCategoryRepository;
 import com.hakimmabike.bankingbackend.services.TransactionService;
 import lombok.AllArgsConstructor;
@@ -12,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+// This controller is only used on Postman
 
 @RestController
 @AllArgsConstructor

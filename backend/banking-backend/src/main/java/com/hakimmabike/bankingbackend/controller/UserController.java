@@ -1,7 +1,6 @@
 package com.hakimmabike.bankingbackend.controller;
 
 import com.hakimmabike.bankingbackend.dto.*;
-import com.hakimmabike.bankingbackend.enums.UserStatus;
 import com.hakimmabike.bankingbackend.repository.UserRepository;
 import com.hakimmabike.bankingbackend.services.UserService;
 import jakarta.validation.Valid;

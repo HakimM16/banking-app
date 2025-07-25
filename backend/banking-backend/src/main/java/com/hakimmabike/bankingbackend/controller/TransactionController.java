@@ -1,9 +1,6 @@
 package com.hakimmabike.bankingbackend.controller;
 
 import com.hakimmabike.bankingbackend.dto.*;
-import com.hakimmabike.bankingbackend.enums.TransactionType;
-import com.hakimmabike.bankingbackend.repository.TransactionCategoryRepository;
-import com.hakimmabike.bankingbackend.repository.TransactionRepository;
 import com.hakimmabike.bankingbackend.services.AccountService;
 import com.hakimmabike.bankingbackend.services.TransactionService;
 import lombok.AllArgsConstructor;
@@ -21,8 +18,6 @@ import java.util.List;
 @RequestMapping("/api/transactions")
 public class TransactionController {
     private final TransactionService transactionService;
-    private final TransactionRepository transactionRepository;
-    private final TransactionCategoryRepository categoryRepository;
     private final AccountService accountService;
 
     // Deposit money into an account
