@@ -79,7 +79,7 @@ export interface RegisterFormInputs {
     email: string;
     phoneNumber: string;
     password: string;
-    role: String;
+    role: string;
 }
 
 // TransferRequest

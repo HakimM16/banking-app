@@ -10,7 +10,7 @@ import Decimal from 'decimal.js';
 import axios from "axios";
 
 // DashboardSummary component displays user's financial summary
-const DashboardSummary: React.FC<{}> = () => {
+const DashboardSummary: React.FC = () => {
     // Get account and transaction utility functions from context providers
     const { getTotalBalance, getActiveAccounts } = useAccounts();
     const { getTransactionsCount } = useTransactions();
@@ -33,7 +33,7 @@ const DashboardSummary: React.FC<{}> = () => {
 
     // State for balance, active accounts, and recent transactions count
     const [getBalance, setGetBalance] = useState<{ success: boolean; balance: Decimal; message: string } | null>(null);
-    const [activeAccounts, setActiveAccounts] = useState<{ success: boolean; number: Number; message: string } | null>();
+    const [activeAccounts, setActiveAccounts] = useState<{ success: boolean; number: number; message: string } | null>();
     const [recentTransactionsCount, setRecentTransactionsCount] = useState<{ success: boolean; count?: number; message?: string }>();
 
     // Fetch summary data when dependencies change

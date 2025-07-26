@@ -87,7 +87,7 @@ const LoginForm: React.FC = () => {
                             onClick={() => router.push('/register')}
                             className="text-indigo-600 hover:text-blue-800 text-sm cursor-pointer"
                         >
-                            Don't have an account? Register here
+                            Don&#39;t have an account? Register here
                         </button>
                     </div>
                     {!isValidated ?

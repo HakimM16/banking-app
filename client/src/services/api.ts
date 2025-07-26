@@ -86,7 +86,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
         },
 
         emailExists: async (email: string) => {
-            const response = await axios.get<Boolean>(`${API_BASE_URL}/api/user/email_exists/${email}`);
+            const response = await axios.get<boolean>(`${API_BASE_URL}/api/user/email_exists/${email}`);
             return response.data;
         },
 

@@ -9,7 +9,7 @@ import { Decimal } from "decimal.js"; // Import types
 interface AccountContextType {
     accounts: Account[];
     getAccounts: (userId: number) => Promise<Account[]>;
-    getActiveAccounts: (userId: number) => Promise<{ success: boolean; number: Number; message: string }>;
+    getActiveAccounts: (userId: number) => Promise<{ success: boolean; number: number; message: string }>;
     getTotalBalance: (userId: number) => Promise<{ success: boolean; balance: Decimal; message: string }>;
     getAccountBalance: (userId: number, accountId: number) => Promise<{ success: boolean; balance: Decimal; message: string }>;
     changeAccountStatus: (userId: number, accountId: number, request: UpdateAccountStatusFormInputs) => Promise<{ success: boolean; message?: string }>;
@@ -97,7 +97,6 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
                 return { success: false, balance: new Decimal(0), message: 'Failed to fetch balance.' };
             }
             // Return the balance from the response
-            // @ts-ignore
             return {
                 success: true,
                 balance: response.balance, // Convert Decimal to string
@@ -117,7 +116,6 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
                 console.error('Failed to fetch account balance');
                 return { success: false, balance: new Decimal(0), message: 'Failed to fetch account balance.' };
             }
-            // @ts-ignore
             return { success: true, balance: response.balance, message: 'Account balance fetched successfully.' };
         } catch (error) {
             console.error('Error fetching account balance:', error);
@@ -126,7 +124,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     }
 
     // Fetch the number of active accounts for a user
-    const getActiveAccounts = async (userId: number): Promise<{ success: boolean; number: Number; message: string }> => {
+    const getActiveAccounts = async (userId: number): Promise<{ success: boolean; number: number; message: string }> => {
         try {
             const accounts = await api.getActiveAccounts(userId);
             // console.log("Active accounts response:", accounts);
