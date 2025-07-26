@@ -1,5 +1,11 @@
 spring:
   datasource:
     url: ${DATABASE_URL}
+    driver-class-name: org.postgresql.Driver
 server:
   port: ${PORT:8080}
+
+cors:
+  allowed-origins:
+    - "https://your-app-name.vercel.app"
+    - "http://localhost:3000"
