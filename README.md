@@ -19,7 +19,7 @@ Feel free to visit the site here
 
 ![Login page](loginPage.png)
 
-Here is a video that demonstrates how to navigate the app.
+Here is a [video](https://www.loom.com/share/0853900ba52a460cb77971a85f925dcc?sid=81a97e55-a8ec-4c55-92d3-fa8956d3825e) that demonstrates how to navigate the app.
 
 ## 🏗️ Tech Stack
 
