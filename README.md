@@ -15,11 +15,15 @@ A secure and user-friendly banking system that allows customers to create and ma
 
 ## 🔗 Visit The Site
 
-Feel free to visit the site here
+Feel free to visit the site **here**
 
-![Login page](loginPage.png)
+<div>
+    <a href="https://www.loom.com/share/0853900ba52a460cb77971a85f925dcc">
+      <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/0853900ba52a460cb77971a85f925dcc-4bcec6b899f082e1-full-play.gif">
+    </a>
+  </div>
 
-Here is a video that demonstrates how to navigate the app.
+Here is a [video](https://www.loom.com/share/0853900ba52a460cb77971a85f925dcc?sid=81a97e55-a8ec-4c55-92d3-fa8956d3825e) that demonstrates how to navigate the app.
 
 ## 🏗️ Tech Stack
 
