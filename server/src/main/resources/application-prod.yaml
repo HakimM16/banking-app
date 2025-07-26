@@ -2,6 +2,12 @@ spring:
   datasource:
     url: ${DATABASE_URL}
     driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop  # This will create tables automatically
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    flyway:
+      enabled: false  # Disable Flyway temporarily
 server:
   port: ${PORT:8080}
 
