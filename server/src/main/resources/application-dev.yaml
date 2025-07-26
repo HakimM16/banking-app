@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bankingApp?assumeMinServerVersion=16
+    username: postgres
+    password: Paulpogba6!
