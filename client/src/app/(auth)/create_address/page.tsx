@@ -1,11 +1,11 @@
 // src/app/(auth)/register/page.tsx
 'use client';
 
-import React, { ReactNode } from 'react';
+import React, { ReactNode, Suspense } from 'react';
 import AddressForm from "@/components/forms/AddressForm";
 import { useSearchParams } from 'next/navigation';
 
-export default function RegisterPage() {
+function RegisterPageContent() {
     // This page is for registering a new user and completing their address
     const searchParams = useSearchParams();
     const idFromParams = searchParams.get('id');
@@ -30,5 +30,13 @@ export default function RegisterPage() {
 
     return (
         <AddressForm id={id}/>
+    );
+}
+
+export default function RegisterPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <RegisterPageContent />
+        </Suspense>
     );
 }
