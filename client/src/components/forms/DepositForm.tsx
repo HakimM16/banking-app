@@ -24,6 +24,7 @@ const DepositForm: React.FC = () => {
 
     // Check if the amount is more than 10000
     const [isAmountmore, setIsAmountMore] = useState(false);
+
     const [id, setId] = useState<string | null>(null);
 
     useEffect(() => {

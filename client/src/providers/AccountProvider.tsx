@@ -102,11 +102,12 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     const getAccountBalance = async (userId: number, accountId: number): Promise<{ success: boolean; balance: string; message: string }> => {
         try {
             const response = await api.getAccountBalance(userId, accountId);
+            console.log("Response from getAccountBalance:", response);
             if (!response) {
                 console.error('Failed to fetch account balance');
                 return { success: false, balance: new Decimal(0).toString(), message: 'Failed to fetch account balance.' };
             }
-            return { success: true, balance: response.toString(), message: 'Account balance fetched successfully.' };
+            return { success: true, balance: response.balance.toString(), message: 'Account balance fetched successfully.' };
         } catch (error) {
             console.error('Error fetching account balance:', error);
             return { success: false, balance: new Decimal(0).toString(), message: 'Error fetching account balance.' };

@@ -1,7 +1,7 @@
 // src/components/forms/TransferForm.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Send } from 'lucide-react';
 import { useAccounts } from '@/providers/AccountProvider';
 import { useTransactions } from '@/providers/TransactionProvider';
@@ -26,51 +26,78 @@ const TransferForm: React.FC = () => {
     });
 
     // Get user id from localStorage
-    const id = localStorage.getItem('id');
+    const [id, setId] = useState<string | null>(null);
+
+    useEffect(() => {
+        const storedId = localStorage.getItem('id');
+        setId(storedId);
+    }, []);
 
     // Handle form submission for transfer
     const handleTransfer = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!id) {
+            console.log('User ID not available', 'error');
+            return;
+        }
+
         const token = localStorage.getItem('authToken');
-        // Set the default Authorization header for all future axios requests
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        if (!token) {
+            console.log('No authentication token found', 'error');
+            return;
+        }
 
         // check if description is empty and set it to 'No comment' if true
         if (transferForm.description.trim() === '') {
             transferForm.description = 'General Transfer';
         }
 
+        const userId = parseInt(id, 10);
 
-        if (id) {
-            const userId = parseInt(id, 10);
+        // check if fromAccount balance is less than amount
+        if (fromId) {
+            const fromAccount = await getAccountBalance(userId, fromId);
+            if (fromAccount.success) {
+                // Handle balance properly - it might already be a Decimal or a number/string
+                let accountBalance: Decimal;
+                if (fromAccount.balance instanceof Decimal) {
+                    accountBalance = fromAccount.balance;
+                } else {
+                    accountBalance = new Decimal(fromAccount.balance);
+                }
 
-            // check if fromAccount balance is less than amount
-            if (fromId) {
-                const fromAccount = await getAccountBalance(userId, fromId);
-                if (fromAccount.success && new Decimal(fromAccount.balance).lessThan(transferForm.amount)) {
+                if (accountBalance.lessThan(transferForm.amount)) {
                     setIsBalanceLess(true);
                     return;
                 } else {
                     setIsBalanceLess(false);
                 }
             }
+        }
 
-            // Prepare transfer data
-            const transferData = {
-                ...transferForm,
-                amount: transferForm.amount
-            };
+        // Prepare transfer data
+        const transferData = {
+            ...transferForm,
+            amount: transferForm.amount
+        };
 
-
-            // Call makeTransfer and handle result
-            const result = await makeTransfer(userId, transferData);
-            if (result.success) {
-                // Reset form after successful transfer
-                setTransferForm({ fromAccount: '', toAccount: '', amount: new Decimal(0), description: '' });
-                window.location.reload();
-            } else {
-                console.log(result.message || 'Transfer failed.', 'error');
+        // Set authorization header for this specific request
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             }
+        };
+
+        // Call makeTransfer and handle result
+        const result = await makeTransfer(userId, transferData, config);
+        if (result.success) {
+            // Reset form after successful transfer
+            setTransferForm({ fromAccount: '', toAccount: '', amount: new Decimal(0), description: '' });
+            window.location.reload();
+        } else {
+            console.log(result.message || 'Transfer failed.', 'error');
         }
     };
 
@@ -175,6 +202,7 @@ const TransferForm: React.FC = () => {
                 <button
                     type="submit"
                     className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                    disabled={!id}
                 >
                     <Send size={20} />
                     Process Transfer
