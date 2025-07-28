@@ -1,7 +1,7 @@
 // src/components/forms/DepositForm.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import { useAccounts } from '@/providers/AccountProvider';
 import { useTransactions } from '@/providers/TransactionProvider';
@@ -24,14 +24,25 @@ const DepositForm: React.FC = () => {
 
     // Check if the amount is more than 10000
     const [isAmountmore, setIsAmountMore] = useState(false);
+    const [id, setId] = useState<string | null>(null);
 
-    const id = localStorage.getItem('id');
+    useEffect(() => {
+        const storedId = localStorage.getItem('id');
+        setId(storedId);
+
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        }
+    }, []);
 
     const handleDeposit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const token = localStorage.getItem('authToken');
-        // Set the default Authorization header for all future axios requests
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
+        if (!id) {
+            console.log('User ID not available', 'error');
+            return;
+        }
 
         // check if description is empty and set it to 'No comment' if true
         if (depositForm.description.trim() === '') {
@@ -43,24 +54,22 @@ const DepositForm: React.FC = () => {
             depositForm.categoryName = 'General Deposit';
         }
 
-        if (id) {
-            const userId = parseInt(id, 10);
+        const userId = parseInt(id, 10);
 
-            // Create a modified version of the form data with the amount as a string or number
-            const depositData = {
-                ...depositForm,
-                amount: depositForm.amount
-            };
+        // Create a modified version of the form data with the amount as a string or number
+        const depositData = {
+            ...depositForm,
+            amount: depositForm.amount
+        };
 
-            const result = await makeDeposit(userId, depositData);
-            if (result.success) {
-                console.log('Deposit completed successfully!', 'success');
-                setDepositForm({ accountNumber: '', amount: new Decimal(0), description: '', categoryName: '' });
-                window.location.reload();
+        const result = await makeDeposit(userId, depositData);
+        if (result.success) {
+            console.log('Deposit completed successfully!', 'success');
+            setDepositForm({ accountNumber: '', amount: new Decimal(0), description: '', categoryName: '' });
+            window.location.reload();
 
-            } else {
-                console.log(result.message || 'Deposit failed.', 'error');
-            }
+        } else {
+            console.log(result.message || 'Deposit failed.', 'error');
         }
     };
 
@@ -151,13 +160,14 @@ const DepositForm: React.FC = () => {
                 <button
                     type="submit"
                     className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                    disabled={!id}
                 >
                     <Plus size={20} />
                     Process Deposit
                 </button>
             </form>
 
-            {/*Check if amouunt is more than 10000*/}
+            {/*Check if amount is more than 10000*/}
             {isAmountmore && (
                 <p className="text-red-600 mt-2">
                     Deposit limit exceeded. Maximum amount is £10,000.
