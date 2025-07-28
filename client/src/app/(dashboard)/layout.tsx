@@ -54,7 +54,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     useEffect(() => {
         // Check backend status every 10 seconds
         const interval = setInterval(() => {
-            fetch('http://localhost:8080/actuator/health', {
+            fetch('https://banking-app-xi-wheat.vercel.app/actuator/health', {
                 method: 'GET',
                 mode: 'cors',
                 headers: {

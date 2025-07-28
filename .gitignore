@@ -1,7 +1,0 @@
-# Deployment
-.vercel
-.railway
-
-# Environment variables
-client/.env.production
-server/src/main/resources/application-prod.yaml
