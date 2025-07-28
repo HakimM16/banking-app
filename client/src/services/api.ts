@@ -132,31 +132,31 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
         // Deposit funds into user's account
         deposit : async (userId: number, data: DepositFormInputs) => {
-            const response = await axios.post<Transaction>(`${API_BASE_URL}/transactions/${userId}/deposit`, data);
+            const response = await axios.post<Transaction>(`${API_BASE_URL}/api/transactions/${userId}/deposit`, data);
             return response.data;
         },
 
         // Withdraw funds from user's account
         withdraw: async (userId: number, data: WithdrawFormInputs) => {
-            const response = await axios.post<Transaction>(`${API_BASE_URL}/transactions/${userId}/withdraw`, data);
+            const response = await axios.post<Transaction>(`${API_BASE_URL}/api/transactions/${userId}/withdraw`, data);
             return response.data;
         },
 
         // Transfer funds between accounts
         transfer: async (userId: number, data: TransferFormInputs) => {
-            const response = await axios.post<Transaction>(`${API_BASE_URL}/transactions/${userId}/transfer`, data);
+            const response = await axios.post<Transaction>(`${API_BASE_URL}/api/transactions/${userId}/transfer`, data);
             return response.data;
         },
 
         // Get all transactions for a user's account
         getTransactions: async (userId: number) => {
-            const response = await axios.get<Transaction[]>(`${API_BASE_URL}/transactions/${userId}/account`);
+            const response = await axios.get<Transaction[]>(`${API_BASE_URL}/api/transactions/${userId}/account`);
             return response.data;
         },
 
         // Get total count of transactions for a user
         getTransactionsCount: async (userId: number) => {
-            const response = await axios.get<TransactionCount>(`${API_BASE_URL}/transactions/${userId}/total`);
+            const response = await axios.get<TransactionCount>(`${API_BASE_URL}/api/transactions/${userId}/total`);
             return response.data;
         },
 
