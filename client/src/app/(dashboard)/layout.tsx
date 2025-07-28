@@ -18,6 +18,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
 
+    // Define the base URL for your API
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+
     // Handle screen size detection
     useEffect(() => {
         const handleResize = () => {
@@ -54,7 +57,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     useEffect(() => {
         // Check backend status every 10 seconds
         const interval = setInterval(() => {
-            fetch('https://banking-app-xi-wheat.vercel.app/actuator/health', {
+            fetch(`${API_BASE_URL}/actuator/health`, {
                 method: 'GET',
                 mode: 'cors',
                 headers: {

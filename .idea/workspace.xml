@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7edbb3ca-bb54-4dc6-b04b-e08c7027eccb" name="Changes" comment="Added vercel.json and .gitignore to support the deployment" />
+    <list default="true" id="7edbb3ca-bb54-4dc6-b04b-e08c7027eccb" name="Changes" comment="Changed the URL of actuator/health">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,12 +21,12 @@
     &quot;assignee&quot;: &quot;HakimM16&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/HakimM16/banking-app.git",
-    "accountId": "c6cd20ef-7b27-49f1-97b1-0718a51ab435"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/HakimM16/banking-app.git&quot;,
+    &quot;accountId&quot;: &quot;c6cd20ef-7b27-49f1-97b1-0718a51ab435&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -76,6 +78,8 @@
       <workItem from="1753456962357" duration="556000" />
       <workItem from="1753478250157" duration="171000" />
       <workItem from="1753695283344" duration="378000" />
+      <workItem from="1753696969343" duration="309000" />
+      <workItem from="1753697583492" duration="606000" />
     </task>
     <task id="LOCAL-00001" summary="Restructured the files into suitable folders">
       <option name="closed" value="true" />
@@ -101,7 +105,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753695481504</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Changed the URL of actuator/health">
+      <option name="closed" value="true" />
+      <created>1753697275331</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1753697275331</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -111,6 +123,7 @@
     <MESSAGE value="Restructured the files into suitable folders" />
     <MESSAGE value="Added the login page screenshot in README.md" />
     <MESSAGE value="Added vercel.json and .gitignore to support the deployment" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added vercel.json and .gitignore to support the deployment" />
+    <MESSAGE value="Changed the URL of actuator/health" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed the URL of actuator/health" />
   </component>
 </project>
