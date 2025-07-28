@@ -168,3 +168,8 @@ export interface TotalBalanceResponse {
     balance: number;
 }
 
+// AccountBalanceResponse
+export interface Balance {
+    accountNumber: string;
+    balance: Decimal;
+}
