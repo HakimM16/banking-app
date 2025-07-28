@@ -2,7 +2,8 @@
 import React from 'react';
 import { CreditCard } from 'lucide-react';
 import { formatCurrency } from '@/utils/helpers';
-import { Account } from '@/types'; // Import type
+import { Account } from '@/types';
+import {Decimal} from "decimal.js"; // Import type
 
 // Props interface for AccountCard component
 interface AccountCardProps {
@@ -41,7 +42,7 @@ const AccountCard: React.FC<AccountCardProps> = ({ account }) => {
                 <p className={`text-sm ${account.status === 'OPEN' ? 'text-green-600' : 'text-red-600'}`}>
                     {account.status}
                 </p>
-                {account.balance.greaterThan(0) ? (
+                {new Decimal(account.balance).greaterThan(0) ? (
                     <p className="text-sm text-gray-500">Unable to Deactivate</p>
                 ) : (
                     <p className="text-sm text-gray-500">Ready to Deactivate</p>

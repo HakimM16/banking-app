@@ -81,13 +81,18 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     const getTotalBalance = async (userId: number): Promise<{ success: boolean; balance: string; message: string }> => {
         try {
             const response = await api.getBalance(userId);
+            console.log('Response from getTotalBalance:', response);
+            console.log("type of response:", typeof response);
+            //console.log("type of balance:", typeof response);
             if (!response) {
                 console.error('Failed to fetch balance');
                 return { success: false, balance: new Decimal(0).toString(), message: 'Failed to fetch balance.' };
             }
             return {
                 success: true,
-                balance: response.toString(),
+                balance: typeof response.balance === 'number' || typeof response.balance === 'string'
+                    ? response.balance.toString()
+                    : new Decimal(0).toString(),
                 message: 'Balance fetched successfully.'
             }
         } catch (error) {
@@ -130,7 +135,8 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
         const account = accounts.find(acc => acc.id === accountId);
 
         if (account?.balance) {
-            if (account.balance.greaterThan(0)) {
+            const balanceDecimal = new Decimal(account.balance);
+            if (balanceDecimal.greaterThan(0)) {
                 console.log("Balance is not zero");
                 return { success: false, message: 'Cannot change status of account with non-zero balance.' };
             }

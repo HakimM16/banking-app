@@ -106,7 +106,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
         // Get total balance for a user
         getBalance: async (userId: number) => {
-            const response = await axios.get<Decimal>(`${API_BASE_URL}/api/accounts/${userId}/total-balance`);
+            const response = await axios.get<number>(`${API_BASE_URL}/api/accounts/${userId}/total-balance`);
             return response.data;
         },
 
