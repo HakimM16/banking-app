@@ -29,11 +29,6 @@ const DepositForm: React.FC = () => {
     useEffect(() => {
         const storedId = localStorage.getItem('id');
         setId(storedId);
-
-        const token = localStorage.getItem('authToken');
-        if (token) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        }
     }, []);
 
     const handleDeposit = async (e: React.FormEvent) => {
@@ -41,6 +36,13 @@ const DepositForm: React.FC = () => {
 
         if (!id) {
             console.log('User ID not available', 'error');
+            return;
+        }
+
+        // Get fresh token for this request
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            console.log('No authentication token found', 'error');
             return;
         }
 
@@ -62,12 +64,19 @@ const DepositForm: React.FC = () => {
             amount: depositForm.amount
         };
 
-        const result = await makeDeposit(userId, depositData);
+        // Set authorization header for this specific request
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const result = await makeDeposit(userId, depositData, config);
         if (result.success) {
             console.log('Deposit completed successfully!', 'success');
             setDepositForm({ accountNumber: '', amount: new Decimal(0), description: '', categoryName: '' });
             window.location.reload();
-
         } else {
             console.log(result.message || 'Deposit failed.', 'error');
         }
