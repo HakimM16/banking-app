@@ -24,12 +24,12 @@ export default function ProfilePage() {
     });
 
     // Get id from localStorage if not in URL params
-    const storedId = localStorage.getItem('id');
     React.useEffect(() => {
+        const storedId = localStorage.getItem('id');
         if (storedId) {
             setId(parseInt(storedId, 10));
         }
-    }, [storedId]);
+    }, []);
 
     useEffect(() => {
         const token = localStorage.getItem('authToken');
