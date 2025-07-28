@@ -163,3 +163,8 @@ export interface WithdrawFormInputs {
     categoryName: string; // Optional, if you want to categorize withdrawals
 }
 
+// TotalBalanceResponse
+export interface TotalBalanceResponse {
+    balance: number;
+}
+

@@ -83,21 +83,19 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
             const response = await api.getBalance(userId);
             console.log('Response from getTotalBalance:', response);
             console.log("type of response:", typeof response);
-            //console.log("type of balance:", typeof response);
+            console.log("type of balance:", typeof response.balance);
             if (!response) {
                 console.error('Failed to fetch balance');
-                return { success: false, balance: new Decimal(0).toString(), message: 'Failed to fetch balance.' };
+                return { success: false, balance: 'Zero', message: 'Failed to fetch balance.' };
             }
             return {
                 success: true,
-                balance: typeof response.balance === 'number' || typeof response.balance === 'string'
-                    ? response.balance.toString()
-                    : new Decimal(0).toString(),
+                balance: response.balance.toString(),
                 message: 'Balance fetched successfully.'
             }
         } catch (error) {
             console.error('Error fetching balance:', error);
-            return { success: false, balance: new Decimal(0).toString(), message: 'Error fetching balance.' };
+            return { success: false, balance: 'Zero', message: 'Error fetching balance.' };
         }
     };
 

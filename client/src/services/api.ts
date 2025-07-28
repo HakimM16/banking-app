@@ -18,7 +18,7 @@ import {
     CreateTransactionCategoryFormInputs,
     AccountCount,
     TransactionCount,
-    Email
+    Email, TotalBalanceResponse
 } from '@/types';
 import axios, {AxiosResponse} from 'axios';
 import {Decimal} from "decimal.js"; // Or just use native fetch
@@ -106,7 +106,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
         // Get total balance for a user
         getBalance: async (userId: number) => {
-            const response = await axios.get<number>(`${API_BASE_URL}/api/accounts/${userId}/total-balance`);
+            const response = await axios.get<TotalBalanceResponse>(`${API_BASE_URL}/api/accounts/${userId}/total-balance`);
             return response.data;
         },
 

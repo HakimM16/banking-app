@@ -19,12 +19,28 @@ export default function DashboardPage() {
     const router = useRouter();
     const { currentUser } = useAuth();
 
-    const token = localStorage.getItem('authToken');
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        }
+    }, []);
 
-    const id: string = localStorage.getItem('id') || '';
+    const [id, setId] = useState<string>('');
+
+    useEffect(() => {
+        const storedId = localStorage.getItem('id') || '';
+        setId(storedId);
+    }, []);
+
     const userId = parseInt(id, 10);
-    const name = localStorage.getItem('name');
+
+    const [name, setName] = useState<string>('');
+
+    useEffect(() => {
+        const storedName = localStorage.getItem('name') || '';
+        setName(storedName);
+    }, []);
 
     const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
 
