@@ -4,6 +4,7 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { useAuth } from './AuthProvider';
 import { Transaction, TransferFormInputs, DepositFormInputs, WithdrawFormInputs } from '@/types'; // Import types
+import axios from "axios"; // Import type
 import Decimal from 'decimal.js';
 import {api} from "@/services/api";
 
@@ -81,6 +82,15 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
     // Handles transfer logic
     const makeTransfer = async (userId: number, request: TransferFormInputs): Promise<{ success: boolean; message?: string }> => {
         if (!currentUser) return { success: false, message: 'User not logged in.' };
+
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            console.log('No authentication token found', 'error');
+            return;
+        }
+
+        // Set authorization header for axios
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
         const amount = new Decimal(request.amount).toNumber();
         if (isNaN(amount) || amount <= 0) return { success: false, message: 'Amount must be a positive number.' };

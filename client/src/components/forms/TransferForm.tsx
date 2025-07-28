@@ -61,10 +61,12 @@ const TransferForm: React.FC = () => {
             if (fromAccount.success) {
                 // Handle balance properly - it might already be a Decimal or a number/string
                 let accountBalance: Decimal;
-                if (fromAccount.balance instanceof Decimal) {
-                    accountBalance = fromAccount.balance;
-                } else {
-                    accountBalance = new Decimal(fromAccount.balance);
+                console.log(typeof fromAccount.balance);
+                try {
+                    accountBalance = new Decimal(fromAccount.balance.toString());
+                } catch (error) {
+                    console.error("Error converting balance to Decimal:", error);
+                    accountBalance = new Decimal(0);
                 }
 
                 if (accountBalance.lessThan(transferForm.amount)) {
@@ -91,7 +93,7 @@ const TransferForm: React.FC = () => {
         };
 
         // Call makeTransfer and handle result
-        const result = await makeTransfer(userId, transferData, config);
+        const result = await makeTransfer(userId, transferData);
         if (result.success) {
             // Reset form after successful transfer
             setTransferForm({ fromAccount: '', toAccount: '', amount: new Decimal(0), description: '' });
