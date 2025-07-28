@@ -49,7 +49,6 @@ export default function AccountsPage() {
             return;
         }
 
-
         const token = localStorage.getItem('authToken');
         // Set the default Authorization header for all future axios requests
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
