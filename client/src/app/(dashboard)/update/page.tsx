@@ -4,7 +4,6 @@
 import React, { useState, useEffect } from 'react';
 import { User, Settings } from 'lucide-react';
 import { useAuth } from '@/providers/AuthProvider';
-import { useAlerts } from '@/hooks/useAlerts';
 import {CustomiseAddressFormInputs, Email, ProfileFormInputs, UpdateUserFormInputs} from '@/types';
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -12,7 +11,6 @@ import axios from "axios";
 export default function ProfilePage() {
     const router = useRouter();
     const {currentUser, updateUser, updateAddress, emailExists} = useAuth();
-    const {addAlert} = useAlerts();
     const [id, setId] = useState<string | null>(null);
     const [emailPresent, setEmailPresent] = useState<boolean>(false);
     const [validEmail, setValidEmail] = useState<boolean>(true);
@@ -109,17 +107,17 @@ export default function ProfilePage() {
                     const address = await updateAddress(userId, addressForm);
 
                     if (user.success && address.success) {
-                        addAlert('Profile updated successfully!', 'success');
+                        console.log('Profile updated successfully!', 'success');
                         // Update localStorage with new first name
                         localStorage.setItem('name', updateUserForm.firstName);
                         localStorage.setItem('currentUser', updateUserForm.email);
 
                         window.location.reload();
                     } else {
-                        addAlert(user.message || 'Failed to update profile.', 'error');
+                        console.log(user.message || 'Failed to update profile.', 'error');
                     }
                 } else {
-                    addAlert('User ID not found. Please log in again.', 'error');
+                    console.log('User ID not found. Please log in again.', 'error');
                     return;
                 }
             }
@@ -130,17 +128,17 @@ export default function ProfilePage() {
                 const address = await updateAddress(userId, addressForm);
 
                 if (user.success && address.success) {
-                    addAlert('Profile updated successfully!', 'success');
+                    console.log('Profile updated successfully!', 'success');
                     // Update localStorage with new first name
                     localStorage.setItem('name', updateUserForm.firstName);
                     localStorage.setItem('currentUser', updateUserForm.email);
 
                     window.location.reload();
                 } else {
-                    addAlert(user.message || 'Failed to update profile.', 'error');
+                    console.log(user.message || 'Failed to update profile.', 'error');
                 }
             } else {
-                    addAlert('User ID not found. Please log in again.', 'error');
+                    console.log('User ID not found. Please log in again.', 'error');
                     return;
                 }
         }

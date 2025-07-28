@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import { Send } from 'lucide-react';
 import { useAccounts } from '@/providers/AccountProvider';
 import { useTransactions } from '@/providers/TransactionProvider';
-import { useAlerts } from '@/hooks/useAlerts';
 import { TransferFormInputs } from '@/types';
 import {Decimal} from "decimal.js";
 import axios from "axios"; // Import type
@@ -15,7 +14,6 @@ const TransferForm: React.FC = () => {
     // Get accounts, transfer function, and alert function from context/providers
     const { accounts, getAccountBalance } = useAccounts();
     const { makeTransfer } = useTransactions();
-    const { addAlert } = useAlerts();
     const [ isBalanceLess, setIsBalanceLess ] = useState(false);
     const [fromId, setFromId] = useState<number | null>(null);
 
@@ -71,7 +69,7 @@ const TransferForm: React.FC = () => {
                 setTransferForm({ fromAccount: '', toAccount: '', amount: new Decimal(0), description: '' });
                 window.location.reload();
             } else {
-                addAlert(result.message || 'Transfer failed.', 'error');
+                console.log(result.message || 'Transfer failed.', 'error');
             }
         }
     };

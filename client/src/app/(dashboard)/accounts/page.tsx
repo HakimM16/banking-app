@@ -5,7 +5,6 @@ import React, {useEffect, useState} from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { useAccounts } from '@/providers/AccountProvider';
 import { useAuth } from '@/providers/AuthProvider';
-import { useAlerts } from '@/hooks/useAlerts';
 import AccountCard from '@/components/AccountCard';
 import {UpdateAccountStatusFormInputs} from "@/types";
 import axios from "axios";
@@ -16,8 +15,6 @@ export default function AccountsPage() {
     const { currentUser } = useAuth();
     // Get accounts and account actions from AccountProvider
     const { accounts, createAccount, changeAccountStatus } = useAccounts();
-    // Get alert handler from useAlerts hook
-    const { addAlert } = useAlerts();
     // State for user id
     const [id, setId] = useState<string | null>(null);
 
@@ -61,7 +58,7 @@ export default function AccountsPage() {
             console.log(accountForm)
             // Show error alert if creation failed
             if (result.success) {
-                addAlert(result.message || 'Failed to create account.', 'error');
+                console.log(result.message || 'Failed to create account.', 'error');
             }
         }
     };
@@ -84,9 +81,9 @@ export default function AccountsPage() {
         if (id) {
             const result = await changeAccountStatus(parseInt(id, 10), accountId, statusUpdate);
             if (result.success) {
-                addAlert('Account status updated successfully!', 'success');
+                console.log('Account status updated successfully!', 'success');
             } else {
-                addAlert(result.message || 'Failed to update account status.', 'error');
+                console.log(result.message || 'Failed to update account status.', 'error');
             }
         }
     };

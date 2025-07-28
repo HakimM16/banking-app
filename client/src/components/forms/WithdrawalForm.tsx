@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import { Minus } from 'lucide-react';
 import { useAccounts } from '@/providers/AccountProvider';
 import { useTransactions } from '@/providers/TransactionProvider';
-import { useAlerts } from '@/hooks/useAlerts';
 import { WithdrawFormInputs } from '@/types';
 import {Decimal} from "decimal.js";
 import axios from "axios"; // Import type
@@ -16,8 +15,6 @@ const WithdrawalForm: React.FC = () => {
     const { accounts, getAccountBalance } = useAccounts();
     // Get withdrawal function from transactions context/provider
     const { makeWithdrawal } = useTransactions();
-    // Get alert function from custom hook
-    const { addAlert } = useAlerts();
     const [ isBalanceLess, setIsBalanceLess ] = useState(false);
     const [fromId, setFromId] = useState<number | null>(null);
 
@@ -81,12 +78,12 @@ const WithdrawalForm: React.FC = () => {
             // Call withdrawal function
             const result = await makeWithdrawal(userId, withdrawData);
             if (result.success) {
-                addAlert('Withdrawal completed successfully!', 'success');
+                console.log('Withdrawal completed successfully!', 'success');
                 // Reset form after success
                 setWithdrawalForm({ accountNumber: '', amount: new Decimal(0), description: '', categoryName: '' });
                 window.location.reload();
             } else {
-                addAlert(result.message || 'Withdrawal failed.', 'error');
+                console.log(result.message || 'Withdrawal failed.', 'error');
             }
         }
     };

@@ -1,11 +1,28 @@
 spring:
   datasource:
-    url: ${DATABASE_URL}
+    # Option 1: Transform DATABASE_URL by replacing postgresql:// with jdbc:postgresql://
+    url: jdbc:postgresql://${DATABASE_URL#postgresql://}
     driver-class-name: org.postgresql.Driver
+
+    # Connection pool settings for Railway
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 1200000
+
   jpa:
     hibernate:
       ddl-auto: none
-    dialect: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+
+  # Flyway configuration
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
 server:
   port: ${PORT:8080}
 
@@ -13,3 +30,9 @@ cors:
   allowed-origins:
     - "https://your-app-name.vercel.app"
     - "http://localhost:3000"
+
+# Logging for debugging (remove in production)
+logging:
+  level:
+    org.springframework.jdbc: DEBUG
+    com.zaxxer.hikari: DEBUG

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from 'react';
-import {useAlerts} from "@/hooks/useAlerts";
 import {useRouter} from "next/navigation";
 import {useAuth} from "@/providers/AuthProvider";
 import LogoForForms from "@/components/ui/LogoForForms";
@@ -20,7 +19,6 @@ const AddressForm: React.FC<AddressFormProps> = ({ id }) => {
         country: ''
     });
 
-    const { addAlert } = useAlerts();
     const [isValidated, setIsValidated] = useState(true); // This state is used to show an invalid message if the form is not validated
     const router = useRouter();
     const { createAddress} = useAuth();
@@ -69,12 +67,12 @@ const AddressForm: React.FC<AddressFormProps> = ({ id }) => {
         const result = await createAddress(addressForm, id);
 
         if (result.success) {
-            addAlert('Registration successful! Please login.', 'success');
+            console.log('Registration successful! Please login.', 'success');
             // Make a page where you create the address
             router.push('/login');
 
         } else {
-            addAlert(result.message || 'Registration failed. Please try again.', 'error');
+            console.log(result.message || 'Registration failed. Please try again.', 'error');
             setIsValidated(false);
             router.push('/register');
         }

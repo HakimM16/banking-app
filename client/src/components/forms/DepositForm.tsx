@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { useAccounts } from '@/providers/AccountProvider';
 import { useTransactions } from '@/providers/TransactionProvider';
-import { useAlerts } from '@/hooks/useAlerts';
 import { DepositFormInputs } from '@/types';
 import { Decimal } from 'decimal.js';
 import axios from "axios";
@@ -13,7 +12,6 @@ import axios from "axios";
 const DepositForm: React.FC = () => {
     const { accounts } = useAccounts();
     const { makeDeposit } = useTransactions();
-    const { addAlert } = useAlerts();
 
     const categoryNames = ["General Deposit", "Google", "Salary", "Freelance Work", "Dividends", "Investment Return", "Bonus", "Stock sale", "Gift", "Cashback", "Scholarship"];
 
@@ -56,12 +54,12 @@ const DepositForm: React.FC = () => {
 
             const result = await makeDeposit(userId, depositData);
             if (result.success) {
-                addAlert('Deposit completed successfully!', 'success');
+                console.log('Deposit completed successfully!', 'success');
                 setDepositForm({ accountNumber: '', amount: new Decimal(0), description: '', categoryName: '' });
                 window.location.reload();
 
             } else {
-                addAlert(result.message || 'Deposit failed.', 'error');
+                console.log(result.message || 'Deposit failed.', 'error');
             }
         }
     };

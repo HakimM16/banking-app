@@ -4,7 +4,6 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Shield } from 'lucide-react';
 import { useAuth } from '@/providers/AuthProvider';
-import { useAlerts } from '@/hooks/useAlerts';
 import {redirect, useRouter} from 'next/navigation';
 import { LoginFormInputs } from '@/types'; // Import type
 import LogoForForms from '@/components/ui/LogoForForms'; // Import your LogoForForms component
@@ -15,7 +14,6 @@ const LoginForm: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isValidated, setIsValidated] = useState(true); // This state is used to show an invalid message if the form is not validated
     const { login } = useAuth();
-    const { addAlert } = useAlerts();
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -23,10 +21,10 @@ const LoginForm: React.FC = () => {
         const result = await login(loginForm); // Now this matches
 
         if (result.success) {
-            addAlert('Login successful!', 'success');
+            console.log('Login successful!', 'success');
             router.push('/home');
         } else {
-            addAlert(result.message || 'Invalid credentials. Please try again.', 'error');
+            console.log(result.message || 'Invalid credentials. Please try again.', 'error');
             setIsValidated(false);
         }
     };

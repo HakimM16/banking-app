@@ -3,7 +3,6 @@
 
 import React, { useState } from 'react';
 import { Eye, EyeOff, Shield } from 'lucide-react';
-import { useAlerts } from '@/hooks/useAlerts';
 import { useRouter } from 'next/navigation';
 import { RegisterFormInputs } from '@/types'; // Import type
 import LogoForForms from '@/components/ui/LogoForForms';
@@ -25,7 +24,6 @@ const RegisterForm: React.FC = () => {
     const [notCapitalized, setNotCapitalized] = useState(false);
     const [notCaptials, setNotCaptials] = useState(true); // This state is used to show an invalid message if the letters after the first letter are not capitalized
     const [isValidated, setIsValidated] = useState(true); // This state is used to show an invalid message if the form is not validated
-    const { addAlert } = useAlerts();
     const router = useRouter();
     const { register, createAddress} = useAuth();
 
@@ -34,7 +32,7 @@ const RegisterForm: React.FC = () => {
         const result = await register(registerForm);
 
         if (result.success) {
-            addAlert('Registration successful! Please login.', 'success');
+            console.log('Registration successful! Please login.', 'success');
             console.log(result.id);
 
             // Store user ID in localStorage
@@ -46,7 +44,7 @@ const RegisterForm: React.FC = () => {
             // Navigate to the address page (without query params)
             router.push('/create_address');
         } else {
-            addAlert(result.message || 'Registration failed. Please try again.', 'error');
+            console.log(result.message || 'Registration failed. Please try again.', 'error');
             setIsValidated(false);
         }
     };

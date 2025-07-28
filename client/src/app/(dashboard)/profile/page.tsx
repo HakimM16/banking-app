@@ -4,13 +4,11 @@
 import React, { useState, useEffect } from 'react';
 import { User, Settings } from 'lucide-react';
 import { useAuth } from '@/providers/AuthProvider';
-import { useAlerts } from '@/hooks/useAlerts';
 import { ProfileFormInputs } from '@/types';
 import axios from "axios"; // Import type
 
 export default function ProfilePage() {
     const { currentUser, getAddress, getUser } = useAuth();
-    const { addAlert } = useAlerts();
     const [id, setId] = React.useState<number | null>(null);
 
     const [profileForm, setProfileForm] = useState<ProfileFormInputs>({
