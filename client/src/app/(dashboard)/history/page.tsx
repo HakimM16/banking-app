@@ -18,11 +18,20 @@ export default function TransactionHistoryPage() {
     const [transactionFilter, setTransactionFilter] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
 
-    const token = localStorage.getItem('authToken');
-    // Set the default Authorization header for all future axios requests
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        }
+    }, []);
 
-    const id: string = localStorage.getItem('id') || '';
+    const [id, setId] = useState<string>('');
+
+    useEffect(() => {
+        const storedId = localStorage.getItem('id') || '';
+        setId(storedId);
+    }, []);
+
     const userId = parseInt(id, 10);
 
     const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);

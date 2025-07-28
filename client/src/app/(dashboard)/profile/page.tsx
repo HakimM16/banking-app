@@ -31,9 +31,12 @@ export default function ProfilePage() {
         }
     }, [storedId]);
 
-    const token = localStorage.getItem('authToken');
-    // Set default Authorization header for axios
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        }
+    }, []);
 
 
     useEffect(() => {
