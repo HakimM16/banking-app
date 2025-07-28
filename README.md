@@ -1,4 +1,4 @@
-# 🏦 Banking App
+# ☂️ Vesta
 
 A secure and user-friendly banking system that allows customers to create and manage accounts, perform transactions, and maintain financial records. Built with Next.js (frontend), Spring Boot (backend), and PostgreSQL (database).
 <div align="center">
