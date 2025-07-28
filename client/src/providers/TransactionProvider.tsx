@@ -86,7 +86,7 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem('authToken');
         if (!token) {
             console.log('No authentication token found', 'error');
-            return;
+            return { success: false, message: 'No authentication token found.'  };
         }
 
         // Set authorization header for axios
