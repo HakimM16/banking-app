@@ -10,6 +10,6 @@ public class TransactionSecurityRules implements SecurityRules {
     @Override
     public void configure(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry registry) {
         registry// Allow TransactionController endpoints to be accessed by users with the USER role
-                .requestMatchers("/api/transactions/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name());
+                .requestMatchers("/api/transactions/**").permitAll();
     }
 }
