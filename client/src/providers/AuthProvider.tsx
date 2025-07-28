@@ -109,10 +109,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // Log in a user
     const login = async (loginData: LoginFormInputs): Promise<{ success: boolean; message?: string; user?: User }> => {
-        console.log('Login function called');
         try {
             const response = await api.login(loginData);
-            console.log('API response:', response);
 
             if (response && response.token) {
                 console.log('Setting user and auth state');
@@ -142,7 +140,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
             if (id !== null) {
                 const response = await api.getUserProfile(id);
-                console.log('API response:', response);
 
                 if (response) {
                     console.log('User retrieval successful');
@@ -240,8 +237,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
             if (id !== null) {
                 const response = await api.getUserAddress(id);
-                console.log('API response:', response);
-
                 if (response) {
                     console.log('Address retrieval successful');
                     return { success: true, address: response };

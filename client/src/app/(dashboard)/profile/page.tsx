@@ -48,8 +48,6 @@ export default function ProfilePage() {
                     const resolvedUser = await getUser(id);
                     const resolvedAddress = await getAddress(id);
 
-                    console.log("Data received:", resolvedUser, resolvedAddress);
-
                     setProfileForm({
                         firstName: resolvedUser?.firstName || '',
                         lastName: resolvedUser?.lastName || '',

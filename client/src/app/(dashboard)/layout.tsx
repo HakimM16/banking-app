@@ -87,7 +87,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             <div className="flex h-screen items-center justify-center bg-indigo-900 px-4">
                 <div className="text-white text-center">
                     <div className="text-xl md:text-2xl">500: Backend service is unavailable.</div>
-                    <div className="text-sm md:text-base mt-2">Please try again in a few moments.</div>
+                    <div className="text-sm md:text-base mt-2">Please reload in a few moments.</div>
                 </div>
             </div>
         );
@@ -97,7 +97,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         localStorage.clear();
         return (
             <div className="flex h-screen items-center justify-center bg-indigo-900 px-4">
-                <div className="text-white text-xl md:text-2xl text-center">Session expired, You have to re-login</div>
+                <div className="text-white text-xl md:text-2xl text-center">10 minutes are up, You have to re-login</div>
             </div>
         );
     }

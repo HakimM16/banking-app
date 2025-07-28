@@ -43,8 +43,6 @@ const WithdrawalForm: React.FC = () => {
         // Set default Authorization header for axios
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-
-
         // check if description is empty and set it to 'No comment' if true
         if (withdrawalForm.description.trim() === '') {
             withdrawalForm.description = 'General withdrawal';

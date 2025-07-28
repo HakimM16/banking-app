@@ -133,7 +133,6 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
     const getTransactionsCount = async (userId: number): Promise<{ success: boolean; count?: number; message?: string }> => {
         try {
             const response = await api.getTransactionsCount(userId);
-            console.log("Response from getTransactionsCount:", response);
             if (response) {
                 // Note: Make sure the API returns the correct property name
                 return { success: true, count: response.transactionsCount };

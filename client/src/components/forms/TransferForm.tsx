@@ -61,8 +61,6 @@ const TransferForm: React.FC = () => {
             if (fromAccount.success) {
                 // Handle balance properly - it might already be a Decimal or a number/string
                 let accountBalance: Decimal;
-                console.log(fromAccount);
-                console.log(typeof fromAccount.balance);
                 try {
                     accountBalance = new Decimal(fromAccount.balance.toString());
                 } catch (error) {

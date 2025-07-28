@@ -51,7 +51,6 @@ export default function DashboardPage() {
             try {
                 const result = await getTransactions(userId);
                 if (result.success && result.transactions) {
-                    console.log('Setting transactions:', result.transactions.length);
                     setAllTransactions(result.transactions);
                 } else {
                     console.log('No transactions found, setting empty array');
@@ -66,7 +65,7 @@ export default function DashboardPage() {
         fetchTransactions();
     }, [transactionFilter, userId]);
 
-    console.log(allTransactions.length === 0 ? "No transactions found" : `Found ${allTransactions.length} transactions`);
+    // console.log(allTransactions.length === 0 ? "No transactions found" : `Found ${allTransactions.length} transactions`);
 
     if (!currentUser) {
         return (

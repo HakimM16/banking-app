@@ -35,7 +35,6 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
         // User login
         login: async (data: LoginFormInputs) => {
             const response = await axios.post(`${API_BASE_URL}/api/auth/login`, data);
-            console.log(`Response data: email=${data.email}, password=${data.password}`);
             if (response.data.token) {
                 // Store the token in localStorage (if needed)
                 localStorage.setItem('authToken', response.data.token);

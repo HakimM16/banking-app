@@ -42,7 +42,6 @@ const DashboardSummary: React.FC = () => {
             // Fetch total balance
             const fetchBalance = async () => {
                 const balance = await getTotalBalance(id);
-                console.log(balance);
                setGetBalance({
                    success: balance.success,
                    balance: new Decimal(balance.balance),
@@ -66,7 +65,6 @@ const DashboardSummary: React.FC = () => {
             getAccountsCount();
             getRecentTransactionsCount();
 
-            console.log(getBalance);
         }
 
     }, [getTotalBalance, getActiveAccounts, getTransactionsCount, id]);

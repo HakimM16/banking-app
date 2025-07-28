@@ -81,9 +81,6 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     const getTotalBalance = async (userId: number): Promise<{ success: boolean; balance: string; message: string }> => {
         try {
             const response = await api.getBalance(userId);
-            console.log('Response from getTotalBalance:', response);
-            console.log("type of response:", typeof response);
-            console.log("type of balance:", typeof response.balance);
             if (!response) {
                 console.error('Failed to fetch balance');
                 return { success: false, balance: 'Zero', message: 'Failed to fetch balance.' };
