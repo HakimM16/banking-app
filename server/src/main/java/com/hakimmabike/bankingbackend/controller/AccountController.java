@@ -1,16 +1,22 @@
 package com.hakimmabike.bankingbackend.controller;
 
 import com.hakimmabike.bankingbackend.dto.account.*;
+import com.hakimmabike.bankingbackend.dto.transaction.DepositRequest;
+import com.hakimmabike.bankingbackend.dto.transaction.TransactionDto;
 import com.hakimmabike.bankingbackend.enums.AccountStatus;
 import com.hakimmabike.bankingbackend.enums.AccountType;
 import com.hakimmabike.bankingbackend.repository.AccountRepository;
 import com.hakimmabike.bankingbackend.repository.UserRepository;
 import com.hakimmabike.bankingbackend.services.AccountService;
+import com.hakimmabike.bankingbackend.services.TransactionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.math.BigDecimal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -18,6 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("/api/accounts")
 public class AccountController {
     private final AccountService accountService;
+    private final TransactionService transactionService;
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
 
@@ -176,6 +183,52 @@ public class AccountController {
 
         ActiveAccountsDto activeAccountsCount = accountService.getActiveAccountsCount(userId);
         return ResponseEntity.ok(activeAccountsCount); // Return the count with a 200 OK status
+    }
+
+    // Deposit money into an account
+    @PostMapping("/transaction/{userId}/deposit")//
+    public ResponseEntity<?> deposit(
+            @PathVariable Long userId,
+            @RequestBody DepositRequest request
+    ) {
+        // check if account number exists
+        if (!transactionService.accountExists(request.getAccountNumber())) {
+            return ResponseEntity.badRequest().body("Accout doesn't exist"); // Return 400 Bad Request if account number does not exist
+        }
+
+        // check if amount is negative or zero
+        if (request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            return ResponseEntity.badRequest().body("Amount must be greater than zero"); // Return 400 Bad Request if amount is negative or zero
+        }
+
+        // check if fields are empty
+        if (request.getAccountNumber() == null || request.getAccountNumber().isEmpty()) {
+            return ResponseEntity.badRequest().body("Account number can't be empty"); // Return 400 Bad Request if account number is empty
+        }
+        if (request.getDescription() == null || request.getDescription().isEmpty()) {
+            return ResponseEntity.badRequest().body("Description can't be empty"); // Return 400 Bad Request if description is empty
+        }
+        if (request.getCategoryName() == null || request.getCategoryName().isEmpty()) {
+            return ResponseEntity.badRequest().body("Category name can't be empty"); // Return 400 Bad Request if category name is empty
+        }
+        if (request.getAmount() == null) {
+            return ResponseEntity.badRequest().body("Amount can't be empty"); // Return 400 Bad Request if amount is empty
+        }
+
+        // check if category exists
+        if (!transactionService.categoryExists(request.getCategoryName())) {
+            return ResponseEntity.badRequest().body("Category doesn't exist"); // Return 400 Bad Request if category does not exist
+        }
+
+        // check if account is closed
+        if (transactionService.isAccountClosed(request.getAccountNumber())) {
+            // return 409 Conflict if the account is closed
+            return ResponseEntity.status(HttpStatusCode.valueOf(409)).body("Account is closed, can't make a deposit");
+        }
+        // make a deposit transaction
+        TransactionDto transactionDto = transactionService.deposit(userId,request);
+        // Return the transaction details with a 201 Created status
+        return ResponseEntity.status(201).body(transactionDto);
     }
 
 }
