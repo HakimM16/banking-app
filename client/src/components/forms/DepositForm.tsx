@@ -72,7 +72,7 @@ const DepositForm: React.FC = () => {
             }
         };
 
-        const result = await makeDeposit(userId, depositData, config);
+        const result = await makeDeposit(userId, depositData);
         if (result.success) {
             console.log('Deposit completed successfully!', 'success');
             setDepositForm({ accountNumber: '', amount: new Decimal(0), description: '', categoryName: '' });
