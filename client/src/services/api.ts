@@ -133,6 +133,9 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
         // Deposit funds into user's account
         deposit : async (userId: number, data: DepositFormInputs) => {
             const response = await axios.post<Transaction>(`${API_BASE_URL}/api/transactions/${userId}/deposit`, data);
+            if (response) {
+                console.log(response);
+            }
             return response.data;
         },
 

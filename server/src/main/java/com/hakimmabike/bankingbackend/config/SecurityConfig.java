@@ -74,7 +74,6 @@ public class SecurityConfig {
 
                             // Allow unauthenticated access to the health endpoint
                             c.requestMatchers("/actuator/health").permitAll();
-                            c.requestMatchers("/api/transactions/**").permitAll();
                             // Apply feature-specific security rules first
                             featureSecurityRules.forEach(r -> r.configure(c));
                             // Then apply the catch-all authenticated rule
