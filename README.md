@@ -15,7 +15,7 @@ A secure and user-friendly banking system that allows customers to create and ma
 
 ## 🔗 Visit The Site
 
-Feel free to visit the site **here**
+Feel free to visit the site [here](https://banking-app-xi-wheat.vercel.app)
 
 <div>
     <a href="https://www.loom.com/share/0853900ba52a460cb77971a85f925dcc">
@@ -31,7 +31,7 @@ Here is a [video](https://www.loom.com/share/0853900ba52a460cb77971a85f925dcc?si
 - **Backend:** [Spring Boot](https://spring.io/projects/spring-boot) - Java-based backend framework
 - **Database:** [PostgreSQL](https://www.postgresql.org/) - Relational database
 - **Authentication:** JWT / Spring Security 
-- **Deployment:** **(Put deployment here)**
+- **Deployment:** Vercel for Client, Railway for Server and Database
 
 ## ✨ Features
 
