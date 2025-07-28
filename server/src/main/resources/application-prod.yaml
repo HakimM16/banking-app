@@ -1,7 +1,7 @@
 spring:
   datasource:
     # Option 1: Transform DATABASE_URL by replacing postgresql:// with jdbc:postgresql://
-    url: jdbc:postgresql://${DATABASE_URL#postgresql://}
+    url: jdbc:${DATABASE_URL/postgresql:/postgresql:}
     driver-class-name: org.postgresql.Driver
 
     # Connection pool settings for Railway
