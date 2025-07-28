@@ -92,7 +92,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://your-app-name.vercel.app", "http://localhost:3000")); // Your Next.js origin
+        configuration.setAllowedOrigins(List.of("https://banking-app-xi-wheat.vercel.app", "http://localhost:3000")); // Your Next.js origin
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")); // Allowed HTTP methods
         configuration.setAllowedHeaders(List.of("*")); // Allow all headers
         configuration.setAllowCredentials(true); // Allow sending credentials (cookies, auth headers)

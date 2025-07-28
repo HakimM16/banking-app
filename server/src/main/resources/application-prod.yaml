@@ -30,7 +30,7 @@ server:
 
 cors:
   allowed-origins:
-    - "https://your-app-name.vercel.app"
+    - "https://banking-app-xi-wheat.vercel.app"
     - "http://localhost:3000"
 
 # Logging for debugging (remove in production)
