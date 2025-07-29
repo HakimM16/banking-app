@@ -64,9 +64,9 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction, accounts
                     )}
                 </div>
             </div>
-            <div className="text-right pl-10">
+            <div className="text-left min-w-[120px]">
                 {/* Amount with color and sign */}
-                <p className={`font-semibold ${amountColorClass}`}>
+                <p className={`font-semibold ${amountColorClass} text-sm`}>
                     {amountSign}{formatCurrency(transaction.amount)}
                 </p>
                 {/* Optionally show transaction status */}

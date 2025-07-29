@@ -100,7 +100,7 @@ export default function AccountsPage() {
     return (
         <div className="pt-13 px-7 pb-7">
             {/* Header section */}
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-8 gap-3">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-50 mb-2">Accounts</h1>
                     <p className="text-gray-200">Manage your bank accounts</p>
