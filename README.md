@@ -31,7 +31,7 @@ Here is a [video](https://www.loom.com/share/0853900ba52a460cb77971a85f925dcc?si
 - **Backend:** [Spring Boot](https://spring.io/projects/spring-boot) - Java-based backend framework
 - **Database:** [PostgreSQL](https://www.postgresql.org/) - Relational database
 - **Authentication:** JWT / Spring Security 
-- **Deployment:** Vercel for Client, Railway for Server and Database
+- **Deployment:** [Vercel](https://vercel.com) for Client, [Railway](https://railway.com) for Server and Database
 
 ## ✨ Features
 
